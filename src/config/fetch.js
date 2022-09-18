@@ -31,7 +31,7 @@ service.interceptors.request.use(config => {
   // }
   // config.data = data;
   if(data) {
-    data.data = qs.stringify(data.data)
+    data = qs.stringify(data)
   }
   config.data = data;
   return config;

@@ -43,9 +43,9 @@
                 </tr>
             </table>
         </div>
-        <OrderPositionAlert
+        <!-- <OrderPositionAlert
             v-if="showAlert">
-        </OrderPositionAlert>
+        </OrderPositionAlert> -->
     </div>
 </template>
 <script>
