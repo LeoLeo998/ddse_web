@@ -72,6 +72,8 @@ export default {
         this.getPositionList()
       } else if (val === 2) {
         this.getEntrustList()
+      } else {
+        this.getCloseOrderList()
       }
     }
   },
@@ -79,7 +81,7 @@ export default {
     this.getPositionList()
   },
   methods: {
-    ...mapActions(['positionListFetch', 'entrustListFetch']),
+    ...mapActions(['positionListFetch', 'entrustListFetch', 'getCloseOrderListFetch']),
     // 持仓
     async getPositionList() {
       let res = await this.positionListFetch()
@@ -90,6 +92,12 @@ export default {
       let res = await this.entrustListFetch()
       this.list = res.rows
     },
+    //平仓
+    async getCloseOrderList() {
+      let res = await this.getCloseOrderListFetch()
+      this.list = res.rows
+    },
+
     orderClick(data) {
       this.oderInfo = data
       if (this.activeName === 1) {

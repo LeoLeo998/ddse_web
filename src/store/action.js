@@ -111,5 +111,13 @@ export default {
       method: 'post',
       data
     })
+  },
+  //获取平仓列表
+  getCloseOrderListFetch: (ctx, data) => {
+    return service({
+      url: '/getCloseOrderList',
+      method: 'post',
+      data
+    })
   }
 }
