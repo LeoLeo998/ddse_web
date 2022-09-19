@@ -187,11 +187,8 @@ export default {
         }
     },
     computed:{
-        ...mapGetters([
-            "getMarketData"
-        ]),
         topSockets () {
-            return this.getMarketData
+            return []
         },
         marketAssets () {
             let data =[]

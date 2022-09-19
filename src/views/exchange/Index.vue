@@ -34,7 +34,8 @@ import { mapActions, mapGetters, mapMutations } from 'vuex'
 import ExLeft from './components/ExLeft.vue'
 import ExRight from './components/ExRight.vue'
 import OrderHistory from './components/OrderHistory.vue'
-import tradingView from './components/tradingView.vue'
+import TradingView from '@/components/TradingView.vue'
+// import tradingView from './components/tradingView.vue'
 import OrderBook from './components/OrderBook.vue'
 import MarketBox from './components/MarketBox.vue'
 import CreateOrder from './components/CreateOrder.vue'
@@ -44,7 +45,7 @@ export default {
     ExLeft,
     ExRight,
     OrderHistory,
-    tradingView,
+    TradingView,
     OrderBook,
     MarketBox,
     CreateOrder,

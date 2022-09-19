@@ -70,7 +70,8 @@ export default {
     },
     methods:{
         ...mapMutations([
-            "setSelectMarket"
+            "setSelectMarket",
+            "setMarketData",
         ]),
         ...mapActions([
             "productListFetch",
@@ -103,14 +104,15 @@ export default {
             this.coinIndex = item.id;
         },
         async initMarketListData () {
-            console.log('aaaaannnnn')
             let res = await this.marketListFetch({
                 symbol:this.getSelectMarket,
                 time:'5',
                 startDate:parseInt(new Date().getTime() / 1000) - 21600,
                 endDate:parseInt(new Date().getTime() / 1000)
             })
-            console.log(res)
+            if(res.status == 200) {
+                this.setMarketData(res.rows)
+            }
         }
         
     },
