@@ -119,5 +119,23 @@ export default {
       method: 'post',
       data
     })
+  },
+
+  //获取用户信息
+  getUserInfoFetch: (ctx, data) => {
+    return service({
+      url: '/getUserInfo',
+      method: 'post',
+      data
+    })
+  },
+
+  //获取用户实时资金
+  getUserBalanceFetch: (ctx, data) => {
+    return service({
+      url: '/getUserBalance',
+      method: 'post',
+      data
+    })
   }
 }
