@@ -108,11 +108,11 @@ import bus from '@/util/bus';
 						'remove_library_container_border',		
 						'widget_logo'
 		        	],
-		        	theme: "Dark",
+		        	theme: "light",
 		        	overrides: {
-		        		"paneProperties.background": "#19191e",
-		        		"paneProperties.horzGridProperties.color": "#1c1c20", //水平网格线颜色，默认：#313131
-		                "paneProperties.vertGridProperties.color": "#1c1c20", //垂直网格线颜色，默认：#313131
+		        		"paneProperties.background": "#fff",
+		        		"paneProperties.horzGridProperties.color": "#eee", //水平网格线颜色，默认：#313131
+		                "paneProperties.vertGridProperties.color": "#eee", //垂直网格线颜色，默认：#313131
 		                
 						'symbolWatermarkProperties.color' : 'rgba( 85, 85, 85, 0)',
 						//'paneProperties.topMargin': 10,
