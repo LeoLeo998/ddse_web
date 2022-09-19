@@ -19,7 +19,9 @@ export default {
   computed:{
     ...mapGetters([
       "getQUOSocket",
-      "getIsLogin"
+      "getIsLogin",
+      "getMarketData",
+      "getSelectMarket",
     ])
   },
   created () {
@@ -28,9 +30,6 @@ export default {
 
     const _socket2 = new Socket(config.TRAN_WSURL+getCookie('userToken'),this);
     this.setTRANSocket(_socket2);
-    // this.setUserName(localStorage.getItem('user_name'))
-    // console.log(localStorage.getItem('isLogin'))
-    // this.setIsLogin(localStorage.getItem('isLogin'))
     const userToken = getCookie('userToken')
     if(userToken) {
       this.setIsLogin(true)
@@ -42,7 +41,6 @@ export default {
         "setTRANSocket",
         "setMarketData",
         "setIsLogin",
-        "setUserName"
     ])
   }
 }

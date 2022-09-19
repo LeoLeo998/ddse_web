@@ -1,3 +1,4 @@
+import bus from '@/util/bus';
 export default class Socket {
     socket = null;
     maxReload = 10;
@@ -40,8 +41,26 @@ export default class Socket {
 	}
 	_onmessage(msg) {
 		if(this.wsurl.indexOf(8002) > -1) {
+			let marketData = JSON.parse(JSON.stringify(this.that.getMarketData)),
+				lastData = marketData[marketData.length - 1];
 			if(msg.data) {
-				this.that.setMarketData(JSON.parse(msg.data));
+				let data = JSON.parse(msg.data)
+				if(data.symbol == this.that.getSelectMarket) {
+					// let data1 = {
+					// 	...data,
+					// 	close:data.buy_price,
+					// 	time:data.datetime,
+					// 	high:data.buy_price,
+					// 	low:data.buy_price,
+					// 	open:data.buy_price
+					// }
+					bus.$emit('updateData',data)
+					// this.that.setMarketData(data1)
+				}
+				
+				
+				// data.push(da)
+				// this.that.setMarketData(JSON.parse(msg.data));
 			}
 		}
 		
