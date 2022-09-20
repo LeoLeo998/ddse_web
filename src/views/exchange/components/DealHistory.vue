@@ -1,9 +1,6 @@
 <template>
   <div class="deal-history">
-    <!-- <div class="deal-type-box">
-      <span class="active">账户资金详情</span>
-    </div> -->
-    <div>
+    <div v-if="isLogin">
       <el-form label-width="100px">
         <el-form-item label="账户类型 :"
           ><span class="ml-10">{{ userInfo.state }}</span></el-form-item
@@ -15,29 +12,29 @@
           ><span class="ml-10">{{ userInfo.level }}</span></el-form-item
         >
         <el-form-item label="盈利/亏损 :"
-          ><span class="ml-10">{{ total_profit }}</span></el-form-item
+          ><span class="ml-10">{{ total_profit | number }}</span></el-form-item
         >
         <el-form-item label="结余 :"
           ><span class="ml-10">{{ balance.balance }}</span></el-form-item
         >
         <el-form-item label="净值 :"
-          ><span class="ml-10">{{ balance.balance - total_profit }}</span></el-form-item
+          ><span class="ml-10">{{ (balance.balance - total_profit) | number }}</span></el-form-item
         >
         <el-form-item label="预付款 :"
           ><span class="ml-10">{{ balance.margin }}</span></el-form-item
         >
         <el-form-item label="可用预付款 :"
-          ><span class="ml-10">{{ balance.balance - balance.margin }}</span></el-form-item
+          ><span class="ml-10">{{ (balance.balance - balance.margin) | number }}</span></el-form-item
         >
         <el-form-item label="预付款比例 :"
-          ><span class="ml-10">{{ balance.margin / (balance.balance - balance.margin + total_profit) }}%</span></el-form-item
+          ><span class="ml-10">{{ (balance.margin / (balance.balance - balance.margin + total_profit)) | number }}%</span></el-form-item
         >
       </el-form>
     </div>
   </div>
 </template>
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 export default {
   data() {
     return {
@@ -47,15 +44,20 @@ export default {
     }
   },
   computed: {
+    ...mapState(['isLogin']),
     total_profit() {
       return this.position.reduce((pre, cur) => {
         return pre + cur.PROFIT
       }, 0)
     }
   },
+  filters: {
+    number(data) {
+      return data.toFixed(2)
+    }
+  },
   methods: {
     ...mapActions(['getUserBalanceFetch', 'getUserInfoFetch', 'positionListFetch']),
-
     async getUserBalance() {
       let res = await this.getUserBalanceFetch()
       this.balance = res
@@ -70,9 +72,11 @@ export default {
     }
   },
   mounted() {
-    this.getUserBalance()
-    this.getUserInfo()
-    this.positionList()
+    if (this.isLogin) {
+      this.getUserBalance()
+      this.getUserInfo()
+      this.positionList()
+    }
   }
 }
 </script>
