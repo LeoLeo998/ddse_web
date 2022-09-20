@@ -1,46 +1,44 @@
 <template>
-    <div class="ex-market-box">
-        <div class="search-box">
-            <i class="fa fa-search"></i>
-            <input type="text">
-        </div>
-        <div class="coin-list">
-            <i class="fa fa-star" @click="coinIndex = -1" :class="coinIndex == -1 && 'active'"></i>
-            <span :class="coinIndex == 100 && 'active'" @click="coinIndex = 100">
-                热门
-            </span>
-            <span v-for="(item,key) in group" :key="key" :class="coinIndex == item.id && 'active'" @click="setMainCoin(item)">
-                {{item.title}}
-            </span>
-        </div>
-        <div class="tab-box">
-            <ul>
-                <li>
-                    <div class="li-head">名称</div>
-                    <div class="li-head">买入价格</div>
-                    <div class="li-head">卖出价格</div>
-                    <div class="li-head">涨幅</div>
-                </li>
-                <div class="market-list">
-                    <li v-for="(item,key) in marketList" :key="key" @click="setCoin(item)">
-                        <div class="li-item">
-                            <i class="fa fa-star" :class="isStar(item.symbol) && 'active'" @click="starClick(item.symbol)"></i>
-                            <div>
-                                <span class="left-coin">{{item.symbol}}</span>
-                                <br />
-                                <span class="left-description">{{item.description}}</span>
-                            </div>
-                        </div>
-                        <div class="li-item price-up">
-                            <strong>{{item.buy_price}}</strong>
-                        </div>
-                        <div class="li-item price-down">
-                            {{item.sell_price}}
-                        </div>
-                        <div class="li-item" :class="getRange(item) > 0 ? 'price-up' : 'price-down'">{{getRange(item)}}%</div>
-                    </li>
-                </div>
-            </ul>
+  <div class="ex-market-box">
+    <div class="search-box">
+      <i class="fa fa-search"></i>
+      <input type="text" />
+    </div>
+    <div class="coin-list">
+      <i class="fa fa-star" @click="coinIndex = -1" :class="coinIndex == -1 && 'active'"></i>
+      <span :class="coinIndex == 100 && 'active'" @click="coinIndex = 100">
+        热门
+      </span>
+      <span v-for="(item, key) in group" :key="key" :class="coinIndex == item.id && 'active'" @click="setMainCoin(item)">
+        {{ item.title }}
+      </span>
+    </div>
+    <div class="tab-box">
+      <ul>
+        <li>
+          <div class="li-head">名称</div>
+          <div class="li-head">买入价格</div>
+          <div class="li-head">卖出价格</div>
+          <div class="li-head">涨幅</div>
+        </li>
+        <div class="market-list">
+          <li v-for="(item, key) in marketList" :key="key" @click="setCoin(item)">
+            <div class="li-item">
+              <i class="fa fa-star" :class="isStar(item.symbol) && 'active'" @click="starClick(item.symbol)"></i>
+              <div>
+                <span class="left-coin">{{ item.symbol }}</span>
+                <br />
+                <span class="left-description">{{ item.description }}</span>
+              </div>
+            </div>
+            <div class="li-item price-up">
+              <strong>{{ item.buy_price }}</strong>
+            </div>
+            <div class="li-item price-down">
+              {{ item.sell_price }}
+            </div>
+            <div class="li-item" :class="getRange(item) > 0 ? 'price-up' : 'price-down'">{{ getRange(item) }}%</div>
+          </li>
         </div>
       </ul>
     </div>
@@ -50,134 +48,119 @@
 <script>
 import { mapGetters, mapMutations, mapActions } from 'vuex'
 export default {
-    data () {
-        return {
-            coinIndex:100,
-            selectMarket:'',
-            group:[],
-            dataList:[],
-            collectionList:[],
+  data() {
+    return {
+      coinIndex: 100,
+      selectMarket: '',
+      group: [],
+      dataList: [],
+      collectionList: []
+    }
+  },
+  computed: {
+    ...mapGetters(['getQUOSocket', 'getSelectMarket']),
+    marketList() {
+      let data = []
+      if (this.coinIndex === -1) {
+        return this.collectionList
+      }
+      if (this.coinIndex === 100) {
+        data = this.dataList.filter(v => {
+          return v.hot == 1
+        })
+      } else {
+        data = this.dataList.filter(v => {
+          return v.group === this.coinIndex
+        })
+      }
+      return data
+    }
+  },
+  methods: {
+    ...mapMutations(['setSelectMarket', 'setMarketData', 'setCurrentSymbolInfo']),
+    ...mapActions(['productListFetch', 'productGroupListFetch', 'marketListFetch', 'productUserListFetch', 'insertProductUserFetch', 'deleteProductUserFetch']),
+    isStar(symbol) {
+      return this.collectionList.find(v => {
+        return v.symbol == symbol
+      })
+    },
+    async starClick(symbol) {
+      let fun = ''
+      if (this.isStar(symbol)) {
+        fun = 'deleteProductUserFetch'
+      } else {
+        fun = 'insertProductUserFetch'
+      }
+      let res = await this[fun]({
+        symbol
+      })
+      if (res.status == 200) {
+        let res = await this.getCollection()
+        if (res.rows.length > 0) {
+          this.formatCollection(res.rows)
         }
+      }
     },
-    computed:{
-        ...mapGetters([
-            "getQUOSocket",
-            "getSelectMarket"
-        ]),
-        marketList () {
-            let data = []
-            if(this.coinIndex === -1) {
-                return this.collectionList
-            }
-            if(this.coinIndex === 100) {
-                data = this.dataList.filter(v => {
-                    return v.hot == 1
-                })
-            }else {
-                data = this.dataList.filter(v => {
-                    return v.group === this.coinIndex
-                })
-            }
-            return data
-        }
+    getRange(item) {
+      return (((item.buy_price - item.close) / item.close) * 100).toFixed(2)
     },
-    methods:{
-        ...mapMutations([
-            "setSelectMarket",
-            "setMarketData",
-            "setCurrentSymbolInfo",
-        ]),
-        ...mapActions([
-            "productListFetch",
-            "productGroupListFetch",
-            "marketListFetch",
-            "productUserListFetch",
-            "insertProductUserFetch",
-            "deleteProductUserFetch",
-        ]),
-        isStar (symbol) {
-            return this.collectionList.find(v => {
-                return v.symbol == symbol
-            })
-        },
-        async starClick (symbol) {
-            let fun = ''
-            if(this.isStar(symbol)) {
-                fun = 'deleteProductUserFetch'
-            }else {
-                fun = 'insertProductUserFetch'
-            }
-            let res = await this[fun]({
-                symbol
-            })
-            if(res.status == 200) {
-                let res = await this.getCollection()
-                if(res.rows.length > 0) {
-                    this.formatCollection(res.rows)
-                }
-            }
-        },
-        getRange (item) {
-            return ((item.buy_price - item.close) / item.close * 100).toFixed(2)
-        },
-        async getCollection () {
-            let res = await this.productUserListFetch()
-            return res
-        },
-        async getData () {
-            let res = await Promise.all([this.productGroupListFetch(),this.productListFetch(),this.getCollection()])
-            if(res[0] && res[0].rows.length > 0) {
-                this.group = res[0].rows
-            }
-            if(res[1] && res[1].rows.length > 0) {
-                this.dataList = res[1].rows
-            }
-            if(res[2] && res[2].rows.length > 0) {
-                this.formatCollection(res[2].rows)
-            }
-        },
-        formatCollection (data) {
-            let tmp = data.map(v => {
-                return v.symbol
-            })
-            let arr = this.dataList.filter(v => {
-                return tmp.indexOf(v.symbol) > -1
-            })
-            this.collectionList = arr
-        },
-        sendMsg (coin) {
-            this.getQUOSocket.send({"quoteAsset":coin})
-        },
-        setCoin (item) {
-            this.setSelectMarket(item.symbol)
-            this.setCurrentSymbolInfo({
-                buy_price:'--',
-                sell_price:'--',
-            })
-            this.initMarketListData()
-        },
-        setMainCoin(item) {
-            this.coinIndex = item.id
-        },
-        async initMarketListData() {
-            let res = await this.marketListFetch({
-                symbol: this.getSelectMarket,
-                time: '5',
-                startDate: parseInt(new Date().getTime() / 1000) - 21600,
-                endDate: parseInt(new Date().getTime() / 1000)
-            })
-            if (res.status == 200) {
-                this.setMarketData(res.rows)
-            }
-        },
+    async getCollection() {
+      let res = await this.productUserListFetch()
+      return res
     },
-  
+    async getData() {
+      let res = await Promise.all([this.productGroupListFetch(), this.productListFetch(), this.getCollection()])
+      if (res[0] && res[0].rows.length > 0) {
+        this.group = res[0].rows
+      }
+      if (res[1] && res[1].rows.length > 0) {
+        this.dataList = res[1].rows
+      }
+      if (res[2] && res[2].rows.length > 0) {
+        this.formatCollection(res[2].rows)
+      }
+    },
+    formatCollection(data) {
+      let tmp = data.map(v => {
+        return v.symbol
+      })
+      let arr = this.dataList.filter(v => {
+        return tmp.indexOf(v.symbol) > -1
+      })
+      this.collectionList = arr
+    },
+    sendMsg(coin) {
+      this.getQUOSocket.send({ quoteAsset: coin })
+    },
+    setCoin(item) {
+      this.setSelectMarket(item.symbol)
+      this.setCurrentSymbolInfo({
+        buy_price: '--',
+        sell_price: '--'
+      })
+      this.initMarketListData()
+    },
+    setMainCoin(item) {
+      this.coinIndex = item.id
+    },
+    async initMarketListData() {
+      let res = await this.marketListFetch({
+        symbol: this.getSelectMarket,
+        time: '5',
+        startDate: parseInt(new Date().getTime() / 1000) - 21600,
+        endDate: parseInt(new Date().getTime() / 1000)
+      })
+      if (res.status == 200) {
+        this.setMarketData(res.rows)
+      }
+    }
+  },
+
   created() {
     this.getData()
     this.initMarketListData()
   }
 }
-
 </script>
 <style lang="less" scoped>
 @color1: rgb(119, 119, 119);
@@ -302,53 +285,54 @@ export default {
           border-radius: 10px;
         }
         .li-item {
+          font-size: 12px;
+          overflow: hidden;
+
+          i {
+            color: @color2;
+            cursor: pointer;
+            margin-right: 10px;
+          }
+          .left-coin {
+            color: @color3;
             font-size: 12px;
-            overflow:hidden;
-            
-            i {
-                color:@color2;
-                cursor: pointer;
-                margin-right:10px;
-            }
-            .left-coin {
-                color:@color3;
-                font-size: 12px;
-            }
-            .left-description {
-                color:@color2;
-                font-size: 12px;
-                //margin-top:10px;
-            }
-            .right-coin {
-                color:@color2;
-                font-size: 12px;
-            }
-            &:first-child {
-                padding-left:8px;
-            }
-            &:last-child {
-                padding-right:8px;
-            }
+          }
+          .left-description {
+            color: @color2;
+            font-size: 12px;
+            //margin-top:10px;
+          }
+          .right-coin {
+            color: @color2;
+            font-size: 12px;
+          }
+          &:first-child {
+            padding-left: 8px;
+          }
+          &:last-child {
+            padding-right: 8px;
+          }
         }
-        .li-head,.li-item {
-            text-align: right;
-            &:first-child {
-                display: flex;
-                align-items: center;
-                text-align: left;
-                width: 40%;
-            }
-            &:nth-child(2) {
-                width: 20%;
-            }
-            &:nth-child(3) {
-                width: 20%;
-            }
-            &:nth-child(4) {
-                display: block;
-                //text-align: right;
-                width: 20%;
-            }
+        .li-head,
+        .li-item {
+          text-align: right;
+          &:first-child {
+            display: flex;
+            align-items: center;
+            text-align: left;
+            width: 40%;
+          }
+          &:nth-child(2) {
+            width: 20%;
+          }
+          &:nth-child(3) {
+            width: 20%;
+          }
+          &:nth-child(4) {
+            display: block;
+            //text-align: right;
+            width: 20%;
+          }
         }
       }
     }
