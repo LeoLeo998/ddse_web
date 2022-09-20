@@ -137,5 +137,50 @@ export default {
       method: 'post',
       data
     })
+  },
+
+  //获取行情分组
+  getProductGroupListFetch: (ctx, data) => {
+    return service({
+      url: '/getProductGroupList',
+      method: 'post',
+      data
+    })
+  },
+
+  //获取产品列表
+  getProductListFetch: (ctx, data) => {
+    return service({
+      url: '/getProductList',
+      method: 'post',
+      data
+    })
+  },
+
+  //获取自选产品列表
+  getProductUserListFetch: (ctx, data) => {
+    return service({
+      url: '/getProductUserList',
+      method: 'post',
+      data
+    })
+  },
+
+  //取消自选产品
+  deleteProductUserFetch: (ctx, data) => {
+    return service({
+      url: '/deleteProductUser',
+      method: 'post',
+      data
+    })
+  },
+
+  //添加自选产品
+  insertProductUserFetch: (ctx, data) => {
+    return service({
+      url: '/insertProductUser',
+      method: 'post',
+      data
+    })
   }
 }
