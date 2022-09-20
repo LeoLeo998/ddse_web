@@ -13,8 +13,8 @@
         </div>
       </div>
       <div class="right">
-        <input type="checkbox" name="" id="" />
-        <span>隐藏其他交易对</span>
+        <!-- <input type="checkbox" name="" id="" />
+        <span>隐藏其他交易对</span> -->
       </div>
     </div>
     <div class="tab">
@@ -48,7 +48,7 @@
   </div>
 </template>
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import PositionOrderDialog from '@/components/PositionOrderDialog'
 import EntrustOrderDialog from '@/components/EntrustOrderDialog'
 export default {
@@ -75,10 +75,16 @@ export default {
       } else {
         this.getCloseOrderList()
       }
-    }
+    },
+    getIsLogin () {
+      this.getPositionList()
+    },
   },
   created() {
     this.getPositionList()
+  },
+  computed:{
+    ...mapGetters(['getIsLogin'])
   },
   methods: {
     ...mapActions(['positionListFetch', 'entrustListFetch', 'getCloseOrderListFetch']),
@@ -141,7 +147,10 @@ export default {
   }
   .tab {
     height: 340px;
-    overflow-y: scroll;
+    overflow-y: auto;
+    &::-webkit-scrollbar {
+      width: 2px;
+    }
     table {
       border-collapse: collapse;
       width: 100%;

@@ -1,17 +1,10 @@
 <template>
   <div class="ex-index-page default-bg" :class="getIsLight ? 'light-css' : 'night-css'">
-    <!-- <div class="content-box">
-            <div class="top">
-                <ex-left />
-                <ex-right />
-            </div>
-            <order-history />
-        </div> -->
     <el-row>
-      <el-col :span="4">
+      <el-col :span="5">
         <market-box />
       </el-col>
-      <el-col :span="16">
+      <el-col :span="15">
         <trading-view />
       </el-col>
       <el-col :span="4">

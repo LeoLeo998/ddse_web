@@ -5,9 +5,9 @@
             <input type="text">
         </div>
         <div class="coin-list">
-            <!-- <i class="fa fa-star" :class="coinIndex == 0 && 'active'"></i> -->
-            <span :class="coinIndex == 0 && 'active'" @click="coinIndex = 0">
-                All
+            <i class="fa fa-star" @click="coinIndex = -1" :class="coinIndex == -1 && 'active'"></i>
+            <span :class="coinIndex == 100 && 'active'" @click="coinIndex = 100">
+                热门
             </span>
             <span v-for="(item,key) in group" :key="key" :class="coinIndex == item.id && 'active'" @click="setMainCoin(item)">
                 {{item.title}}
@@ -24,14 +24,15 @@
                 <div class="market-list">
                     <li v-for="(item,key) in marketList" :key="key" @click="setCoin(item)">
                         <div class="li-item">
-                            <!-- <i class="fa fa-star"></i> -->
-                            <!-- <span class="left-coin">BTC<span class="right-coin">/USDT</span></span> -->
-                            <span class="left-coin">{{item.symbol}}</span>
-                            <br />
-                            <span class="left-description">{{item.description}}</span>
+                            <i class="fa fa-star" :class="isStar(item.symbol) && 'active'" @click="starClick(item.symbol)"></i>
+                            <div>
+                                <span class="left-coin">{{item.symbol}}</span>
+                                <br />
+                                <span class="left-description">{{item.description}}</span>
+                            </div>
                         </div>
                         <div class="li-item price-up">
-                            {{item.buy_price}}
+                            <strong>{{item.buy_price}}</strong>
                         </div>
                         <div class="li-item price-down">
                             {{item.sell_price}}
@@ -49,10 +50,11 @@ import { mapGetters, mapMutations, mapActions } from 'vuex'
 export default {
     data () {
         return {
-            coinIndex:0,
+            coinIndex:100,
             selectMarket:'',
             group:[],
-            dataList:[]
+            dataList:[],
+            collectionList:[],
         }
     },
     computed:{
@@ -62,9 +64,18 @@ export default {
         ]),
         marketList () {
             let data = []
-            data = this.dataList.filter(v => {
-                return v.group === this.coinIndex
-            })
+            if(this.coinIndex === -1) {
+                return this.collectionList
+            }
+            if(this.coinIndex === 100) {
+                data = this.dataList.filter(v => {
+                    return v.hot == 1
+                })
+            }else {
+                data = this.dataList.filter(v => {
+                    return v.group === this.coinIndex
+                })
+            }
             return data
         }
     },
@@ -72,33 +83,76 @@ export default {
         ...mapMutations([
             "setSelectMarket",
             "setMarketData",
+            "setCurrentSymbolInfo",
         ]),
         ...mapActions([
             "productListFetch",
             "productGroupListFetch",
-            "marketListFetch"
+            "marketListFetch",
+            "productUserListFetch",
+            "insertProductUserFetch",
+            "deleteProductUserFetch",
         ]),
+        isStar (symbol) {
+            return this.collectionList.find(v => {
+                return v.symbol == symbol
+            })
+        },
+        async starClick (symbol) {
+            let fun = ''
+            if(this.isStar(symbol)) {
+                fun = 'deleteProductUserFetch'
+            }else {
+                fun = 'insertProductUserFetch'
+            }
+            let res = await this[fun]({
+                symbol
+            })
+            if(res.status == 200) {
+                let res = await this.getCollection()
+                if(res.rows.length > 0) {
+                    this.formatCollection(res.rows)
+                }
+            }
+        },
         getRange (item) {
             return ((item.buy_price - item.close) / item.close * 100).toFixed(2)
         },
+        async getCollection () {
+            let res = await this.productUserListFetch()
+            return res
+        },
         async getData () {
-            let res = await Promise.all([this.productGroupListFetch(),this.productListFetch()])
-            console.log(res[0].rows)
+            let res = await Promise.all([this.productGroupListFetch(),this.productListFetch(),this.getCollection()])
             if(res[0] && res[0].rows.length > 0) {
                 this.group = res[0].rows
             }
             if(res[1] && res[1].rows.length > 0) {
                 this.dataList = res[1].rows
             }
+            if(res[2] && res[2].rows.length > 0) {
+                this.formatCollection(res[2].rows)
+            }
+        },
+        formatCollection (data) {
+            let tmp = data.map(v => {
+                return v.symbol
+            })
+            let arr = this.dataList.filter(v => {
+                return tmp.indexOf(v.symbol) > -1
+            })
+            this.collectionList = arr
         },
         sendMsg (coin) {
             this.getQUOSocket.send({"quoteAsset":coin})
         },
         setCoin (item) {
             this.setSelectMarket(item.symbol)
+            this.setCurrentSymbolInfo({
+                buy_price:'--',
+                sell_price:'--',
+            })
             this.initMarketListData()
-            // this.$router.replace('/exchange?market='+item.symbol)
-            
         },
         setMainCoin (item) {
             this.coinIndex = item.id;
@@ -268,8 +322,11 @@ export default {
         .li-item {
             font-size: 12px;
             overflow:hidden;
+            
             i {
                 color:@color2;
+                cursor: pointer;
+                margin-right:10px;
             }
             .left-coin {
                 color:@color3;
@@ -292,10 +349,23 @@ export default {
             }
         }
         .li-head,.li-item {
-            width: 33.3%;
             text-align: right;
             &:first-child {
+                display: flex;
+                align-items: center;
                 text-align: left;
+                width: 40%;
+            }
+            &:nth-child(2) {
+                width: 20%;
+            }
+            &:nth-child(3) {
+                width: 20%;
+            }
+            &:nth-child(4) {
+                display: block;
+                //text-align: right;
+                width: 20%;
             }
         }
     }

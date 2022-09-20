@@ -6,4 +6,6 @@ export default {
     getIsLight:(state) => state.isLight,
     getIsLogin:(state) => state.isLogin,
     getSelectMarket:(state) => state.selectMarket,
+    getUserInfo:(state) => state.userInfo,
+    getCurrentSymbolInfo:(state) => state.currenSymbolInfo,
 }

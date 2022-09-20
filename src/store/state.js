@@ -4,5 +4,7 @@ export default {
     marketData:{},
     isLight:true,
     isLogin:false,
-    selectMarket:''
+    selectMarket:'',
+    userInfo:{},
+    currenSymbolInfo:{}
 }

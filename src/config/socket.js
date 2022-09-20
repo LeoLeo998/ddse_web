@@ -46,21 +46,9 @@ export default class Socket {
 			if(msg.data) {
 				let data = JSON.parse(msg.data)
 				if(data.symbol == this.that.getSelectMarket) {
-					// let data1 = {
-					// 	...data,
-					// 	close:data.buy_price,
-					// 	time:data.datetime,
-					// 	high:data.buy_price,
-					// 	low:data.buy_price,
-					// 	open:data.buy_price
-					// }
+					this.that.setCurrentSymbolInfo(data)
 					bus.$emit('updateData',data)
-					// this.that.setMarketData(data1)
 				}
-				
-				
-				// data.push(da)
-				// this.that.setMarketData(JSON.parse(msg.data));
 			}
 		}
 		

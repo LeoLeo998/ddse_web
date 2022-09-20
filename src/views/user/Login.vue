@@ -7,6 +7,12 @@
       <img src="/static/images/login-banner.png" alt="" />
     </div>
     <div class="form-box">
+      <div class="go-register">
+        <span>还没有账号？</span>
+        <router-link to="/register">
+          去注册
+        </router-link>
+      </div>
       <div class="content">
         <p class="title">登录</p>
         <ul class="login-type">
@@ -17,11 +23,18 @@
         <div class="row">
           <label for="">{{ type === 1 ? '手机号码' : '邮箱/子账号' }}</label>
           <el-input v-if="type == 1" type="number" placeholder="请输入手机号码" v-model="user.email" class="input-with-select">
-            <el-select v-model="user.code" slot="prepend" placeholder="请选择">
-              <el-option label="+1" value="+1"></el-option>
-              <el-option label="+86" value="+86"></el-option>
-              <el-option label="+886" value="+886"></el-option>
+
+            <el-select v-model="user.code" slot="prepend" filterable placeholder="请选择">
+              <el-option
+                v-for="item in cityCode"
+                :key="item.code + item.en"
+                :label="item.code"
+                :value="item.code">
+                <span style="float: left">{{ item.en }}</span>
+                <span style="float: right; color: #8492a6; font-size: 13px">{{ item.code }}</span>
+              </el-option>
             </el-select>
+
           </el-input>
           <el-input v-else label="email" size="large" v-model="user.email" placeholder="请输入邮箱/子账号" clearable />
         </div>
@@ -45,16 +58,18 @@
 import FormatInput from '@/components/FormatInput'
 import { mapGetters, mapActions, mapMutations } from 'vuex'
 import { setCookie, getCookie } from '@/common/cookie'
+import { cityCode } from '@/common/code'
 export default {
   components: {
     FormatInput
   },
   data() {
     return {
+      cityCode,
       type: 1,
       showInv: false,
       user: {
-        code: '+86',
+        code: '65',
         email: '',
         password: '',
         invCode: ''
@@ -81,32 +96,34 @@ export default {
       }
     },
     submitClick() {
-      let reg = new RegExp('^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$')
-
-      // if(!this.user.email) {
-      //     this.$toast.error('请输入正确的邮箱地址');
-      //     return;
-      // }else if(!this.user.password) {
-      //     this.$toast.error('请输入您的密码');
-      //     return;
-      // }else if (!reg.test(this.user.email)) {
-      //     this.$toast.error('请检查邮箱格式');
-      //     return;
-      // }
+      if(this.inspect()) {
+        return
+      }
       this.firstLogin()
     },
+    inspect () {
+      let reg = new RegExp("^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$");
+      if(this.type == 2 && !this.user.account) {
+          this.$toast.error('请输入正确的邮箱地址');
+          return true;
+      }else if(!this.user.password) {
+          this.$toast.error('请输入您的密码');
+          return true;
+      }else if (this.type == 2 && !reg.test(this.user.account)) {
+          this.$toast.error('请检查邮箱格式');
+          return true;
+      }
+      return false
+    },
     async firstLogin() {
-      console.log(this.user)
       let res = await this.loginFetch({
         account: this.user.email,
         password: this.user.password
       })
       if (res.status == 200) {
         setCookie('userToken', res.token, 36000)
-        setTimeout(() => {
-          this.setIsLogin(true)
-          this.$router.push('/exchange')
-        }, 500)
+        this.setIsLogin(true)
+        this.$router.push('/exchange')
       } else {
         this.$toast.error('error')
       }
@@ -157,9 +174,10 @@ export default {
     .go-register {
       position: absolute;
       right: 100px;
-      top: 100px;
+      top: 60px;
       a {
         color: #2dbd96;
+        cursor: pointer;
       }
     }
     .content {

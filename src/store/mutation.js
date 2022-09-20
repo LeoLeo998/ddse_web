@@ -5,4 +5,6 @@ export default {
     setIsLight:(state,v) => state.isLight = v,
     setIsLogin:(state,v) => state.isLogin = v,
     setSelectMarket:(state,v) => state.selectMarket = v,
+    setUserInfo:(state,v) => state.userInfo = v,
+    setCurrentSymbolInfo:(state,v) => state.currenSymbolInfo = v,
 }

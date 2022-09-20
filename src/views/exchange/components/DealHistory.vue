@@ -34,7 +34,7 @@
   </div>
 </template>
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapMutations, mapGetters } from 'vuex'
 export default {
   data() {
     return {
@@ -58,6 +58,7 @@ export default {
   },
   methods: {
     ...mapActions(['getUserBalanceFetch', 'getUserInfoFetch', 'positionListFetch']),
+    ...mapMutations(["setIsLogin"]),
     async getUserBalance() {
       let res = await this.getUserBalanceFetch()
       this.balance = res

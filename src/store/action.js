@@ -126,10 +126,9 @@ export default {
     return service({
       url: '/getUserInfo',
       method: 'post',
-      data
+      data,
     })
   },
-
   //获取用户实时资金
   getUserBalanceFetch: (ctx, data) => {
     return service({
@@ -137,5 +136,37 @@ export default {
       method: 'post',
       data
     })
-  }
+  },
+  //退出登录
+  LogOutFetch: (ctx, data) => {
+    return service({
+      url: '/LogOut',
+      method: 'post',
+      data
+    })
+  },
+  //获取自选列表
+  productUserListFetch:(ctx, data) => {
+    return service({
+      url: '/getProductUserList',
+      method: 'post',
+      data
+    })
+  },
+  //添加自选
+  insertProductUserFetch:(ctx, data) => {
+    return service({
+      url: '/insertProductUser',
+      method: 'post',
+      data
+    })
+  },
+  //删除自选
+  deleteProductUserFetch:(ctx, data) => {
+    return service({
+      url: '/deleteProductUser',
+      method: 'post',
+      data
+    })
+  },
 }
