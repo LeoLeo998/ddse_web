@@ -25,9 +25,9 @@ export default {
       data
     })
   },
-  phoneCodeFetch: (ctx, data) => {
+  verifyCodeFetch: (ctx, data) => {
     return service({
-      url: '/sendPhoneCode',
+      url: '/getVerifyCode',
       method: 'post',
       data
     })

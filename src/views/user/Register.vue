@@ -21,9 +21,10 @@
                           <el-option label="+1" value="+1"></el-option>
                           <el-option label="+86" value="+86"></el-option>
                           <el-option label="+886" value="+886"></el-option>
+                          <el-option label="+65" value="+65"></el-option>
                         </el-select>
                       </el-input>
-                    <el-input v-else label="email" size="large" v-model="user.email" placeholder="请输入邮箱" clearable />
+                    <el-input v-else label="email" size="large" v-model="user.account" placeholder="请输入邮箱" clearable />
                 </div>
                 <div class="row">
                     <label for="">设置登录密码</label>
@@ -84,10 +85,10 @@ export default {
     methods:{
         ...mapActions([
             "registerFetch",
-            "phoneCodeFetch"
+            "verifyCodeFetch"
         ]),
         async sendMsg () {
-            let res = await this.phoneCodeFetch({
+            let res = await this.verifyCodeFetch({
                 account:this.user.account
             })
             if(res.status == 200) {
