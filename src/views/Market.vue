@@ -164,7 +164,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 export default {
   data() {
     return {
@@ -180,6 +180,8 @@ export default {
     }
   },
   computed: {
+    ...mapState(['isLogin']),
+    
     topSockets() {
       return []
     },
