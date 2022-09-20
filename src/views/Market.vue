@@ -221,7 +221,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['productGroupListFetch', 'getProductListFetch', 'productUserListFetch', 'deleteProductUserFetch', 'insertProductUserFetch']),
+    ...mapActions(['productGroupListFetch', 'productListFetch', 'productUserListFetch', 'deleteProductUserFetch', 'insertProductUserFetch']),
 
     mainCoinClick(id) {
       this.screenType = id
@@ -253,7 +253,7 @@ export default {
     },
     // 获取产品
     async getProductList() {
-      let res = await this.getProductListFetch()
+      let res = await this.productListFetch()
       this.allProductList = res.rows
       let favSymbolArr = this.myFavorite.map(a => {
         return a.symbol
