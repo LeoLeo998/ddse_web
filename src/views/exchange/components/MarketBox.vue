@@ -58,26 +58,35 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getQUOSocket', 'getSelectMarket']),
+    ...mapGetters(['getQUOSocket', 'getSelectMarket','getQuotesWsData','getProductData']),
     marketList() {
-      let data = []
+      let data = Object.values(this.getProductData)
       if (this.coinIndex === -1) {
-        return this.collectionList
-      }
-      if (this.coinIndex === 100) {
-        data = this.dataList.filter(v => {
+        data = this.collectionList 
+      }else if (this.coinIndex === 100) {
+        data = data.filter(v => {
           return v.hot == 1
         })
       } else {
-        data = this.dataList.filter(v => {
+        data = data.filter(v => {
           return v.group === this.coinIndex
         })
       }
+      let obj = {}
+      data.forEach(v => {
+        obj[v.symbol] = {}
+        obj[v.symbol] = v
+      })
       return data
     }
   },
+  watch:{
+    getQuotesWsData (v) {
+      // console.log(v)
+    }
+  },
   methods: {
-    ...mapMutations(['setSelectMarket', 'setMarketData', 'setCurrentSymbolInfo']),
+    ...mapMutations(['setSelectMarket', 'setMarketData', 'setCurrentSymbolInfo','setProductData']),
     ...mapActions(['productListFetch', 'productGroupListFetch', 'marketListFetch', 'productUserListFetch', 'insertProductUserFetch', 'deleteProductUserFetch']),
     isStar(symbol) {
       return this.collectionList.find(v => {
@@ -115,6 +124,12 @@ export default {
       }
       if (res[1] && res[1].rows.length > 0) {
         this.dataList = res[1].rows
+        let obj = {}
+        res[1].rows.forEach(v => {
+          obj[v.symbol] = {}
+          obj[v.symbol] = v
+        })
+        this.setProductData(obj)
       }
       if (res[2] && res[2].rows.length > 0) {
         this.formatCollection(res[2].rows)

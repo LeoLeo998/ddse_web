@@ -17,7 +17,7 @@
         <span>隐藏其他交易对</span> -->
       </div>
     </div>
-    <div class="tab">
+    <div class="tab-head">
       <table>
         <tr>
           <th>订单号</th>
@@ -30,6 +30,10 @@
           <th>最新价格</th>
           <th>盈亏</th>
         </tr>
+      </table>
+    </div>
+    <div class="tab">
+      <table>
         <tr v-for="(item, key) in list" :key="key" @click="orderClick(item)">
           <td>{{ item.TICKET }}</td>
           <td>{{ item.SYMBOL }}</td>
@@ -38,8 +42,8 @@
           <td>{{ item.OPEN_PRICE }}</td>
           <td>{{ item.SL }}</td>
           <td>{{ item.TP }}</td>
-          <td>--</td>
-          <td>--</td>
+          <td>{{formatPrice(item)}}</td>
+          <td>{{formatProfit(item)}}</td>
         </tr>
       </table>
     </div>
@@ -51,6 +55,7 @@
 import { mapActions, mapGetters } from 'vuex'
 import PositionOrderDialog from '@/components/PositionOrderDialog'
 import EntrustOrderDialog from '@/components/EntrustOrderDialog'
+import bus from '@/util/bus'
 export default {
   data() {
     return {
@@ -80,11 +85,16 @@ export default {
       this.getPositionList()
     },
   },
+  mounted () {
+    bus.$on('updatePosition',(data) => {
+      this.getPositionList()
+    })
+  },
   created() {
     this.getPositionList()
   },
   computed:{
-    ...mapGetters(['getIsLogin'])
+    ...mapGetters(['getIsLogin','getProductData'])
   },
   methods: {
     ...mapActions(['positionListFetch', 'entrustListFetch', 'getCloseOrderListFetch']),
@@ -103,7 +113,46 @@ export default {
       let res = await this.getCloseOrderListFetch()
       this.list = res.rows
     },
-
+    formatPrice (data) {
+      let currencyData = this.getProductData[data.SYMBOL]
+      if(!currencyData) {
+        return '--'
+      }
+      if(data.CMD == '0'){
+        return currencyData.buy_price
+      }else {
+        return currencyData.sell_price
+      }
+    },
+    formatProfit (data) {
+      let currencyData = this.getProductData[data.SYMBOL]
+      if(!currencyData) {
+        return '--'
+      }
+      let rate,profit;
+      if(currencyData.currency != currencyData.margin_currency) {
+        rate = currencyData.buy_price;
+      }else{
+        rate = 1;
+      }
+      if(data.CMD == '0' && currencyData.profit_mode=='1' ){
+        profit = (currencyData.buy_price - data.OPEN_PRICE) * data.VOLUME  * currencyData.contract_size * rate;
+      }else if(data.CMD == '1' && currencyData.profit_mode=='1' ){
+        profit = (data.OPEN_PRICE - currencyData.sell_price )  *data.VOLUME * currencyData.contract_size * rate
+      }else if(data.CMD == '0' && currencyData.profit_mode=='0' && currencyData.currency=='USD' && currencyData.margin_currency=='USD' ){
+        profit = (currencyData.buy_price - data.OPEN_PRICE)  *data.VOLUME  * currencyData.contract_size / currencyData.sell_price
+      }else if(data.CMD == '1' && currencyData.profit_mode=='0' && currencyData.currency=='USD' && currencyData.margin_currency=='USD' ){
+        profit = (data.OPEN_PRICE - currencyData.sell_price )  *data.VOLUME  * currencyData.contract_size / currencyData.buy_price
+      }else if(data.CMD == '0' && currencyData.profit_mode=='0' && currencyData.currency!='USD' && currencyData.margin_currency=='USD' ){
+        profit = (currencyData.buy_price - data.OPEN_PRICE)  *data.VOLUME * currencyData.contract_size 
+      }else if(data.CMD == '1' && currencyData.profit_mode=='0' && currencyData.currency!='USD' && currencyData.margin_currency=='USD' ){
+        profit = (data.OPEN_PRICE - currencyData.sell_price )  *data.VOLUME * currencyData.contract_size
+      }
+      if(profit) {
+        return profit.toFixed(4)
+      }
+      return '--'
+    },
     orderClick(data) {
       this.oderInfo = data
       if (this.activeName === 1) {
@@ -145,8 +194,25 @@ export default {
       }
     }
   }
+  .tab-head {
+    width: 100%;
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      th {
+        color: rgb(132, 142, 156);
+        background-color: var(--hover-color-);
+        height:40px;
+        width: 11.111%;
+        text-align: left;
+        &:first-child {
+          padding-left: 16px;
+        }
+      }
+    }
+  }
   .tab {
-    height: 340px;
+    height: 300px;
     overflow-y: auto;
     &::-webkit-scrollbar {
       width: 2px;

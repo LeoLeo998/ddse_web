@@ -22,6 +22,7 @@ export default {
       "getIsLogin",
       "getMarketData",
       "getSelectMarket",
+      "getProductData",
     ])
   },
   created () {

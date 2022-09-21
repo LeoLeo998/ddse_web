@@ -35,6 +35,7 @@
 </template>
 <script>
 import { mapActions, mapState, mapMutations, mapGetters } from 'vuex'
+import bus from '@/util/bus'
 export default {
   data() {
     return {
@@ -78,6 +79,10 @@ export default {
       this.getUserInfo()
       this.positionList()
     }
+    bus.$on("updateBalanceInfo", (data) => {
+      this.balance.balance = data.balance
+      this.balance.margin = data.margin
+    })
   }
 }
 </script>

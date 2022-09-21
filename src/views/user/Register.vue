@@ -13,55 +13,70 @@
                   去登录
                 </router-link>
               </div>
-            <div class="content">
+            <el-form class="content" :rules="rules" :model="user" ref="register">
                 <p class="title">注册</p>
                 <ul class="login-type">
                     <li :class="type == 1 && 'active'" @click="type = 1">手机注册</li>
                     <div class="line"></div>
                     <li :class="type == 2 && 'active'" @click="type = 2">邮箱注册</li>
                 </ul>
-                <div class="row">
-                    <label for="">{{type === 1 ? '手机号码' : '邮箱'}}</label>
-                    <el-input v-if="type == 1" type="number" placeholder="请输入手机号码" v-model="user.account" class="input-with-select">
-                        <!-- <el-select v-model="user.code" slot="prepend" placeholder="请选择">
-                          <el-option label="+1" value="+1"></el-option>
-                          <el-option label="+86" value="+86"></el-option>
-                          <el-option label="+886" value="+886"></el-option>
-                          <el-option label="+65" value="+65"></el-option>
-                        </el-select> -->
-                        <el-select v-model="user.code" slot="prepend" filterable placeholder="请选择">
-                            <el-option
-                              v-for="item in cityCode"
-                              :key="item.code + item.en"
-                              :label="item.code"
-                              :value="item.code">
-                              <span style="float: left">{{ item.en }}</span>
-                              <span style="float: right; color: #8492a6; font-size: 13px">{{ item.code }}</span>
-                            </el-option>
-                        </el-select>
-                      </el-input>
-                    <el-input v-else label="email" size="large" v-model="user.account" placeholder="请输入邮箱" clearable />
-                </div>
-                <div class="row">
-                    <label for="">设置登录密码</label>
-                    <el-input size="large" type="password" show-password v-model="user.password" placeholder="请输入密码" clearable />
-                </div>
-                <div class="row">
-                    <label for="">验证码</label>
-                    <el-input placeholder="请输入验证码" v-model="user.verifyCode">
-                        <template slot="append">
-                            <button class="send-btn" @click="sendMsg" :disabled="sendDisable">{{sendText}}</button>
-                        </template>
-                    </el-input>
-                </div>
+                <el-form-item prop="account">
+                    <div class="row">
+                        <label for="">{{type === 1 ? '手机号码' : '邮箱'}}</label>
+                        <el-input v-if="type == 1" type="number" v-model="user.account" class="input-with-select">
+                            <template slot="prepend">
+                                <VueCountryIntl schema="popover" v-model="user.code">
+                                    <button type="button" slot="reference">+{{user.code}}</button>
+                                </VueCountryIntl>
+                            </template>
+                            
+                            <!-- <el-select v-model="user.code" slot="prepend" filterable placeholder="请选择">
+                                <el-option
+                                  v-for="item in cityCode"
+                                  :key="item.code + item.en"
+                                  :label="item.code"
+                                  :value="item.code">
+                                  <span style="float: left">{{ item.en }}</span>
+                                  <span style="float: right; color: #8492a6; font-size: 13px">{{ item.code }}</span>
+                                </el-option>
+                            </el-select> -->
+                          </el-input>
+                        <el-input v-else label="email" size="large" v-model="user.account" clearable />
+                    </div>
+                </el-form-item>
+                
+                <el-form-item prop="password">
+                    <div class="row">
+                        <label for="">设置登录密码</label>
+                        <el-input size="large" type="password" show-password v-model="user.password" clearable />
+                    </div>
+                </el-form-item>
+                
+                <el-form-item prop="verifyCode">
+                    <div class="row">
+                        <label for="">验证码</label>
+                        <el-input type="number" v-model="user.verifyCode">
+                            <template slot="append">
+                                <div class="send-btn" :class="sendDisable && 'disabled'" @click="sendMsg" >{{sendText}}</div>
+                            </template>
+                        </el-input>
+                    </div>
+                </el-form-item>
+                
                 <div class="row">
                     <label for="">邀请码（选填）</label>
-                    <el-input size="large" type="text" v-model="user.invCode" placeholder="请输入邀请码" clearable />
+                    <el-input size="large" type="text" v-model="user.invCode" clearable />
                 </div>
-                <div class="row">
-                    <el-button class="submit-btn" type="success" @click="submitClick">注册</el-button>
+                <!-- <div class="row">
+                    
+                </div> -->
+                <div class="row checkedbox">
+                    <el-form-item prop="read">
+                        <el-checkbox v-model="user.read">我已阅读并同意 <a href="" class="agreement">服务协议</a></el-checkbox>
+                    </el-form-item>
+                    <el-button class="submit-btn" type="success" @click="submitClick('register')">注册</el-button>
                 </div>
-            </div>
+            </el-form>
         </div>
     </div>
 </template>
@@ -70,12 +85,36 @@ import FormatInput from '@/components/FormatInput'
 import { mapGetters,mapActions} from 'vuex';
 import {setCookie, getCookie} from '@/common/cookie'
 import { cityCode } from '@/common/code'
-import { string } from '_postcss-selector-parser@3.1.2@postcss-selector-parser';
 export default {
     components:{
         FormatInput
     },
     data () {
+        var validatePass = (rule, value, callback) => {
+            var passReg= /(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,20}/;
+            let emailReg = /^[A-Za-z\d]+([-_\.][A-Za-z\d]+)*@([A-Za-z\d]+[-\.])+[A-Za-z\d]{2,4}(,[A-Za-z\d]+([-_\.][A-Za-z\d]+)*@([A-Za-z\d]+[-\.])+[A-Za-z\d]{2,4})*$/
+            let text = ''
+            if(rule.field === 'account') {
+                text = '账户'
+            }else if(rule.field === "password") {
+                text = '密码'
+            }else if(rule.field === 'verifyCode') {
+                text = '验证码'
+            }
+            if(rule.field === 'read' && !value) {
+                callback(new Error(`请阅读协议并勾选`));
+            }
+            if (value === '') {
+                callback(new Error(`${text}不可为空`));
+            }
+            if (rule.field === "password" && !passReg.test(value)) {
+                callback(new Error('密码长度至少8位，最多20位, 必须包括数字和字母'));
+            }
+            if(rule.field === "account" && this.type == 2 && !emailReg.test(value)) {
+                callback(new Error('请检查邮箱格式'));
+            }
+            callback()
+        }
         return {
             cityCode,
             type:1,
@@ -87,7 +126,22 @@ export default {
                 account:'',
                 password:'',
                 invCode:'',
-                verifyCode:''
+                verifyCode:'',
+                read:false
+            },
+            rules:{
+                account:[
+                    { validator: validatePass, trigger: 'blur' }
+                ],
+                password: [
+                    { validator: validatePass, trigger: 'blur' }
+                ],
+                verifyCode:[
+                    { validator: validatePass, trigger: 'blur' }
+                ],
+                read:[
+                    { validator: validatePass, trigger: 'blur' }
+                ]
             }
         }
     },
@@ -109,10 +163,13 @@ export default {
             "verifyCodeFetch"
         ]),
         async sendMsg () {
-            let reg = new RegExp("^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$");
+            if(this.sendDisable) {
+                return 
+            }
+            let reg = /^[A-Za-z\d]+([-_\.][A-Za-z\d]+)*@([A-Za-z\d]+[-\.])+[A-Za-z\d]{2,4}(,[A-Za-z\d]+([-_\.][A-Za-z\d]+)*@([A-Za-z\d]+[-\.])+[A-Za-z\d]{2,4})*$/
             if (this.type == 2 && !reg.test(this.user.account)) {
-                this.$toast.error('请检查邮箱格式');
-                return true;
+                this.$message.error('请检查邮箱格式');
+                return;
             }
             let account = this.type == 1 ? String(this.user.code)+String(this.user.account) : this.user.account
             let res = await this.verifyCodeFetch({
@@ -123,7 +180,7 @@ export default {
                 this.user.verifyCode = res.code
                 setCookie('phoneToken',res.token,36000)
             }else {
-
+                this.$message.error(res.msg);
             }
         },
         timerStart () {
@@ -139,36 +196,14 @@ export default {
                 }
             },1000)
         },
-        submitClick() {
-            if(this.inspect()) {
-                return
-            }
-            this.registerClick()
-        },
-        inspect () {
-            let reg = new RegExp("^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$");
-            var passReg= /(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,20}/;
-            if(!this.user.account) {
-                this.$toast.error('请输入账号');
-                return true;
-            }
-            if(this.type == 2 && !this.user.account) {
-                this.$toast.error('请输入正确的邮箱地址');
-                return true;
-            }else if(!this.user.password) {
-                this.$toast.error('请输入您的密码');
-                return true;
-            }else if (this.type == 2 && !reg.test(this.user.account)) {
-                this.$toast.error('请检查邮箱格式');
-                return true;
-            }else if(!passReg.test(this.user.password)) {
-                this.$toast.error('密码长度至少8位，最多20位, 必须包括数字和字母');
-                return true;
-            }else if(!this.user.verifyCode){
-                this.$toast.error('请输入验证码');
-                return true;
-            }
-            return false
+        submitClick(formName) {
+            this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    this.registerClick()
+                } else {
+                    return false;
+                }
+            });
         },
         async registerClick () {
             let account = this.type == 1 ? String(this.user.code)+String(this.user.account) : this.user.account
@@ -178,9 +213,10 @@ export default {
             });
             if(res.status == 200) {
                 // this.$router.push({name:'LoginVe',params:this.user})
+                this.$message.success('注册成功，正在跳转登录');
                 this.$router.push('/login')
             }else {
-                this.$toast.error(res.msg);
+                this.$message.error(res.msg);
             }
         }
     },
@@ -204,8 +240,35 @@ export default {
     z-index: 100;
     //height: calc(~"100vh - 65px");
     height:100vh;
+    .el-input-group__prepend .vue-country-popover-container button {
+        border:none;
+        background: transparent;
+        width: 70px;
+        cursor: pointer;
+    }
+    .el-input-group__append, .el-input-group__prepend {
+        padding:0;
+        width: 70px;
+        text-align: center;
+    }
     .el-input-group__append {
         padding:0;
+    }
+    .el-form-item__content {
+        line-height: 16px;
+    }
+    .el-form-item {
+        width: 100%;
+        margin-bottom:20px;
+    }
+    .el-checkbox__label {
+        font-size: 12px;
+    }
+    .el-checkbox__input.is-checked .el-checkbox__inner, .el-checkbox__input.is-indeterminate .el-checkbox__inner {
+        background: rgb(45, 189, 150);
+    }
+    .el-checkbox__input.is-checked+.el-checkbox__label {
+        color:rgb(45, 189, 150);
     }
     .login-bg {
         flex: 0 0 41.6667%;
@@ -285,9 +348,18 @@ export default {
                     color:rgb(45, 189, 150);
                 }
             }
+            .checkedbox {
+                margin-top:30px;
+                .agreement{
+                    color:rgba(0, 20, 42, 0.6);
+                    font-size: 12px;
+                }
+                .el-form-item {
+                    margin-bottom:18px;
+                }
+            }
             .row {
                 width: 100%;
-                margin-bottom:30px;
                 label {
                     font-size: 12px;
                     color: rgba(0, 20, 42, 0.6);
@@ -297,9 +369,14 @@ export default {
                 .send-btn {
                     width: 70px;
                     height:40px;
+                    text-align: center;
+                    line-height: 40px;
                     border:none;
                     background: transparent;
                     cursor: pointer;
+                    &.disabled {
+                        cursor: not-allowed;
+                    }
                 }
                 .el-select .el-input {
                     width: 100px;
@@ -314,7 +391,7 @@ export default {
                     width: 100%;
                     height:50px;
                     background: rgb(45, 189, 150);
-                    margin-top:30px;
+                    //margin-top:30px;
                 }
                 .forget {
                     text-align: right;

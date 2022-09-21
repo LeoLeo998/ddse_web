@@ -34,7 +34,7 @@ import bus from '@/util/bus';
       const widgetOptions = {
 		debug: false, // uncomment this line to see Library errors and warnings in the console
 		fullscreen: false, // 是否全屏
-		symbol: "BTCUSDm", // 默认商品标识
+		symbol: this.getSelectMarket, // 默认商品标识
 		interval: '1', // 初始化显示时间范围
 		container_id: "tv_chart_container", // 容器的id名
 		// 调用接口API hrc_usdt
@@ -145,7 +145,7 @@ import bus from '@/util/bus';
     },
     watch:{
       getSelectMarket (v) {
-          this.tvWidget.setSymbol(v,1,null);
+        this.tvWidget.setSymbol(v,1,null);
       }
     }
   }

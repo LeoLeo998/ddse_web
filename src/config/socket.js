@@ -41,14 +41,26 @@ export default class Socket {
   }
   _onmessage(msg) {
     if (this.wsurl.indexOf(8002) > -1) {
-      let marketData = JSON.parse(JSON.stringify(this.that.getMarketData)),
-        lastData = marketData[marketData.length - 1]
       if (msg.data) {
         let data = JSON.parse(msg.data)
         store.commit('setQuotesWsData', data)
         if (data.symbol == this.that.getSelectMarket) {
           this.that.setCurrentSymbolInfo(data)
           bus.$emit('updateData', data)
+        }
+		if(this.that.getProductData && this.that.getProductData[data.symbol]) {
+			let item = this.that.getProductData[data.symbol]
+			item['buy_price'] = data.buy_price
+			item['sell_price'] = data.buy_price
+		}
+      }
+    }
+    if(this.wsurl.indexOf(8001) > -1) {
+      if(msg.data) {
+        let data = JSON.parse(msg.data)
+        if(data.type === "addPosition") {
+          bus.$emit('updatePosition', data)
+          bus.$emit('updateBalanceInfo', data)
         }
       }
     }
