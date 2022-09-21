@@ -21,7 +21,7 @@
             <div class="line"></div>
             <li :class="type == 2 && 'active'" @click="type = 2">邮箱账户</li>
           </ul>
-          <div class="row">
+          <div class="row row2">
             <label for="">{{ type === 1 ? '手机号码' : '邮箱/子账号' }}</label>
             <div class="flex-center-between">
               <div>
@@ -40,20 +40,20 @@
               </div>
             </div>
           </div>
-          <div class="row">
+          <div class="row row2">
             <label for="">验证码</label>
             <el-input size="large" v-model="user.verifyCode" placeholder="请输入验证码" />
           </div>
-          <div class="row">
+          <div class="row row2">
             <el-button class="submit-btn" type="success" @click="stepNext">确认</el-button>
           </div>
         </div>
         <div v-else>
-          <div class="row">
+          <div class="row row2">
             <el-input label="email" size="large" type="password" show-password v-model="user.password" placeholder="请输入原密码" clearable style="margin:10px 0" />
             <el-input label="email" size="large" type="password" show-password v-model="user.re_password" placeholder="请输入新密码" clearable style="margin:10px 0" />
           </div>
-          <div class="row">
+          <div class="row row2">
             <el-button class="submit-btn" type="success" @click="submitClick">确认</el-button>
           </div>
         </div>
@@ -267,6 +267,9 @@ export default {
       }
       .row {
         width: 100%;
+        &.row2 {
+          margin-bottom:30px;
+        }
         .send-btn {
           width: 70px;
           height: 40px;
