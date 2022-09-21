@@ -1,7 +1,22 @@
 <template>
   <div class="market-page">
+    <div class="hot">
+      <div class="hot-item" v-for="(item, index) in hotProductList" :key="index" @click="toExchange(item)">
+        <div class="flex-center-between symbol">
+          <div>{{ item.symbol }}</div>
+          <img src="https://huobicfg.s3.amazonaws.com/currency_icon/btc.png" alt="" />
+        </div>
+        <div class="flex-start-center price">
+          <div>{{ item.buy_price }}</div>
+          <span v-show="item.symbol !== 'USDCNHm'"> ≈ ¥{{ numRate(item) }}</span>
+        </div>
+        <div class="flex-start-center updown">
+          <div :class="upDown(item) > 0 ? 'price-up' : 'price-down'">{{ upDown(item) }}%</div>
+          <!-- <span>24H量7128</span> -->
+        </div>
+      </div>
+    </div>
     <div class="header">
-      <!-- <router-link to="/login">登录</router-link>或<router-link to="/register">注册</router-link> -->
       <div class="search-box">
         <p class="css-1xamyaw">行情</p>
         <div class="search-ipt">
@@ -175,7 +190,6 @@ export default {
       childCoin: 1,
       showSelectChild: false,
       topTitle: ['最大涨幅（24h）', '最大跌幅（24h）', '成交量（24h）', '亮点'],
-
       groupList: [],
       allProductList: [],
       myFavorite: []
@@ -186,11 +200,33 @@ export default {
     topSockets() {
       return []
     },
+    //获取汇率
+    getRate() {
+      return this.allProductList.find(item => {
+        return item.symbol === 'USDCNHm'
+      })
+    },
+    //汇率计算
+    numRate() {
+      return function(data) {
+        return (data.buy_price * this.getRate.buy_price).toFixed(2)
+      }
+    },
+    //头部热门
+    hotProductList() {
+      let arr = ['XAUUSDm', 'BTCUSDm', 'USDCNHm', 'US30m', 'AAPLm']
+      return this.allProductList.filter(item => {
+        return arr.includes(item.symbol)
+      })
+    },
     // 产品列表处理
     productList() {
-      // 热门
+      // 最热门
       if (this.marketType === 0) {
         return this.allProductList.filter(item => {
+          if (item.hot === 1) {
+            console.log(item)
+          }
           return item.hot === 1
         })
         // 自选
@@ -334,12 +370,52 @@ export default {
 @tabline: #eaecef;
 
 .market-page {
+  .hot {
+    padding: 0 30px;
+    display: flex;
+    justify-content: center;
+    .hot-item {
+      width: 350px;
+      margin: 10px 10px;
+      border-radius: 10px;
+      background: #fff;
+      padding: 25px 25px;
+      cursor: pointer;
+      .symbol {
+        div {
+          font-size: 20px;
+          color: #000;
+        }
+        img {
+          width: 40px;
+        }
+      }
+      .price {
+        margin: 5px 0 10px 0;
+        div {
+          font-size: 25px;
+          font-weight: bold;
+          color: #000;
+          margin-right: 5px;
+        }
+        span {
+          color: @fontcolor;
+        }
+      }
+      .updown {
+        div {
+          margin-right: 5px;
+        }
+        span {
+          color: @fontcolor;
+        }
+      }
+    }
+  }
   .header {
-    // height:295px;
     padding: 50px 0;
     background-color: @bgcolor2;
     text-align: center;
-    // line-height: 295px;
     .search-box {
       width: 1280px;
       margin: 0 auto;

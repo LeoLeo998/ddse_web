@@ -168,5 +168,26 @@ export default {
       method: 'post',
       data
     })
+  },
+
+  //获取修改密码验证码
+  getPasswordVerifyCodeFetch: (ctx, data) => {
+    return service({
+      url: '/getPasswordVerifyCode',
+      method: 'post',
+      data
+    })
+  },
+
+  //未登录 - 重置密码
+  setNewPasswordFetch: (ctx, data) => {
+    return service({
+      url: '/setNewPassword',
+      headers: {
+        authorization: 'Bearer ' + getCookie('phoneToken')
+      },
+      method: 'post',
+      data
+    })
   }
 }

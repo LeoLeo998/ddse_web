@@ -5,21 +5,21 @@ import Market from '@/views/Market'
 import Exchange from '@/views/exchange/Index'
 import Login from '@/views/user/Login'
 import Register from '@/views/user/Register'
-
+import FindPwd from '@/views/user/FindPwd'
 const originalPush = Router.prototype.push
-Router.prototype.push = function push (location) {
-  return originalPush.call(this,location).catch(err => err)
-} 
+Router.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => err)
+}
 
 Vue.use(Router)
 
 export default new Router({
-  mode:'history',
+  mode: 'history',
   routes: [
     {
       path: '/',
       name: 'Home',
-      component: Home,
+      component: Home
     },
     {
       path: '/market',
@@ -30,15 +30,21 @@ export default new Router({
       path: '/exchange',
       name: 'Exchange',
       component: Exchange
-    },{
+    },
+    {
       path: '/login',
-      name:'Login',
-      component:Login
-    },{
-      path:'/register',
-      name:'Register',
-      component:Register
+      name: 'Login',
+      component: Login
+    },
+    {
+      path: '/register',
+      name: 'Register',
+      component: Register
+    },
+    {
+      path: '/FindPwd',
+      name: 'FindPwd',
+      component: FindPwd
     }
-    
   ]
 })
