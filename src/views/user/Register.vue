@@ -70,6 +70,7 @@ import FormatInput from '@/components/FormatInput'
 import { mapGetters,mapActions} from 'vuex';
 import {setCookie, getCookie} from '@/common/cookie'
 import { cityCode } from '@/common/code'
+import { string } from '_postcss-selector-parser@3.1.2@postcss-selector-parser';
 export default {
     components:{
         FormatInput
@@ -113,8 +114,9 @@ export default {
                 this.$toast.error('请检查邮箱格式');
                 return true;
             }
+            let account = this.type == 1 ? String(this.user.code)+String(this.user.account) : this.user.account
             let res = await this.verifyCodeFetch({
-                account:this.user.account
+                account,
             })
             if(res.status == 200) {
                 this.timerStart()
@@ -145,9 +147,11 @@ export default {
         },
         inspect () {
             let reg = new RegExp("^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$");
-            // 正则
-            var passReg= /^(?=.*[A-Za-z])(?=.*\d)(?=.*[`~!@#$%^&*()_+<>?:"{},.\/\\;'[\]])[A-Za-z\d`~!@#$%^&*()_+<>?:"{},.\/\\;'[\]]{8,20}$/;
-            // 可用 test 方法验证
+            var passReg= /(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,20}/;
+            if(!this.user.account) {
+                this.$toast.error('请输入账号');
+                return true;
+            }
             if(this.type == 2 && !this.user.account) {
                 this.$toast.error('请输入正确的邮箱地址');
                 return true;
@@ -158,7 +162,7 @@ export default {
                 this.$toast.error('请检查邮箱格式');
                 return true;
             }else if(!passReg.test(this.user.password)) {
-                this.$toast.error('密码长度至少8位，最多20位, 必须包括数字字母和特殊字符');
+                this.$toast.error('密码长度至少8位，最多20位, 必须包括数字和字母');
                 return true;
             }else if(!this.user.verifyCode){
                 this.$toast.error('请输入验证码');
@@ -167,7 +171,11 @@ export default {
             return false
         },
         async registerClick () {
-            let res = await this.registerFetch(this.user);
+            let account = this.type == 1 ? String(this.user.code)+String(this.user.account) : this.user.account
+            let res = await this.registerFetch({
+                ...this.user,
+                account,
+            });
             if(res.status == 200) {
                 // this.$router.push({name:'LoginVe',params:this.user})
                 this.$router.push('/login')

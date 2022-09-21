@@ -391,9 +391,10 @@ export default {
     }
     .li-head,
     .li-item {
-      width: 33.3%;
+      width: 20%;
       text-align: right;
       &:first-child {
+        width: 40%;
         text-align: left;
       }
     }

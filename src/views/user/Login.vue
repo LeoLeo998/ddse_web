@@ -22,7 +22,7 @@
         </ul>
         <div class="row">
           <label for="">{{ type === 1 ? '手机号码' : '邮箱/子账号' }}</label>
-          <el-input v-if="type == 1" type="number" placeholder="请输入手机号码" v-model="user.email" class="input-with-select">
+          <el-input v-if="type == 1" type="number" placeholder="请输入手机号码" v-model="user.account" class="input-with-select">
 
             <el-select v-model="user.code" slot="prepend" filterable placeholder="请选择">
               <el-option
@@ -36,7 +36,7 @@
             </el-select>
 
           </el-input>
-          <el-input v-else label="email" size="large" v-model="user.email" placeholder="请输入邮箱/子账号" clearable />
+          <el-input v-else label="email" size="large" v-model="user.account" placeholder="请输入邮箱/子账号" clearable />
         </div>
         <div class="row">
           <label for="">登录密码</label>
@@ -70,7 +70,7 @@ export default {
       showInv: false,
       user: {
         code: '65',
-        email: '',
+        account: '',
         password: '',
         invCode: ''
       }
@@ -103,6 +103,10 @@ export default {
     },
     inspect () {
       let reg = new RegExp("^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$");
+      if(!this.user.account) {
+          this.$toast.error('请输入账号');
+          return true;
+      }
       if(this.type == 2 && !this.user.account) {
           this.$toast.error('请输入正确的邮箱地址');
           return true;
@@ -116,8 +120,9 @@ export default {
       return false
     },
     async firstLogin() {
+      let account = this.type == 1 ? String(this.user.code)+String(this.user.account) : this.user.account
       let res = await this.loginFetch({
-        account: this.user.email,
+        account,
         password: this.user.password
       })
       if (res.status == 200) {
@@ -125,7 +130,7 @@ export default {
         this.setIsLogin(true)
         this.$router.push('/exchange')
       } else {
-        this.$toast.error('error')
+        this.$toast.error(res.msg)
       }
     }
   }
