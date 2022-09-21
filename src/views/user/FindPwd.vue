@@ -267,7 +267,6 @@ export default {
       }
       .row {
         width: 100%;
-        margin-bottom: 30px;
         .send-btn {
           width: 70px;
           height: 40px;
