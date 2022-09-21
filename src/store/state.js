@@ -7,5 +7,6 @@ export default {
   selectMarket: '',
   userInfo: {},
   currenSymbolInfo: {},
-  quotes_ws_data: {}
+  quotes_ws_data: {},
+  productData: {}
 }

@@ -7,5 +7,6 @@ export default {
   getSelectMarket: state => state.selectMarket,
   getUserInfo: state => state.userInfo,
   getCurrentSymbolInfo: state => state.currenSymbolInfo,
-  getQuotesWsData: state => state.quotes_ws_data
+  getQuotesWsData: state => state.quotes_ws_data,
+  getProductData: state => state.productData,
 }

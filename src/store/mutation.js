@@ -7,5 +7,6 @@ export default {
   setSelectMarket: (state, v) => (state.selectMarket = v),
   setUserInfo: (state, v) => (state.userInfo = v),
   setCurrentSymbolInfo: (state, v) => (state.currenSymbolInfo = v),
-  setQuotesWsData: (state, v) => (state.quotes_ws_data = v)
+  setQuotesWsData: (state, v) => (state.quotes_ws_data = v),
+  setProductData: (state, v) => (state.productData = v)
 }

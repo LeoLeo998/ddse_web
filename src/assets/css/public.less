@@ -19,12 +19,15 @@
 }
 
 :root {
-  --font-color1-: #8c8e9c;
-  --font-color2-: #2c2c2c;
-  --hover-color-: #f0f0f0;
-  --hover-color2-: #f6f6f6;
-  --color-red-: #fd5760;
-  --color-green-: #03a66d;
+    --font-color1-:#8c8e9c;
+    --font-color2-:#2c2c2c;
+    --hover-color-:#f0f0f0;
+    --hover-color2-:#f6f6f6;
+    --color-red-:#fd5760;
+    --color-green-:#41b883;
+}
+.vue-country-intl-popover-content .vue-country-list-wrap .vue-country-list .vue-country-item.selected {
+    background-color:var(--color-green-);
 }
 .el-slider__stop {
   background-color: #dadada !important;
@@ -37,6 +40,13 @@ input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none !important;
   margin: 0;
+}
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
 }
 input[type='number'] {
   -moz-appearance: textfield;
