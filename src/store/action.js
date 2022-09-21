@@ -126,7 +126,7 @@ export default {
     return service({
       url: '/getUserInfo',
       method: 'post',
-      data,
+      data
     })
   },
   //获取用户实时资金
@@ -146,7 +146,7 @@ export default {
     })
   },
   //获取自选列表
-  productUserListFetch:(ctx, data) => {
+  productUserListFetch: (ctx, data) => {
     return service({
       url: '/getProductUserList',
       method: 'post',
@@ -154,7 +154,7 @@ export default {
     })
   },
   //添加自选
-  insertProductUserFetch:(ctx, data) => {
+  insertProductUserFetch: (ctx, data) => {
     return service({
       url: '/insertProductUser',
       method: 'post',
@@ -162,11 +162,32 @@ export default {
     })
   },
   //删除自选
-  deleteProductUserFetch:(ctx, data) => {
+  deleteProductUserFetch: (ctx, data) => {
     return service({
       url: '/deleteProductUser',
       method: 'post',
       data
     })
   },
+
+  //获取修改密码验证码
+  getPasswordVerifyCodeFetch: (ctx, data) => {
+    return service({
+      url: '/getPasswordVerifyCode',
+      method: 'post',
+      data
+    })
+  },
+
+  //未登录 - 重置密码
+  setNewPasswordFetch: (ctx, data) => {
+    return service({
+      url: '/setNewPassword',
+      headers: {
+        authorization: 'Bearer ' + getCookie('phoneToken')
+      },
+      method: 'post',
+      data
+    })
+  }
 }

@@ -1,7 +1,22 @@
 <template>
   <div class="market-page">
+    <div class="hot">
+      <div class="hot-item" v-for="(item, index) in hotProductList" :key="index" @click="toExchange(item)">
+        <div class="flex-center-between symbol">
+          <div>{{ item.symbol }}</div>
+          <img src="https://huobicfg.s3.amazonaws.com/currency_icon/btc.png" alt="" />
+        </div>
+        <div class="flex-start-center price">
+          <div>{{ item.buy_price }}</div>
+          <span v-show="item.symbol !== 'USDCNHm'"> ≈ ¥{{ numRate(item) }}</span>
+        </div>
+        <div class="flex-start-center updown">
+          <div :class="upDown(item) > 0 ? 'price-up' : 'price-down'">{{ upDown(item) }}%</div>
+          <!-- <span>24H量7128</span> -->
+        </div>
+      </div>
+    </div>
     <div class="header">
-      <!-- <router-link to="/login">登录</router-link>或<router-link to="/register">注册</router-link> -->
       <div class="search-box">
         <p class="css-1xamyaw">行情</p>
         <div class="search-ipt">
@@ -122,7 +137,8 @@
                 <i class="fa fa-sort-down"></i>
               </span>
             </th>
-            <th>24H最高/24H最低</th>
+            <th>24H最高</th>
+            <th>24H最低</th>
             <!-- <th>
               24H交易量
               <span class="sort">
@@ -137,25 +153,26 @@
                 <i class="fa fa-sort-down"></i>
               </span>
             </th> -->
-            <th>操作</th>
+            <!-- <th>操作</th> -->
           </tr>
-          <tr v-for="(item, key) in productList" :key="key">
+          <tr v-for="(item, key) in productList" :key="key" class="cursor" @click.stop="toExchange(item)">
             <td>
-              <i class="fa fa-star" :class="item.isFavorite === 1 ? 'fa-star-fav' : 'fa-star'" @click="isFavorite(item)"></i>
+              <i class="fa fa-star" :class="item.isFavorite === 1 ? 'fa-star-fav' : 'fa-star'" @click.stop="isFavorite(item)"></i>
               {{ item.symbol }}
             </td>
             <td>
-              {{ item.buy_price }} <span>{{ item.margin_currency }}</span>
+              {{ item.buy_price }}
             </td>
             <td :class="upDown(item) > 0 ? 'price-up' : 'price-down'">{{ upDown(item) }}%</td>
-            <td>{{ item.high }} / {{ item.low }}</td>
+            <td>{{ item.high }}</td>
+            <td>{{ item.low }}</td>
             <!-- <td>{{ item.volume || '--' }}</td>
             <td>--</td> -->
-            <td>
+            <!-- <td>
               <span class="to-trans">
                 交易
               </span>
-            </td>
+            </td> -->
           </tr>
         </table>
       </div>
@@ -164,7 +181,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 export default {
   data() {
     return {
@@ -173,21 +190,43 @@ export default {
       childCoin: 1,
       showSelectChild: false,
       topTitle: ['最大涨幅（24h）', '最大跌幅（24h）', '成交量（24h）', '亮点'],
-
       groupList: [],
       allProductList: [],
       myFavorite: []
     }
   },
   computed: {
+    ...mapState(['isLogin', 'quotes_ws_data']),
     topSockets() {
       return []
     },
+    //获取汇率
+    getRate() {
+      return this.allProductList.find(item => {
+        return item.symbol === 'USDCNHm'
+      })
+    },
+    //汇率计算
+    numRate() {
+      return function(data) {
+        return (data.buy_price * this.getRate.buy_price).toFixed(2)
+      }
+    },
+    //头部热门
+    hotProductList() {
+      let arr = ['XAUUSDm', 'BTCUSDm', 'USDCNHm', 'US30m', 'AAPLm']
+      return this.allProductList.filter(item => {
+        return arr.includes(item.symbol)
+      })
+    },
     // 产品列表处理
     productList() {
-      // 热门
+      // 最热门
       if (this.marketType === 0) {
         return this.allProductList.filter(item => {
+          if (item.hot === 1) {
+            console.log(item)
+          }
           return item.hot === 1
         })
         // 自选
@@ -208,7 +247,7 @@ export default {
     //24小时涨跌计算
     upDown() {
       return function(data) {
-        return ((data.buy_price - data.close) / data.close).toFixed(3)
+        return (((data.buy_price - data.close) / data.close) * 100).toFixed(2)
       }
     }
   },
@@ -218,6 +257,13 @@ export default {
         this.getProductUserList()
         this.getProductList()
       }
+    },
+    quotes_ws_data(val) {
+      this.allProductList.forEach(item => {
+        if (item.symbol === val.symbol) {
+          item.buy_price = val.buy_price
+        }
+      })
     }
   },
   methods: {
@@ -255,7 +301,8 @@ export default {
     async getProductList() {
       let res = await this.productListFetch()
       this.allProductList = res.rows
-      let favSymbolArr = this.myFavorite.map(a => {
+      let favorites = this.isLogin ? this.myFavorite : JSON.parse(localStorage.getItem('ddse_favorite_product')) || []
+      let favSymbolArr = favorites.map(a => {
         return a.symbol
       })
       // 是否自选
@@ -265,20 +312,45 @@ export default {
     },
     // 获取自选
     async getProductUserList() {
-      let res = await this.productUserListFetch()
-      this.myFavorite = res.rows
+      if (this.isLogin) {
+        let res = await this.productUserListFetch()
+        this.myFavorite = res.rows
+      } else {
+        this.myFavorite = JSON.parse(localStorage.getItem('ddse_favorite_product')) || []
+      }
     },
     // 取消-添加 自选
     async isFavorite(item) {
-      let params = { symbol: item.symbol }
-      let res = item.isFavorite === 1 ? await this.deleteProductUserFetch(params) : this.insertProductUserFetch(params)
-      //   let index = this.allProductList.findIndex(v => {
-      //     return v.symbol === item.symbol
-      //   })
+      if (this.isLogin) {
+        let params = { symbol: item.symbol }
+        let res = item.isFavorite === 1 ? await this.deleteProductUserFetch(params) : this.insertProductUserFetch(params)
+      } else {
+        let arr = JSON.parse(localStorage.getItem('ddse_favorite_product')) || []
+        if (item.isFavorite === 1) {
+          if (arr.length > 0) {
+            let index = arr.findIndex(a => {
+              return a.symbol === item.symbol
+            })
+            this.$delete(arr, index)
+            localStorage.removeItem('ddse_favorite_product')
+            localStorage.setItem('ddse_favorite_product', JSON.stringify(arr))
+          }
+        } else {
+          localStorage.setItem('ddse_favorite_product', JSON.stringify(arr.concat(item)))
+        }
+      }
       setTimeout(() => {
         this.getProductUserList()
         this.getProductList()
       }, 400)
+    },
+    toExchange(item) {
+      this.$router.push({
+        path: '/exchange',
+        query: {
+          market: item.symbol
+        }
+      })
     }
   },
 
@@ -298,12 +370,52 @@ export default {
 @tabline: #eaecef;
 
 .market-page {
+  .hot {
+    padding: 0 30px;
+    display: flex;
+    justify-content: center;
+    .hot-item {
+      width: 350px;
+      margin: 10px 10px;
+      border-radius: 10px;
+      background: #fff;
+      padding: 25px 25px;
+      cursor: pointer;
+      .symbol {
+        div {
+          font-size: 20px;
+          color: #000;
+        }
+        img {
+          width: 40px;
+        }
+      }
+      .price {
+        margin: 5px 0 10px 0;
+        div {
+          font-size: 25px;
+          font-weight: bold;
+          color: #000;
+          margin-right: 5px;
+        }
+        span {
+          color: @fontcolor;
+        }
+      }
+      .updown {
+        div {
+          margin-right: 5px;
+        }
+        span {
+          color: @fontcolor;
+        }
+      }
+    }
+  }
   .header {
-    // height:295px;
     padding: 50px 0;
     background-color: @bgcolor2;
     text-align: center;
-    // line-height: 295px;
     .search-box {
       width: 1280px;
       margin: 0 auto;
@@ -537,7 +649,7 @@ export default {
         }
         th:nth-child(4),
         td:nth-child(4) {
-          width: 18%;
+          width: 10%;
           text-align: left;
         }
         th:nth-child(5),

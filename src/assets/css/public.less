@@ -1,35 +1,43 @@
-@exBorderColor:rgb(196, 44, 44);
-@activeColor:#03A66D;
+@exBorderColor: rgb(196, 44, 44);
+@activeColor: #03a66d;
 .night-css {
-    background-color: rgb(22, 26, 30);
+  background-color: rgb(22, 26, 30);
 }
 .light-bg {
-
 }
 .night-bg {
-    background-color: rgb(22, 26, 30);
+  background-color: rgb(22, 26, 30);
 }
 .active {
-    color: @activeColor!important;
+  color: @activeColor!important;
 }
 .price-up {
-    color:@activeColor!important;
+  color: @activeColor!important;
 }
 .price-down {
-    color:#CF304A !important;
+  color: #cf304a !important;
 }
 
 :root {
-    --font-color1-:#8c8e9c;
-    --font-color2-:#2c2c2c;
-    --hover-color-:#f0f0f0;
-    --hover-color2-:#f6f6f6;
-    --color-red-:#fd5760;
-    --color-green-:#03A66D;
+  --font-color1-: #8c8e9c;
+  --font-color2-: #2c2c2c;
+  --hover-color-: #f0f0f0;
+  --hover-color2-: #f6f6f6;
+  --color-red-: #fd5760;
+  --color-green-: #03a66d;
 }
 .el-slider__stop {
-    background-color: #dadada !important;
+  background-color: #dadada !important;
 }
 .el-slider__bar {
-    background-color: @activeColor !important;
+  background-color: @activeColor !important;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0;
+}
+input[type='number'] {
+  -moz-appearance: textfield;
 }

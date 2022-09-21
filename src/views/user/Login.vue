@@ -25,29 +25,24 @@
           <el-input v-if="type == 1" type="number" placeholder="请输入手机号码" v-model="user.account" class="input-with-select">
 
             <el-select v-model="user.code" slot="prepend" filterable placeholder="请选择">
-              <el-option
-                v-for="item in cityCode"
-                :key="item.code + item.en"
-                :label="item.code"
-                :value="item.code">
+              <el-option v-for="item in cityCode" :key="item.code + item.en" :label="item.code" :value="item.code">
                 <span style="float: left">{{ item.en }}</span>
                 <span style="float: right; color: #8492a6; font-size: 13px">{{ item.code }}</span>
               </el-option>
             </el-select>
-
           </el-input>
           <el-input v-else label="email" size="large" v-model="user.account" placeholder="请输入邮箱/子账号" clearable />
         </div>
         <div class="row">
           <label for="">登录密码</label>
-          <el-input size="large" type="password" show-password v-model="user.password" placeholder="Please input Password" clearable />
+          <el-input size="large" type="password" show-password v-model="user.password" placeholder="请输入密码" clearable />
         </div>
         <div class="row">
           <el-button class="submit-btn" type="success" @click="submitClick">登录</el-button>
         </div>
         <div class="row">
           <div class="forget">
-            <a href="">忘记密码？</a>
+            <a href="" @click="$router.push('/FindPwd')">忘记密码？</a>
           </div>
         </div>
       </div>
@@ -96,7 +91,7 @@ export default {
       }
     },
     submitClick() {
-      if(this.inspect()) {
+      if (this.inspect()) {
         return
       }
       this.firstLogin()
