@@ -129,7 +129,6 @@ export default {
       data
     })
   },
-
   //获取用户实时资金
   getUserBalanceFetch: (ctx, data) => {
     return service({
@@ -138,47 +137,34 @@ export default {
       data
     })
   },
-
-  //获取行情分组
-  getProductGroupListFetch: (ctx, data) => {
+  //退出登录
+  LogOutFetch: (ctx, data) => {
     return service({
-      url: '/getProductGroupList',
+      url: '/LogOut',
       method: 'post',
       data
     })
   },
-
-  //获取产品列表
-  getProductListFetch: (ctx, data) => {
-    return service({
-      url: '/getProductList',
-      method: 'post',
-      data
-    })
-  },
-
-  //获取自选产品列表
-  getProductUserListFetch: (ctx, data) => {
+  //获取自选列表
+  productUserListFetch: (ctx, data) => {
     return service({
       url: '/getProductUserList',
       method: 'post',
       data
     })
   },
-
-  //取消自选产品
-  deleteProductUserFetch: (ctx, data) => {
+  //添加自选
+  insertProductUserFetch: (ctx, data) => {
     return service({
-      url: '/deleteProductUser',
+      url: '/insertProductUser',
       method: 'post',
       data
     })
   },
-
-  //添加自选产品
-  insertProductUserFetch: (ctx, data) => {
+  //删除自选
+  deleteProductUserFetch: (ctx, data) => {
     return service({
-      url: '/insertProductUser',
+      url: '/deleteProductUser',
       method: 'post',
       data
     })

@@ -122,7 +122,8 @@
                 <i class="fa fa-sort-down"></i>
               </span>
             </th>
-            <th>24H最高/24H最低</th>
+            <th>24H最高</th>
+            <th>24H最低</th>
             <!-- <th>
               24H交易量
               <span class="sort">
@@ -137,25 +138,26 @@
                 <i class="fa fa-sort-down"></i>
               </span>
             </th> -->
-            <th>操作</th>
+            <!-- <th>操作</th> -->
           </tr>
-          <tr v-for="(item, key) in productList" :key="key">
+          <tr v-for="(item, key) in productList" :key="key" class="cursor" @click.stop="toExchange(item)">
             <td>
-              <i class="fa fa-star" :class="item.isFavorite === 1 ? 'fa-star-fav' : 'fa-star'" @click="isFavorite(item)"></i>
+              <i class="fa fa-star" :class="item.isFavorite === 1 ? 'fa-star-fav' : 'fa-star'" @click.stop="isFavorite(item)"></i>
               {{ item.symbol }}
             </td>
             <td>
-              {{ item.buy_price }} <span>{{ item.margin_currency }}</span>
+              {{ item.buy_price }}
             </td>
             <td :class="upDown(item) > 0 ? 'price-up' : 'price-down'">{{ upDown(item) }}%</td>
-            <td>{{ item.high }} / {{ item.low }}</td>
+            <td>{{ item.high }}</td>
+            <td>{{ item.low }}</td>
             <!-- <td>{{ item.volume || '--' }}</td>
             <td>--</td> -->
-            <td>
+            <!-- <td>
               <span class="to-trans">
                 交易
               </span>
-            </td>
+            </td> -->
           </tr>
         </table>
       </div>
@@ -180,8 +182,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['isLogin']),
-    
+    ...mapState(['isLogin', 'quotes_ws_data']),
     topSockets() {
       return []
     },
@@ -210,7 +211,7 @@ export default {
     //24小时涨跌计算
     upDown() {
       return function(data) {
-        return ((data.buy_price - data.close) / data.close).toFixed(3)
+        return (((data.buy_price - data.close) / data.close) * 100).toFixed(2)
       }
     }
   },
@@ -220,10 +221,17 @@ export default {
         this.getProductUserList()
         this.getProductList()
       }
+    },
+    quotes_ws_data(val) {
+      this.allProductList.forEach(item => {
+        if (item.symbol === val.symbol) {
+          item.buy_price = val.buy_price
+        }
+      })
     }
   },
   methods: {
-    ...mapActions(['getProductGroupListFetch', 'getProductListFetch', 'getProductUserListFetch', 'deleteProductUserFetch', 'insertProductUserFetch']),
+    ...mapActions(['productGroupListFetch', 'productListFetch', 'productUserListFetch', 'deleteProductUserFetch', 'insertProductUserFetch']),
 
     mainCoinClick(id) {
       this.screenType = id
@@ -235,7 +243,7 @@ export default {
     },
     // 获取分组
     async getProductGroup() {
-      let res = await this.getProductGroupListFetch()
+      let res = await this.productGroupListFetch()
       this.groupList = res.rows
       this.groupList.unshift({
         id: 0,
@@ -255,9 +263,10 @@ export default {
     },
     // 获取产品
     async getProductList() {
-      let res = await this.getProductListFetch()
+      let res = await this.productListFetch()
       this.allProductList = res.rows
-      let favSymbolArr = this.myFavorite.map(a => {
+      let favorites = this.isLogin ? this.myFavorite : JSON.parse(localStorage.getItem('ddse_favorite_product')) || []
+      let favSymbolArr = favorites.map(a => {
         return a.symbol
       })
       // 是否自选
@@ -267,20 +276,45 @@ export default {
     },
     // 获取自选
     async getProductUserList() {
-      let res = await this.getProductUserListFetch()
-      this.myFavorite = res.rows
+      if (this.isLogin) {
+        let res = await this.productUserListFetch()
+        this.myFavorite = res.rows
+      } else {
+        this.myFavorite = JSON.parse(localStorage.getItem('ddse_favorite_product')) || []
+      }
     },
     // 取消-添加 自选
     async isFavorite(item) {
-      let params = { symbol: item.symbol }
-      let res = item.isFavorite === 1 ? await this.deleteProductUserFetch(params) : this.insertProductUserFetch(params)
-      //   let index = this.allProductList.findIndex(v => {
-      //     return v.symbol === item.symbol
-      //   })
+      if (this.isLogin) {
+        let params = { symbol: item.symbol }
+        let res = item.isFavorite === 1 ? await this.deleteProductUserFetch(params) : this.insertProductUserFetch(params)
+      } else {
+        let arr = JSON.parse(localStorage.getItem('ddse_favorite_product')) || []
+        if (item.isFavorite === 1) {
+          if (arr.length > 0) {
+            let index = arr.findIndex(a => {
+              return a.symbol === item.symbol
+            })
+            this.$delete(arr, index)
+            localStorage.removeItem('ddse_favorite_product')
+            localStorage.setItem('ddse_favorite_product', JSON.stringify(arr))
+          }
+        } else {
+          localStorage.setItem('ddse_favorite_product', JSON.stringify(arr.concat(item)))
+        }
+      }
       setTimeout(() => {
         this.getProductUserList()
         this.getProductList()
       }, 400)
+    },
+    toExchange(item) {
+      this.$router.push({
+        path: '/exchange',
+        query: {
+          market: item.symbol
+        }
+      })
     }
   },
 
@@ -539,7 +573,7 @@ export default {
         }
         th:nth-child(4),
         td:nth-child(4) {
-          width: 18%;
+          width: 10%;
           text-align: left;
         }
         th:nth-child(5),

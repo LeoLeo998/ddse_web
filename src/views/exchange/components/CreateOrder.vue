@@ -9,8 +9,8 @@
             </button>
         </div> -->
         <div class="order-type-box">
-            <div class="item" :class="orderType === 0 && 'active'" @click="orderType = 0">限价</div>
             <div class="item" :class="orderType === 1 && 'active'" @click="orderType = 1">市价</div>
+            <div class="item" :class="orderType === 0 && 'active'" @click="orderType = 0">限价</div>
         </div>
         <!-- <div class="available-balance">
             <span class="txt">
@@ -24,6 +24,17 @@
             <div class="row">
                 <label for="">交易品种</label>
                 <strong>{{getSelectMarket}}</strong>
+            </div>
+            <div class="row flex">
+                <div>
+                    <label for="">买入价格</label>
+                    <span class="price-up">{{getCurrentSymbolInfo.buy_price}}</span>
+                </div>
+                <div>
+                    <label for="">卖出价格</label>
+                    
+                    <span class="price-down">{{getCurrentSymbolInfo.sell_price}}</span>
+                </div>
             </div>
             <div class="row">
                 <label for="">交易手数</label>
@@ -91,12 +102,12 @@
             <div class="row flex">
                 <div>
                     <label for="">买入价格</label>
-                    <span class="price-up">3851.48</span>
+                    <span class="price-up">{{getCurrentSymbolInfo.buy_price}}</span>
                 </div>
                 <div>
                     <label for="">卖出价格</label>
                     
-                    <span class="price-down">3852.88</span>
+                    <span class="price-down">{{getCurrentSymbolInfo.sell_price}}</span>
                 </div>
             </div>
             <div class="row">
@@ -127,8 +138,8 @@
                 </el-input>
             </div>
             <div class="row" v-if="!getIsLogin">
-                <el-button class="primarily-btn" type="success" @click="$router.push('/register')">立即注册</el-button>
-                <el-button class="secondary-btn" @click="$router.push('/login')">登录</el-button>
+                <el-button class="primarily-btn buy-btn" type="success" @click="$router.push('/register')">立即注册</el-button>
+                <el-button class="secondary-btn " @click="$router.push('/login')">登录</el-button>
             </div>
             <div class="row" v-else>
                 <el-button class="primarily-btn buy-btn" type="success" @click="submitClick(0)">市价买入</el-button>
@@ -139,14 +150,15 @@
 </template>
 <script>
 import FormatInput from '@/components/FormatInput'
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters, mapMutations } from 'vuex';
+import { delCookie } from '@/common/cookie.js'
 export default {
     components:{
         FormatInput,
     },
     data () {
         return {
-            orderType:0,
+            orderType:1,
             per:0,
             remindBuy:'',
             remindSell:'',
@@ -190,6 +202,7 @@ export default {
         ...mapGetters([
             "getSelectMarket",
             "getIsLogin",
+            "getCurrentSymbolInfo"
         ]),
         market () {
             return this.$route.query.market.replace('_','/');
@@ -205,6 +218,9 @@ export default {
         ...mapActions([
             "openPositionFetch",
             "openEntrustFetch"
+        ]),
+        ...mapMutations([
+            "setIsLogin"
         ]),
         changeBuyPrice (v) {
             this.buyData.price = v;
@@ -231,14 +247,16 @@ export default {
             if(res.status == 200) {
                 this.$toast({
                     type:'success',
-                    tips:'下单成功',
-                    why:'111'
+                    tips:'下单成功'
                 });
+            }else if(res.status == 700){
+                this.$router.replace('/login')
+                delCookie('userToken')
+                this.setIsLogin(false)
             }else {
                 this.$toast({
                     type:'error',
-                    tips:res.msg,
-                    why:'hahah'
+                    tips:res.msg
                 });
             }
         }
@@ -311,7 +329,7 @@ export default {
     .form-box {
         margin-top:16px;
         .row {
-            margin-bottom:10px;
+            margin-bottom:6px;
             &.flex{
                 display: flex;
                 div {
@@ -335,6 +353,7 @@ export default {
             }
             .secondary-btn {
                 margin-top:10px;
+                margin-left:0;
                 span {
                     color:var(--font-color1-);
                 }

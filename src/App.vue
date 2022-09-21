@@ -9,8 +9,8 @@
 import Header from '@/components/Header'
 import Socket from './config/socket'
 import config from './config/index'
-import { mapGetters, mapMutations } from 'vuex'
-import { getCookie } from '@/common/cookie'
+import { mapGetters, mapMutations, mapActions } from 'vuex'
+import { getCookie, delCookie } from '@/common/cookie'
 export default {
   name: 'App',
   components:{
@@ -30,6 +30,7 @@ export default {
 
     const _socket2 = new Socket(config.TRAN_WSURL+getCookie('userToken'),this);
     this.setTRANSocket(_socket2);
+    this.getUserInfo();
     const userToken = getCookie('userToken')
     if(userToken) {
       this.setIsLogin(true)
@@ -41,7 +42,24 @@ export default {
         "setTRANSocket",
         "setMarketData",
         "setIsLogin",
-    ])
+        "setUserInfo",
+        "setCurrentSymbolInfo"
+    ]),
+    ...mapActions([
+      "getUserInfoFetch"
+    ]),
+    async getUserInfo() {
+      let res = await this.getUserInfoFetch()
+      if(res.name) {
+        this.setIsLogin(true)
+        this.setUserInfo(res)
+      }
+      if(res.status == 700) {
+        //登录过期
+        this.setIsLogin(false)
+        delCookie("userToken")
+      }
+    },
   }
 }
 </script>

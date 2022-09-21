@@ -34,7 +34,7 @@
                         <router-link to="/" class="a-item">账户总览</router-link>
                         <router-link to="/" class="a-item">账户安全</router-link>
                         <!-- <router-link class="a-item">返佣</router-link> -->
-                        <div class="a-item">退出</div>
+                        <div class="a-item" @click="logout">退出</div>
                     </div>
                 </div>
                 <div class="item1">
@@ -58,7 +58,8 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex'
+import { mapGetters, mapMutations, mapActions } from 'vuex'
+import { delCookie } from '../common/cookie'
 export default {
     data () {
         return {
@@ -73,10 +74,21 @@ export default {
     },
     methods:{
         ...mapMutations([
-            "setIsLight"
+            "setIsLight",
+            "setIsLogin",
+        ]),
+        ...mapActions([
+            "LogOutFetch"
         ]),
         setLight (type) {
             this.setIsLight(type)
+        },
+        async logout() {
+            let res = await this.LogOutFetch()
+            if(res) {
+                this.setIsLogin(false)
+                delCookie("userToken")
+            }
         }
     }
 }
