@@ -304,7 +304,7 @@ export default {
           width: 100%;
           height: 50px;
           background: rgb(45, 189, 150);
-          margin-top: 30px;
+          //margin-top: 30px;
         }
         .forget {
           text-align: right;
