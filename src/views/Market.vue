@@ -654,35 +654,35 @@ export default {
         }
         th:nth-child(1),
         td:nth-child(1) {
-          width: 13%;
+          width: 18%;
           text-align: left;
           padding-left: 20px;
         }
         th:nth-child(2),
         td:nth-child(2) {
           width: 12%;
-          text-align: right;
+          text-align: left;
         }
         th:nth-child(3),
         td:nth-child(3) {
           width: 12%;
-          text-align: right;
+          text-align: left;
         }
         th:nth-child(4),
         td:nth-child(4) {
           width: 12%;
-          text-align: right;
+          text-align: left;
         }
         th:nth-child(5),
         td:nth-child(5) {
           width: 12%;
-          text-align: right;
+          text-align: left;
         }
         th:nth-child(6),
         td:nth-child(6) {
           width: 12%;
           padding-right: 20px;
-          text-align: right;
+          text-align: left;
           .el-button {
             color: @green;
           }
@@ -691,7 +691,7 @@ export default {
         td:nth-child(7) {
           width: 14%;
           padding-right: 20px;
-          text-align: right;
+          text-align: left;
         }
       }
 
