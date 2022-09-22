@@ -50,8 +50,20 @@ export default class Socket {
         }
 		if(this.that.getProductData && this.that.getProductData[data.symbol]) {
 			let item = this.that.getProductData[data.symbol]
+      let old_buy_price = item['buy_price']
+      let old_sell_price = item['sell_price']
+      if(old_buy_price > data.buy_price) {
+        item['buy_price_direction'] = 'down'
+      }else {
+        item['buy_price_direction'] = 'up'
+      }
+      if(old_sell_price > data.sell_price) {
+        item['sell_price_direction'] = 'down'
+      }else {
+        item['sell_price_direction'] = 'up'
+      }
 			item['buy_price'] = data.buy_price
-			item['sell_price'] = data.buy_price
+			item['sell_price'] = data.sell_price
 		}
       }
     }

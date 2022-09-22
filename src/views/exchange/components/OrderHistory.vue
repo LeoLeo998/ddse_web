@@ -37,8 +37,8 @@
         <tr v-for="(item, key) in list" :key="key" @click="orderClick(item)">
           <td>{{ item.TICKET }}</td>
           <td>{{ item.SYMBOL }}</td>
-          <td>{{ item.CMD | orderType }}</td>
-          <td>{{ item.VOLUME }}</td>
+          <td :class="item.CMD == 0 ? 'green-color' : 'red-color'">{{ item.CMD | orderType }}</td>
+          <td class="green-color">{{ item.VOLUME }}</td>
           <td>{{ item.OPEN_PRICE }}</td>
           <td>{{ item.SL }}</td>
           <td>{{ item.TP }}</td>
@@ -140,9 +140,9 @@ export default {
       }else if(data.CMD == '1' && currencyData.profit_mode=='1' ){
         profit = (data.OPEN_PRICE - currencyData.sell_price )  *data.VOLUME * currencyData.contract_size * rate
       }else if(data.CMD == '0' && currencyData.profit_mode=='0' && currencyData.currency=='USD' && currencyData.margin_currency=='USD' ){
-        profit = (currencyData.buy_price - data.OPEN_PRICE)  *data.VOLUME  * currencyData.contract_size / currencyData.sell_price
+        profit = (currencyData.buy_price - data.OPEN_PRICE)  *data.VOLUME  * currencyData.contract_size / currencyData.buy_price
       }else if(data.CMD == '1' && currencyData.profit_mode=='0' && currencyData.currency=='USD' && currencyData.margin_currency=='USD' ){
-        profit = (data.OPEN_PRICE - currencyData.sell_price )  *data.VOLUME  * currencyData.contract_size / currencyData.buy_price
+        profit = (data.OPEN_PRICE - currencyData.sell_price )  *data.VOLUME  * currencyData.contract_size / currencyData.sell_price
       }else if(data.CMD == '0' && currencyData.profit_mode=='0' && currencyData.currency!='USD' && currencyData.margin_currency=='USD' ){
         profit = (currencyData.buy_price - data.OPEN_PRICE)  *data.VOLUME * currencyData.contract_size 
       }else if(data.CMD == '1' && currencyData.profit_mode=='0' && currencyData.currency!='USD' && currencyData.margin_currency=='USD' ){
@@ -175,7 +175,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .order-history {
-  padding: 15px;
+  padding: 15px 0;
   border: 1px solid rgb(70, 70, 70);
   border-top: none;
   background-color: #fff;
@@ -185,6 +185,7 @@ export default {
     display: flex;
     justify-content: space-between;
     margin-bottom: 15px;
+    padding:0 15px;
     .left {
       display: flex;
       .item {
@@ -199,12 +200,14 @@ export default {
     table {
       border-collapse: collapse;
       width: 100%;
+      
       th {
-        color: rgb(132, 142, 156);
+        color: var(--font-body-);
         background-color: var(--hover-color-);
         height:40px;
         width: 11.111%;
         text-align: left;
+        font-weight: 400;
         &:first-child {
           padding-left: 16px;
         }
@@ -214,13 +217,19 @@ export default {
   .tab {
     height: 300px;
     overflow-y: auto;
+    .red-color{
+      color:var(--color-red-);
+    }
+    .green-color{
+      color:var(--color-green-);
+    }
     &::-webkit-scrollbar {
       width: 2px;
     }
     table {
       border-collapse: collapse;
       width: 100%;
-      color: var(--font-color1-);
+      color: var(--font-body-);
       tr {
         height: 40px;
         &:hover {
@@ -238,6 +247,7 @@ export default {
       td {
         width: 11.111%;
         text-align: left;
+        font-size: 12px;
         &:first-child {
           padding-left: 16px;
         }

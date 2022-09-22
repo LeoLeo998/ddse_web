@@ -17,8 +17,8 @@
       <ul>
         <li>
           <div class="li-head">名称</div>
-          <div class="li-head">买入价格</div>
           <div class="li-head">卖出价格</div>
+          <div class="li-head">买入价格</div>
           <div class="li-head">涨幅</div>
         </li>
         <div class="market-list">
@@ -31,10 +31,10 @@
                 <span class="left-description">{{ item.description }}</span>
               </div>
             </div>
-            <div class="li-item price-up">
-              <strong>{{ item.buy_price }}</strong>
+            <div class="li-item" :class="item.buy_price_direction == 'up' ? 'price-up' : 'price-down'">
+              {{ item.buy_price }}
             </div>
-            <div class="li-item price-down">
+            <div class="li-item" :class="item.sell_price_direction == 'up' ? 'price-up' : 'price-down'">
               {{ item.sell_price }}
             </div>
             <div class="li-item" :class="getRange(item) > 0 ? 'price-up' : 'price-down'">{{ getRange(item) }}%</div>
@@ -206,7 +206,8 @@ export default {
       border: none;
       height: 24px;
       padding: 4px 15px 4px 30px;
-      color: #fff;
+      color: var(--font-color2-);
+      font-size: 12px;
     }
   }
   .coin-list {

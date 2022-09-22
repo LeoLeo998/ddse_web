@@ -1,15 +1,23 @@
 <template>
-  <el-dialog title="修改持仓订单" :visible.sync="dialogVisible" width="800px">
-    <div>
-      <el-form :model="form" label-width="150px" :rules="rule">
+  <el-dialog title="修改持仓订单" :visible.sync="dialogVisible" width="480px" style="border-radius:5px;">
+    <div class="cc-dialog">
+      <el-form :model="form" :rules="rule">
         <el-form-item label="订单编号 :">{{ oderInfo.TICKET }}</el-form-item>
         <el-form-item label="交易品种 :">{{ oderInfo.SYMBOL }}</el-form-item>
         <el-form-item label="手数 :">{{ oderInfo.VOLUME }}</el-form-item>
         <el-form-item label="订单类型 :">{{ oderInfo.CMD === 1 ? '卖出' : '买入' }}</el-form-item>
         <el-divider content-position="left">修改订单</el-divider>
-        <div class="flex-start-center">
-          <el-form-item label="止损价 :"> <el-input-number size="small" v-model="form.sl"></el-input-number></el-form-item>
-          <el-form-item label="获利价 :"> <el-input-number size="small" v-model="form.tp"></el-input-number></el-form-item>
+        <div>
+          <div class="row">
+            <label for="">止损价</label>
+            <el-input v-model="form.sl" clearable></el-input>
+          </div>
+          <div class="row">
+            <label for="">获利价</label>
+            <el-input v-model="form.tp" clearable></el-input>
+          </div>
+          <!-- <el-form-item label="止损价 :"> <el-input-number size="small" v-model="form.sl"></el-input-number></el-form-item>
+          <el-form-item label="获利价 :"> <el-input-number size="small" v-model="form.tp"></el-input-number></el-form-item> -->
         </div>
       </el-form>
     </div>
@@ -107,7 +115,22 @@ export default {
 }
 </script>
 <style lang="less" scoped>
+.cc-dialog {
+  .row {
+    margin-bottom: 20px;
+    
+  }
+}
+/deep/.el-dialog__header {
+  padding: 30px 40px 0;
+}
+/deep/.el-dialog__body {
+  padding: 30px 40px 0;
+}
 .primarily-btn {
   background-color: #03a66d;
+}
+.el-form-item {
+  margin-bottom:10px;
 }
 </style>

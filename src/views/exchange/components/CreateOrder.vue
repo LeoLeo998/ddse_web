@@ -274,7 +274,7 @@ export default {
     padding:15px;
     height: 484px;
     div,p,span,label{
-        color:var(--font-color1-);
+        color:var(--font-body-);
         font-size: 14px;
     }
     
