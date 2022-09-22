@@ -15,67 +15,93 @@
       </div>
       <div class="content">
         <p class="title">忘记密码</p>
-        <div v-if="step === 1">
-          <ul class="login-type">
-            <li :class="type == 1 && 'active'" @click="type = 1">手机账户</li>
-            <div class="line"></div>
-            <li :class="type == 2 && 'active'" @click="type = 2">邮箱账户</li>
-          </ul>
-          <div class="row row2">
-            <label for="">{{ type === 1 ? '手机号码' : '邮箱/子账号' }}</label>
-            <div class="flex-center-between">
-              <div>
-                <el-input v-if="type == 1" type="number" placeholder="请输入手机号码" v-model="user.account" class="input-with-select" style="width:350px">
-                  <el-select v-model="user.code" slot="prepend" filterable placeholder="请选择">
-                    <el-option v-for="item in cityCode" :key="item.code + item.en" :label="item.code" :value="item.code">
-                      <span style="float: left">{{ item.en }}</span>
-                      <span style="float: right; color: #8492a6; font-size: 13px">{{ item.code }}</span>
-                    </el-option>
-                  </el-select>
-                </el-input>
-                <el-input v-else label="email" size="large" v-model="user.account" placeholder="请输入邮箱/子账号" clearable style="width:350px" />
+        <el-form class="content" :rules="rules" :model="user" ref="form">
+          <div v-if="step === 1" style="width:100%">
+            <ul class="login-type">
+              <li :class="type == 1 && 'active'" @click="type = 1">手机账户</li>
+              <div class="line"></div>
+              <li :class="type == 2 && 'active'" @click="type = 2">邮箱账户</li>
+            </ul>
+            <el-form-item prop="account">
+              <div class="row row2">
+                <label for="">{{ type === 1 ? '手机号码' : '邮箱/子账号' }}</label>
+                <div class="flex-center-between">
+                  <div>
+                    <el-input v-if="type == 1" type="number" placeholder="手机" v-model="user.account" class="input-with-select" style="width:350px">
+                      <template slot="prepend">
+                        <VueCountryIntl schema="popover" v-model="user.code">
+                          <button type="button" slot="reference">+{{ user.code }}</button>
+                        </VueCountryIntl>
+                      </template>
+                    </el-input>
+                    <el-input v-else label="email" size="large" v-model="user.account" placeholder="邮箱/子账号" clearable style="width:350px" />
+                  </div>
+                  <el-button class="submit-btn" type="success" @click="sendMsg" :disabled="sendDisable" style="width:130px">{{ sendText }}</el-button>
+                </div>
               </div>
-              <div>
-                <el-button class="submit-btn" type="success" @click="sendMsg" :disabled="sendDisable">{{ sendText }}</el-button>
+            </el-form-item>
+            <el-form-item prop="verifyCode">
+              <div class="row row2">
+                <label for="">验证码</label>
+                <el-input size="large" v-model="user.verifyCode" placeholder="" />
               </div>
+            </el-form-item>
+            <div class="row row2">
+              <el-button class="submit-btn" type="success" @click="stepNext">确认</el-button>
             </div>
           </div>
-          <div class="row row2">
-            <label for="">验证码</label>
-            <el-input size="large" v-model="user.verifyCode" placeholder="请输入验证码" />
+          <div v-else style="width:100%">
+            <div class="row row2">
+              <el-form-item prop="password">
+                <el-input label="email" size="large" type="password" show-password v-model="user.password" placeholder="新密码" clearable style="margin:10px 0" />
+              </el-form-item>
+              <el-form-item prop="re_password">
+                <el-input label="email" size="large" type="password" show-password v-model="user.re_password" placeholder="确认密码" clearable style="margin:10px 0" />
+              </el-form-item>
+            </div>
+            <div class="row row2">
+              <el-button class="submit-btn" type="success" @click="submitClick">确认</el-button>
+            </div>
           </div>
-          <div class="row row2">
-            <el-button class="submit-btn" type="success" @click="stepNext">确认</el-button>
-          </div>
-        </div>
-        <div v-else>
-          <div class="row row2">
-            <el-input label="email" size="large" type="password" show-password v-model="user.password" placeholder="请输入原密码" clearable style="margin:10px 0" />
-            <el-input label="email" size="large" type="password" show-password v-model="user.re_password" placeholder="请输入新密码" clearable style="margin:10px 0" />
-          </div>
-          <div class="row row2">
-            <el-button class="submit-btn" type="success" @click="submitClick">确认</el-button>
-          </div>
-        </div>
+        </el-form>
       </div>
     </div>
   </div>
 </template>
 <script>
-import FormatInput from '@/components/FormatInput'
 import { mapGetters, mapActions, mapMutations } from 'vuex'
 import { setCookie, getCookie } from '@/common/cookie'
-import { cityCode } from '@/common/code'
 export default {
-  components: {
-    FormatInput
-  },
   data() {
+    var validatePass = (rule, value, callback) => {
+      var passReg = /(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,20}/
+      let emailReg = /^[A-Za-z\d]+([-_\.][A-Za-z\d]+)*@([A-Za-z\d]+[-\.])+[A-Za-z\d]{2,4}(,[A-Za-z\d]+([-_\.][A-Za-z\d]+)*@([A-Za-z\d]+[-\.])+[A-Za-z\d]{2,4})*$/
+      let text = ''
+      if (rule.field === 'account') {
+        text = '账户'
+      } else if (rule.field === 'password' || rule.field === 're_password') {
+        text = '密码'
+      } else if (rule.field === 'verifyCode') {
+        text = '验证码'
+      }
+      if (value === '') {
+        callback(new Error(`${text}不可为空`))
+      }
+      if (this.step !== 1 && rule.field === 'password' && !passReg.test(value)) {
+        callback(new Error('密码长度至少8位，最多20位, 必须包括数字和字母'))
+      }
+      if (this.step !== 1 && rule.field === 're_password' && value !== this.user.password) {
+        callback(new Error('密码输入不一致'))
+      }
+      if (rule.field === 'account' && this.type == 2 && !emailReg.test(value)) {
+        callback(new Error('请检查邮箱格式'))
+      }
+      callback()
+    }
     return {
-      cityCode,
       type: 1,
       showInv: false,
-      sendText: '发送',
+      sendText: '发送验证码',
       sendDisable: false,
       step: 1,
       user: {
@@ -86,6 +112,12 @@ export default {
         invCode: '',
         re_password: '',
         password: ''
+      },
+      rules: {
+        account: [{ validator: validatePass, trigger: 'blur' }],
+        password: [{ validator: validatePass, trigger: 'blur' }],
+        verifyCode: [{ validator: validatePass, trigger: 'blur' }],
+        re_password: [{ validator: validatePass, trigger: 'blur' }]
       }
     }
   },
@@ -101,18 +133,11 @@ export default {
   methods: {
     ...mapActions(['loginFetch', 'getPasswordVerifyCodeFetch', 'setNewPasswordFetch']),
     ...mapMutations(['setIsLogin']),
-    checkType() {
-      if (this.type == 1) {
-        this.$router.push('/register')
-      } else {
-        this.$router.push('/login')
-      }
-    },
     stepNext() {
-      if (this.inspect()) {
-        return
-      }
-      this.step = 2
+      this.$refs['form'].validate(valid => {
+        if (!valid) return false
+        this.step = 2
+      })
     },
     async sendMsg() {
       let reg = new RegExp('^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$')
@@ -158,22 +183,21 @@ export default {
       }
       return false
     },
-    async submitClick() {
-      if (!this.user.re_password || !this.user.password) {
-        this.$toast.error('请输入密码')
-        return
-      }
-      let res = await this.setNewPasswordFetch({
-        re_password: this.user.re_password,
-        password: this.user.password,
-        verifyCode: this.user.verifyCode
+    submitClick() {
+      this.$refs['form'].validate(async valid => {
+        if (!valid) return false
+        let res = await this.setNewPasswordFetch({
+          re_password: this.user.re_password,
+          password: this.user.password,
+          verifyCode: this.user.verifyCode
+        })
+        if (res.status == 200) {
+          this.$toast.success('操作成功')
+          this.$router.push('/login')
+        } else {
+          this.$toast.error(res.msg)
+        }
       })
-      if (res.status == 200) {
-        this.$toast.success('操作成功')
-        this.$router.push('/login')
-      } else {
-        this.$toast.error(res.msg)
-      }
     }
   }
 }
@@ -186,6 +210,27 @@ export default {
   width: 100%;
   //height: calc(~"100vh - 65px");
   height: 100vh;
+
+  .el-input-group__prepend .vue-country-popover-container button {
+    border: none;
+    background: transparent;
+    width: 70px;
+    cursor: pointer;
+  }
+  .el-input-group__append,
+  .el-input-group__prepend {
+    padding: 0;
+    width: 70px;
+    text-align: center;
+    border: none;
+  }
+  .el-form-item__content {
+    line-height: 16px;
+  }
+  .el-form-item {
+    width: 100%;
+    margin-bottom: 20px;
+  }
   .login-bg {
     position: relative;
     flex: 0 0 41.6667%;
@@ -229,7 +274,7 @@ export default {
     }
     .content {
       display: flex;
-      width: 480px;
+      width: 500px;
       align-items: center;
       justify-content: center;
       position: relative;
@@ -268,7 +313,7 @@ export default {
       .row {
         width: 100%;
         &.row2 {
-          margin-bottom:30px;
+          // margin-bottom: 30px;
         }
         .send-btn {
           width: 70px;
@@ -289,12 +334,16 @@ export default {
         .el-input {
           input {
             height: 50px;
+            background: #f5f6f7;
+            border: none;
           }
         }
         .submit-btn {
           width: 100%;
           height: 48px;
-          background: rgb(45, 189, 150);
+          background: #2dbd96;
+          border: none;
+          margin: 0 0 !important;
         }
         .forget {
           text-align: right;

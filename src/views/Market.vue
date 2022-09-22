@@ -55,13 +55,15 @@
         </div>
       </div>
     </div>
-
     <div class="market-box">
       <div class="market-type-box">
-        <button :class="marketType == item.id && 'active'" @click="marketType = item.id" v-for="(item, index) in groupList" :key="index">
-          <i class="fa fa-star" v-show="item.id === -1"></i>
-          {{ item.title }}
-        </button>
+        <el-tabs v-model="marketType">
+          <el-tab-pane :label="item.title" :name="item.id" v-for="(item, index) in groupList" :key="index">
+            <span slot="label" v-if="item.id == -1"
+              ><i class="fa fa-star"></i><span style="margin-left:10px">{{ item.title }}</span></span
+            >
+          </el-tab-pane>
+        </el-tabs>
       </div>
       <!-- <div class="class-coin">
         <button :class="screenType == 1 && 'active'" @click="mainCoinClick(1)">BTC</button>
@@ -139,40 +141,25 @@
             </th>
             <th>24H最高</th>
             <th>24H最低</th>
-            <!-- <th>
-              24H交易量
-              <span class="sort">
-                <i class="fa fa-sort-up"></i>
-                <i class="fa fa-sort-down"></i>
-              </span>
-            </th>
-            <th>
-              市值
-              <span class="sort">
-                <i class="fa fa-sort-up"></i>
-                <i class="fa fa-sort-down"></i>
-              </span>
-            </th> -->
-            <!-- <th>操作</th> -->
+            <th>操作</th>
           </tr>
           <tr v-for="(item, key) in productList" :key="key" class="cursor" @click.stop="toExchange(item)">
             <td>
-              <i class="fa fa-star" :class="item.isFavorite === 1 ? 'fa-star-fav' : 'fa-star'" @click.stop="isFavorite(item)"></i>
-              {{ item.symbol }}
+              <div class="flex-start-center">
+                <i class="fa fa-star" :class="item.isFavorite === 1 ? 'fa-star-fav' : 'fa-star'" @click.stop="isFavorite(item)"></i>
+                <div>
+                  <div class="sym">{{ item.symbol }}</div>
+                  <div class="des">{{ item.description }}</div>
+                </div>
+              </div>
             </td>
-            <td>
-              {{ item.buy_price }}
-            </td>
+            <td>$ {{ item.buy_price }}</td>
             <td :class="upDown(item) > 0 ? 'price-up' : 'price-down'">{{ upDown(item) }}%</td>
             <td>{{ item.high }}</td>
             <td>{{ item.low }}</td>
-            <!-- <td>{{ item.volume || '--' }}</td>
-            <td>--</td> -->
-            <!-- <td>
-              <span class="to-trans">
-                交易
-              </span>
-            </td> -->
+            <td>
+              <el-button type="text" @click.stop="toExchange(item)">交易</el-button>
+            </td>
           </tr>
         </table>
       </div>
@@ -186,7 +173,7 @@ export default {
   data() {
     return {
       screenType: 1,
-      marketType: 0,
+      marketType: '0',
       childCoin: 1,
       showSelectChild: false,
       topTitle: ['最大涨幅（24h）', '最大跌幅（24h）', '成交量（24h）', '亮点'],
@@ -222,25 +209,25 @@ export default {
     // 产品列表处理
     productList() {
       // 最热门
-      if (this.marketType === 0) {
+      if (this.marketType == 0) {
         return this.allProductList.filter(item => {
-          if (item.hot === 1) {
+          if (item.hot == 1) {
             console.log(item)
           }
-          return item.hot === 1
+          return item.hot == 1
         })
         // 自选
-      } else if (this.marketType === -1) {
+      } else if (this.marketType == -1) {
         return this.allProductList.filter(item => {
-          return item.isFavorite === 1
+          return item.isFavorite == 1
         })
         //全部
-      } else if (this.marketType === this.groupList.length) {
+      } else if (this.marketType == this.groupList.length) {
         return this.allProductList
       } else {
         //其他
         return this.allProductList.filter(item => {
-          return item.group === this.marketType
+          return item.group == this.marketType
         })
       }
     },
@@ -253,7 +240,7 @@ export default {
   },
   watch: {
     marketType(val) {
-      if (val === -1) {
+      if (val == -1) {
         this.getProductUserList()
         this.getProductList()
       }
@@ -295,6 +282,9 @@ export default {
         id: this.groupList.length + 1,
         num: this.groupList.length + 1,
         title: '全部'
+      })
+      this.groupList.forEach(item => {
+        item.id = item.id.toString()
       })
     },
     // 获取产品
@@ -368,6 +358,7 @@ export default {
 @fontcolor: #707a8a;
 @fontcolor2: rgb(112, 122, 138);
 @tabline: #eaecef;
+@green: #2dbd96;
 
 .market-page {
   .hot {
@@ -504,6 +495,23 @@ export default {
     .market-type-box {
       display: flex;
       margin: 0 0 20px 0;
+      /deep/ .el-tabs {
+        .el-tabs__item {
+          font-size: 16px;
+          &:hover {
+            color: @green;
+          }
+        }
+        .el-tabs__item.is-active {
+          color: @green;
+        }
+        .el-tabs__nav-wrap::after {
+          display: none;
+        }
+        .el-tabs__active-bar {
+          background-color: @green;
+        }
+      }
       button {
         outline: none;
         border: none;
@@ -633,13 +641,13 @@ export default {
         }
         th:nth-child(1),
         td:nth-child(1) {
-          width: 14%;
+          width: 18%;
           text-align: left;
           padding-left: 20px;
         }
         th:nth-child(2),
         td:nth-child(2) {
-          width: 15%;
+          width: 12%;
           text-align: left;
         }
         th:nth-child(3),
@@ -649,7 +657,7 @@ export default {
         }
         th:nth-child(4),
         td:nth-child(4) {
-          width: 10%;
+          width: 12%;
           text-align: left;
         }
         th:nth-child(5),
@@ -659,8 +667,12 @@ export default {
         }
         th:nth-child(6),
         td:nth-child(6) {
-          width: 15%;
+          width: 12%;
+          padding-right: 20px;
           text-align: right;
+          .el-button{
+            color: @green;
+          }
         }
         th:nth-child(7),
         td:nth-child(7) {
@@ -669,8 +681,17 @@ export default {
           text-align: right;
         }
       }
+
+      .sym {
+        margin-bottom: 5px;
+      }
+      .des {
+        font-size: 13px;
+        color: #848e9c;
+      }
       .fa-star {
         cursor: pointer;
+        margin-right: 10px;
       }
       .fa-star-fav {
         cursor: pointer;

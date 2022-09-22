@@ -10,7 +10,7 @@ const service = axios.create({
   baseURL: config.BASE_URL, // api的base_url
   timeout: 5000, // 请求超时时间,
   headers: {
-    'Content-Type': 'application/x-www-form-urlencoded',
+    'Content-Type': 'application/x-www-form-urlencoded'
     // authorization: 'Bearer ' + getCookie('userToken')
   }
 })
@@ -22,12 +22,11 @@ service.interceptors.request.use(
     if (config.data) {
       data = JSON.parse(JSON.stringify(config.data))
     }
-    if(!config.headers.authorization) {
+    if (!config.headers.authorization) {
       config.headers.authorization = ''
       config.headers.authorization = 'Bearer ' + getCookie('userToken')
     }
-    
-    
+
     // if(config.headers && config.headers.authorization) {
 
     // }
