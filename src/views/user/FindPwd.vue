@@ -142,7 +142,7 @@ export default {
     async sendMsg() {
       let reg = new RegExp('^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$')
       if (this.type == 2 && !reg.test(this.user.account)) {
-        this.$toast.error('请检查邮箱格式')
+        this.$message.error('请检查邮箱格式')
         return true
       }
       let res = await this.getPasswordVerifyCodeFetch({
@@ -153,7 +153,7 @@ export default {
         this.user.verifyCode = res.code
         setCookie('phoneToken', res.token, 36000)
       } else {
-        this.$toast.error(res.msg)
+        this.$message.error(res.msg)
       }
     },
     timerStart() {
@@ -172,13 +172,13 @@ export default {
     inspect() {
       let reg = new RegExp('^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$')
       if (this.type == 2 && !this.user.account) {
-        this.$toast.error('请输入正确的邮箱地址')
+        this.$message.error('请输入正确的邮箱地址')
         return true
       } else if (!this.user.verifyCode) {
-        this.$toast.error('请输入验证码')
+        this.$message.error('请输入验证码')
         return true
       } else if (this.type == 2 && !reg.test(this.user.account)) {
-        this.$toast.error('请检查邮箱格式')
+        this.$message.error('请检查邮箱格式')
         return true
       }
       return false
@@ -192,10 +192,10 @@ export default {
           verifyCode: this.user.verifyCode
         })
         if (res.status == 200) {
-          this.$toast.success('操作成功')
+          this.$message.success('密码重置成功，正在跳转登录')
           this.$router.push('/login')
         } else {
-          this.$toast.error(res.msg)
+          this.$message.error(res.msg)
         }
       })
     }

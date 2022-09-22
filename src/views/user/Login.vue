@@ -29,17 +29,6 @@
                   <button type="button" slot="reference">+{{ user.code }}</button>
                 </VueCountryIntl>
               </template>
-              <!-- <vue-country-intl v-model="user.code"></vue-country-intl> -->
-              <!-- <el-select v-model="user.code" slot="prepend" filterable placeholder="请选择">
-                <el-option
-                  v-for="item in cityCode"
-                  :key="item.code + item.en"
-                  :label="item.code"
-                  :value="item.code">
-                  <span style="float: left">{{ item.en }}</span>
-                  <span style="float: right; color: #8492a6; font-size: 13px">{{ item.code }}</span>
-                </el-option>
-              </el-select> -->
             </el-input>
             <el-input v-else label="email" size="large" v-model="user.account" clearable />
           </div>
@@ -119,10 +108,14 @@ export default {
       this.$router.go(-1)
       return
     }
+    // this.getIP()
   },
   methods: {
-    ...mapActions(['loginFetch']),
-    ...mapMutations(['setIsLogin']),
+    ...mapActions(['loginFetch','getIPFetch']),
+    ...mapMutations(['setIsLogin','setTRANSocket']),
+    async getIP () {
+      let res = await this.getIPFetch()
+    },
     checkType() {
       if (this.type == 1) {
         this.$router.push('/register')
@@ -142,17 +135,17 @@ export default {
     inspect() {
       let reg = new RegExp('^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$')
       if (!this.user.account) {
-        this.$toast.error('请输入账号')
+        this.$message.error('请输入账号')
         return true
       }
       if (this.type == 2 && !this.user.account) {
-        this.$toast.error('请输入正确的邮箱地址')
+        this.$message.error('请输入正确的邮箱地址')
         return true
       } else if (!this.user.password) {
-        this.$toast.error('请输入您的密码')
+        this.$message.error('请输入您的密码')
         return true
       } else if (this.type == 2 && !reg.test(this.user.account)) {
-        this.$toast.error('请检查邮箱格式')
+        this.$message.error('请检查邮箱格式')
         return true
       }
       return false
@@ -167,7 +160,9 @@ export default {
         setCookie('userToken', res.token, 36000)
         this.setIsLogin(true)
         this.$message.success('登录成功')
-        this.$router.push('/exchange')
+        setTimeout(() => {
+          this.$router.push('/exchange')
+        },1000)
       } else {
         this.$message.error(res.msg)
       }

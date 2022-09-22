@@ -151,7 +151,11 @@ export default {
             font-size: 14px;
             text-decoration: none;
             margin:0 10px;
-            color:#000;
+            color:var(--font-color2-);
+            font-weight: 400;
+            &:hover {
+                color:var(--color-green-);
+            }
         }
     }
     .user-name {
@@ -164,7 +168,8 @@ export default {
         font-size: 14px;
         text-decoration: none;
         margin:0 10px;
-        color:#000;
+        color:var(--font-color2-);
+        font-weight: 400;
         line-height: 0;
         cursor: pointer;
         position: relative;
@@ -172,7 +177,9 @@ export default {
         height: 40px;
         display: flex;
         align-items: center;
+        z-index:101;
         &:hover {
+            color:var(--color-green-);
             .child-menu {
                 display: block;
             }
@@ -191,10 +198,10 @@ export default {
                 display: block;
                 padding: 18px;
                 text-decoration: none;
-                color: #111;
-                
+                color:var(--font-color2-);
                 &:hover {
-                    background-color: rgb(243, 243, 243);
+                    background-color:var(--hover-color-);
+                    color:var(--color-green-);
                 }
             }
         }

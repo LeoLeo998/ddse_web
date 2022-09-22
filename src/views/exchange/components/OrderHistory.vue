@@ -37,8 +37,8 @@
         <tr v-for="(item, key) in list" :key="key" @click="orderClick(item)">
           <td>{{ item.TICKET }}</td>
           <td>{{ item.SYMBOL }}</td>
-          <td>{{ item.CMD | orderType }}</td>
-          <td>{{ item.VOLUME }}</td>
+          <td :class="item.CMD == 0 ? 'green-color' : 'red-color'">{{ item.CMD | orderType }}</td>
+          <td class="green-color">{{ item.VOLUME }}</td>
           <td>{{ item.OPEN_PRICE }}</td>
           <td>{{ item.SL }}</td>
           <td>{{ item.TP }}</td>
@@ -59,7 +59,9 @@ import bus from '@/util/bus'
 export default {
   data() {
     return {
-      list: [],
+      list1: [],
+      list2: [],
+      list3: [],
       showAlert: true,
       PositionOrderDialogVisible: false,
       EntrustOrderDialogVisible: false,
@@ -72,46 +74,54 @@ export default {
     EntrustOrderDialog
   },
   watch: {
-    activeName(val) {
-      if (val === 1) {
-        this.getPositionList()
-      } else if (val === 2) {
-        this.getEntrustList()
-      } else {
-        this.getCloseOrderList()
-      }
-    },
     getIsLogin () {
       this.getPositionList()
     },
   },
   mounted () {
-    bus.$on('updatePosition',(data) => {
-      this.getPositionList()
+    bus.$on('updateOrder',(data) => {
+      if(data.type === 'add') {
+        this[`list${data.order}`].unshift(data.data)
+      }
+      if(data.type === 'remove') {
+        this[`list${data.order}`] = this[`list${data.order}`].filter(v => {
+          return v.TICKET != data.data.TICKET
+        })
+      }
+      if(data.type === 'update') {
+        this[`list${data.order}`] = this[`list${data.order}`].map(v => {
+          return v.TICKET === data.data.TICKET ? data.data : v
+        })
+      }
     })
   },
   created() {
-    this.getPositionList()
+    this.getPositionList();
+    this.getEntrustList();
+    this.getCloseOrderList();
   },
   computed:{
-    ...mapGetters(['getIsLogin','getProductData'])
+    ...mapGetters(['getIsLogin','getProductData']),
+    list () {
+      return this[`list${this.activeName}`]
+    }
   },
   methods: {
     ...mapActions(['positionListFetch', 'entrustListFetch', 'getCloseOrderListFetch']),
     // 持仓
     async getPositionList() {
       let res = await this.positionListFetch()
-      this.list = res.rows
+      this.list1 = res.rows
     },
     // 挂单
     async getEntrustList() {
       let res = await this.entrustListFetch()
-      this.list = res.rows
+      this.list2 = res.rows
     },
     //平仓
     async getCloseOrderList() {
       let res = await this.getCloseOrderListFetch()
-      this.list = res.rows
+      this.list3 = res.rows
     },
     formatPrice (data) {
       let currencyData = this.getProductData[data.SYMBOL]
@@ -119,9 +129,9 @@ export default {
         return '--'
       }
       if(data.CMD == '0'){
-        return currencyData.buy_price
+        return this.mathFloor(currencyData.buy_price,currencyData.digits)
       }else {
-        return currencyData.sell_price
+        return this.mathFloor(currencyData.sell_price,currencyData.digits)
       }
     },
     formatProfit (data) {
@@ -140,16 +150,16 @@ export default {
       }else if(data.CMD == '1' && currencyData.profit_mode=='1' ){
         profit = (data.OPEN_PRICE - currencyData.sell_price )  *data.VOLUME * currencyData.contract_size * rate
       }else if(data.CMD == '0' && currencyData.profit_mode=='0' && currencyData.currency=='USD' && currencyData.margin_currency=='USD' ){
-        profit = (currencyData.buy_price - data.OPEN_PRICE)  *data.VOLUME  * currencyData.contract_size / currencyData.sell_price
+        profit = (currencyData.buy_price - data.OPEN_PRICE)  *data.VOLUME  * currencyData.contract_size / currencyData.buy_price
       }else if(data.CMD == '1' && currencyData.profit_mode=='0' && currencyData.currency=='USD' && currencyData.margin_currency=='USD' ){
-        profit = (data.OPEN_PRICE - currencyData.sell_price )  *data.VOLUME  * currencyData.contract_size / currencyData.buy_price
+        profit = (data.OPEN_PRICE - currencyData.sell_price )  *data.VOLUME  * currencyData.contract_size / currencyData.sell_price
       }else if(data.CMD == '0' && currencyData.profit_mode=='0' && currencyData.currency!='USD' && currencyData.margin_currency=='USD' ){
         profit = (currencyData.buy_price - data.OPEN_PRICE)  *data.VOLUME * currencyData.contract_size 
       }else if(data.CMD == '1' && currencyData.profit_mode=='0' && currencyData.currency!='USD' && currencyData.margin_currency=='USD' ){
         profit = (data.OPEN_PRICE - currencyData.sell_price )  *data.VOLUME * currencyData.contract_size
       }
       if(profit) {
-        return profit.toFixed(4)
+        return profit.toFixed(2)
       }
       return '--'
     },
@@ -175,7 +185,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .order-history {
-  padding: 15px;
+  padding: 15px 0;
   border: 1px solid rgb(70, 70, 70);
   border-top: none;
   background-color: #fff;
@@ -185,6 +195,7 @@ export default {
     display: flex;
     justify-content: space-between;
     margin-bottom: 15px;
+    padding:0 15px;
     .left {
       display: flex;
       .item {
@@ -199,12 +210,14 @@ export default {
     table {
       border-collapse: collapse;
       width: 100%;
+      
       th {
-        color: rgb(132, 142, 156);
+        color: var(--font-body-);
         background-color: var(--hover-color-);
         height:40px;
         width: 11.111%;
         text-align: left;
+        font-weight: 400;
         &:first-child {
           padding-left: 16px;
         }
@@ -214,13 +227,19 @@ export default {
   .tab {
     height: 300px;
     overflow-y: auto;
+    .red-color{
+      color:var(--color-red-);
+    }
+    .green-color{
+      color:var(--color-green-);
+    }
     &::-webkit-scrollbar {
       width: 2px;
     }
     table {
       border-collapse: collapse;
       width: 100%;
-      color: var(--font-color1-);
+      color: var(--font-body-);
       tr {
         height: 40px;
         &:hover {
@@ -238,6 +257,7 @@ export default {
       td {
         width: 11.111%;
         text-align: left;
+        font-size: 12px;
         &:first-child {
           padding-left: 16px;
         }

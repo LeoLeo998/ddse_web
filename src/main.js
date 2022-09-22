@@ -14,7 +14,7 @@ import VueCountryIntl from 'vue-country-intl';
 import 'vue-country-intl/lib/vue-country-intl.css'
 // import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import { vueConciseSlider } from "vue-concise-slider"
-
+import './mixins'
 Vue.component(VueCountryIntl.name, VueCountryIntl);
 Vue.use(Toast);
 Vue.use(ElementUI)

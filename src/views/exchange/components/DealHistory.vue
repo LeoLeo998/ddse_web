@@ -1,35 +1,86 @@
 <template>
   <div class="deal-history">
+    <h1 class="account-info">账户信息</h1>
     <div v-if="isLogin">
-      <el-form label-width="100px">
-        <el-form-item label="账户类型 :"
-          ><span class="ml-10">{{ userInfo.state }}</span></el-form-item
-        >
-        <el-form-item label="交易账号ID :"
-          ><span class="ml-10">{{ userInfo.im_account }}</span></el-form-item
-        >
-        <el-form-item label="当前杠杆 :"
-          ><span class="ml-10">{{ userInfo.level }}</span></el-form-item
-        >
-        <el-form-item label="盈利/亏损 :"
-          ><span class="ml-10">{{ total_profit | number }}</span></el-form-item
-        >
-        <el-form-item label="结余 :"
-          ><span class="ml-10">{{ balance.balance }}</span></el-form-item
-        >
-        <el-form-item label="净值 :"
-          ><span class="ml-10">{{ (balance.balance - total_profit) | number }}</span></el-form-item
-        >
-        <el-form-item label="预付款 :"
-          ><span class="ml-10">{{ balance.margin }}</span></el-form-item
-        >
-        <el-form-item label="可用预付款 :"
-          ><span class="ml-10">{{ (balance.balance - balance.margin) | number }}</span></el-form-item
-        >
-        <el-form-item label="预付款比例 :"
-          ><span class="ml-10">{{ (balance.margin / (balance.balance - balance.margin + total_profit)) | number }}%</span></el-form-item
-        >
-      </el-form>
+      
+      <div class="info-row">
+        <span>
+          账户类型
+        </span>
+        <span>
+          {{userInfo.state}}
+        </span>
+      </div>
+      <div class="info-row">
+        <span>
+          交易账号ID
+        </span>
+        <span class="account-id">
+          {{userInfo.im_account}}
+        </span>
+      </div>
+      <div class="info-row">
+        <span>
+          当前杠杆
+        </span>
+        <span>
+          {{userInfo.level}}
+        </span>
+      </div>
+      <div class="info-row">
+        <span>
+          盈利/亏损
+        </span>
+        <span :class="total_profit > 0 ? 'price-up' : 'price-down'">
+          {{total_profit | number}}
+        </span>
+      </div>
+      <div class="info-row">
+        <span>
+          结余
+        </span>
+        <span class="major-text">
+          {{balance.balance}}
+        </span>
+      </div>
+      <div class="info-row">
+        <span>
+          净值
+        </span>
+        <span class="major-text">
+          {{ (balance.balance - total_profit) | number }}
+        </span>
+      </div>
+      <div class="info-row">
+        <span>
+          预付款
+        </span>
+        <span class="major-text">
+          {{ balance.margin }}
+        </span>
+      </div>
+      <div class="info-row">
+        <span>
+          可用预付款
+        </span>
+        <span class="major-text">
+          {{ (balance.balance - balance.margin) | number }}
+        </span>
+      </div>
+      <div class="info-row">
+        <span>
+          预付款比例
+        </span>
+        <span>
+          {{ (balance.margin / (balance.balance - balance.margin + total_profit)) | number }}%
+        </span>
+      </div>
+    </div>
+    <div class="tip-text" v-else>
+      <router-link to="/register">注册</router-link>
+      或
+      <router-link to="/login">登录</router-link>
+      后查看
     </div>
   </div>
 </template>
@@ -92,11 +143,57 @@ export default {
 @color2: rgb(132, 142, 156);
 @color3: rgb(234, 236, 239);
 .deal-history {
-  padding: 5px 0px 10px 15px;
   color: @color1;
   background: #fff;
+  height:100%;
+  padding:15px;
+  padding-bottom:0;
+  height: 395px;
+  .account-info {
+    font-size: 14px;
+    margin-bottom:20px;
+  }
+  .tip-text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top:50px;
+    letter-spacing:1px;
+    font-size: 12px;
+    a {
+      color:var(--color-green-);
+      font-size: 12px;
+    }
+  }
   .el-form-item {
     margin-bottom: 0 !important;
+  }
+  .info-row {
+    height:28px;
+    margin-bottom:10px;
+    display: flex;
+    justify-content: space-between;
+    span {
+      &.account-id {
+        //border-bottom:1px dashed #eee;
+      }
+      
+      &:first-child {
+        display: inline-block;
+        width:120px;
+        text-align: left;
+        color:var(--font-body-);
+      }
+      &:last-child {
+        display: inline-block;
+        color:var(--font-color2-);
+      }
+      &.major-text {
+        text-decoration:underline;
+        font-style:italic;
+        color:var(--font-color1-);
+      }
+    }
   }
   .ml-10 {
     margin-left: 15px;

@@ -131,7 +131,7 @@ import bus from '@/util/bus';
 			//跌的外边线
 			'mainSeriesProperties.candleStyle.borderDownColor': "#EF5350",
 			
-			"scalesProperties.textColor" : "#ffbe40",
+			"scalesProperties.textColor" : "#555555",
 			}
 					
       	}

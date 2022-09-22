@@ -157,6 +157,10 @@ export default {
         this.$message.error('请检查邮箱格式')
         return
       }
+      if (this.type == 1 && !this.user.account) {
+        this.$message.error('请输入手机号码')
+        return
+      }
       let account = this.type == 1 ? String(this.user.code) + String(this.user.account) : this.user.account
       let res = await this.verifyCodeFetch({
         account
