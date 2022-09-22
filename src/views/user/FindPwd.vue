@@ -36,7 +36,7 @@
                     </el-input>
                     <el-input v-else label="email" size="large" v-model="user.account" placeholder="邮箱/子账号" clearable style="width:350px" />
                   </div>
-                  <el-button class="submit-btn" type="success" @click="sendMsg" :disabled="sendDisable" style="width:130px">{{ sendText }}</el-button>
+                  <el-button class="submit-btn" :class="sendDisable ? 'submit-btn-dis' : 'submit-btn'" type="success" @click="sendMsg" :disabled="sendDisable" style="width:130px">{{ sendText }}</el-button>
                 </div>
               </div>
             </el-form-item>
@@ -344,6 +344,10 @@ export default {
           background: #2dbd96;
           border: none;
           margin: 0 0 !important;
+        }
+        .submit-btn-dis {
+          background: #f5f6f7;
+          color: #909399;
         }
         .forget {
           text-align: right;

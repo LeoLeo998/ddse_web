@@ -12,16 +12,14 @@
         </div>
         <div class="flex-start-center updown">
           <div :class="upDown(item) > 0 ? 'price-up' : 'price-down'">{{ upDown(item) }}%</div>
-          <!-- <span>24H量7128</span> -->
         </div>
       </div>
     </div>
     <div class="header">
       <div class="search-box">
-        <p class="css-1xamyaw">行情</p>
-        <div class="search-ipt">
-          <i class="fa fa-search"></i>
-          <input type="text" placeholder="搜索" />
+        <div class="title">
+          <p class="css-1xamyaw">DDSE币种行情</p>
+          <div>发现好币,寻找机会</div>
         </div>
       </div>
       <div class="content-box">
@@ -56,14 +54,20 @@
       </div>
     </div>
     <div class="market-box">
-      <div class="market-type-box">
-        <el-tabs v-model="marketType">
-          <el-tab-pane :label="item.title" :name="item.id" v-for="(item, index) in groupList" :key="index">
-            <span slot="label" v-if="item.id == -1"
-              ><i class="fa fa-star"></i><span style="margin-left:10px">{{ item.title }}</span></span
-            >
-          </el-tab-pane>
-        </el-tabs>
+      <div class="market-type-box flex-center-between">
+        <div>
+          <el-tabs v-model="marketType">
+            <el-tab-pane :label="item.title" :name="item.id" v-for="(item, index) in groupList" :key="index">
+              <span slot="label" v-if="item.id == -1"
+                ><i class="fa fa-star"></i><span style="margin-left:10px">{{ item.title }}</span></span
+              >
+            </el-tab-pane>
+          </el-tabs>
+        </div>
+        <div class="search-ipt">
+          <i class="fa fa-search"></i>
+          <input type="text" placeholder="搜索" />
+        </div>
       </div>
       <!-- <div class="class-coin">
         <button :class="screenType == 1 && 'active'" @click="mainCoinClick(1)">BTC</button>
@@ -117,7 +121,7 @@
       </div>
       <div class="list-box">
         <table>
-          <tr>
+          <tr class="table-header">
             <th>
               名称
               <span class="sort">
@@ -155,8 +159,8 @@
             </td>
             <td>$ {{ item.buy_price }}</td>
             <td :class="upDown(item) > 0 ? 'price-up' : 'price-down'">{{ upDown(item) }}%</td>
-            <td>{{ item.high }}</td>
-            <td>{{ item.low }}</td>
+            <td>$ {{ item.high }}</td>
+            <td>$ {{ item.low }}</td>
             <td>
               <el-button type="text" @click.stop="toExchange(item)">交易</el-button>
             </td>
@@ -404,32 +408,21 @@ export default {
     }
   }
   .header {
-    padding: 50px 0;
     background-color: @bgcolor2;
     text-align: center;
+    padding-left: 120px;
     .search-box {
       width: 1280px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      padding: 0 30px;
-      .css-1xamyaw {
-        font-size: 26px;
-      }
-      .search-ipt {
-        position: relative;
-        input {
-          width: 280px;
-          height: 42px;
-          border: 1px solid @tabline;
-          border-radius: 5px;
-          padding: 0 30px;
+      padding: 20px 0 0 530px;
+      .title {
+        width: 300px;
+        text-align: left;
+        div {
+          margin-top: 10px;
+          color: #b7bdc3;
         }
-        i {
-          position: absolute;
-          left: 10px;
-          top: 14px;
-          color: @fontcolor;
+        .css-1xamyaw {
+          font-size: 30px;
         }
       }
     }
@@ -437,7 +430,6 @@ export default {
       width: 1280px;
       margin: 20px auto 0;
       display: flex;
-
       .item {
         flex: 1;
         text-align: left;
@@ -448,7 +440,6 @@ export default {
         }
         .title {
           font-size: 12px;
-
           color: @fontcolor;
         }
         .market-info {
@@ -491,13 +482,14 @@ export default {
   .market-box {
     width: 1280px;
     margin: 0 auto;
-    padding: 30px 20px;
+    padding: 0px 20px;
     .market-type-box {
       display: flex;
       margin: 0 0 20px 0;
       /deep/ .el-tabs {
         .el-tabs__item {
           font-size: 16px;
+          color: #6b7682;
           &:hover {
             color: @green;
           }
@@ -510,6 +502,25 @@ export default {
         }
         .el-tabs__active-bar {
           background-color: @green;
+        }
+      }
+      .search-ipt {
+        position: relative;
+        margin-bottom: 10px;
+        input {
+          width: 280px;
+          height: 42px;
+          border-radius: 5px;
+          border: none;
+          outline: none;
+          padding: 0 30px;
+          background-color: #e3e1e17c;
+        }
+        i {
+          position: absolute;
+          left: 10px;
+          top: 14px;
+          color: @fontcolor;
         }
       }
       button {
@@ -601,12 +612,14 @@ export default {
       table {
         width: 100%;
         border-collapse: collapse;
+        tr:nth-child(1) {
+        }
         tr:hover {
           background-color: #03a66d0d;
         }
         th {
-          background-color: @bgcolor2;
-          color: @fontcolor;
+          background-color: #e3e1e17c;
+          color: #6b7682;
           height: 40px;
           font-size: 12px;
           .sort {
@@ -614,7 +627,7 @@ export default {
             -webkit-box-orient: vertical;
             flex-direction: column;
             height: 1px;
-            color: @fontcolor;
+            color: #6b7682;
             cursor: pointer;
             i {
               height: 12px;
@@ -641,36 +654,36 @@ export default {
         }
         th:nth-child(1),
         td:nth-child(1) {
-          width: 18%;
+          width: 13%;
           text-align: left;
           padding-left: 20px;
         }
         th:nth-child(2),
         td:nth-child(2) {
           width: 12%;
-          text-align: left;
+          text-align: right;
         }
         th:nth-child(3),
         td:nth-child(3) {
           width: 12%;
-          text-align: left;
+          text-align: right;
         }
         th:nth-child(4),
         td:nth-child(4) {
           width: 12%;
-          text-align: left;
+          text-align: right;
         }
         th:nth-child(5),
         td:nth-child(5) {
           width: 12%;
-          text-align: center;
+          text-align: right;
         }
         th:nth-child(6),
         td:nth-child(6) {
           width: 12%;
           padding-right: 20px;
           text-align: right;
-          .el-button{
+          .el-button {
             color: @green;
           }
         }
