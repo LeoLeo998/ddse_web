@@ -189,5 +189,14 @@ export default {
       method: 'post',
       data
     })
-  }
+  },
+  //获取Ip,区号
+  getIPFetch: (ctx, data) => {
+    return service({
+      baseURL:'http://156.254.127.134:300/',
+      method: 'get',
+      data
+    })
+  },
+  
 }

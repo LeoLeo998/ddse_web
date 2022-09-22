@@ -28,9 +28,7 @@ export default {
   created () {
     const _socket = new Socket(config.QUO_WSURL+Math.random(),this);
     this.setQUOSocket(_socket);
-
-    const _socket2 = new Socket(config.TRAN_WSURL+getCookie('userToken'),this);
-    this.setTRANSocket(_socket2);
+    
     this.getUserInfo();
     const userToken = getCookie('userToken')
     if(userToken) {

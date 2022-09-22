@@ -1,25 +1,9 @@
 <template>
     <div class="create-order">
-        <!-- <div class="ex-type-box">
-            <button>
-                全仓
-            </button>
-            <button>
-                20X
-            </button>
-        </div> -->
         <div class="order-type-box">
             <div class="item" :class="orderType === 1 && 'active'" @click="orderType = 1">市价</div>
             <div class="item" :class="orderType === 0 && 'active'" @click="orderType = 0">限价</div>
         </div>
-        <!-- <div class="available-balance">
-            <span class="txt">
-                可用
-            </span>
-            <span class="balance">
-                -USDT
-            </span>
-        </div> -->
         <div class="form-box" v-if="orderType === 0">
             <div class="row">
                 <label for="">交易品种</label>
@@ -27,20 +11,19 @@
             </div>
             <div class="row flex">
                 <div>
-                    <label for="">买入价格</label>
-                    <span class="price-up">{{getCurrentSymbolInfo.buy_price}}</span>
+                    <label for="">卖出价格</label>
+                    <span :class="getClass('buy_price_direction')">{{getProductData && getProductData[getSelectMarket].buy_price}}</span>
                 </div>
                 <div>
-                    <label for="">卖出价格</label>
+                    <label for="">买入价格</label>
                     
-                    <span class="price-down">{{getCurrentSymbolInfo.sell_price}}</span>
+                    <span :class="getClass('sell_price_direction')">{{getProductData && getProductData[getSelectMarket].sell_price}}</span>
                 </div>
             </div>
             <div class="row">
                 <label for="">交易手数</label>
                 <el-input
                     type="number"
-                    placeholder="数量"
                     v-model="form.volume"
                     clearable>
                 </el-input>
@@ -50,7 +33,6 @@
                     <label for="">止盈</label>
                     <el-input
                         type="number"
-                        placeholder="止盈价格"
                         v-model="form.tp"
                         clearable>
                     </el-input>
@@ -59,7 +41,6 @@
                     <label for="">止损</label>
                     <el-input
                         type="number"
-                        placeholder="止损价格"
                         v-model="form.sl"
                         clearable>
                     </el-input>
@@ -81,7 +62,6 @@
                 <label for="">价格</label>
                 <el-input
                     type="number"
-                    placeholder="价格"
                     v-model="form.price"
                     clearable>
                 </el-input>
@@ -101,20 +81,19 @@
             </div>
             <div class="row flex">
                 <div>
-                    <label for="">买入价格</label>
-                    <span class="price-up">{{getCurrentSymbolInfo.buy_price}}</span>
+                    <label for="">卖出价格</label>
+                    <span :class="getClass('buy_price_direction')">{{getProductData && getProductData[getSelectMarket] && getProductData[getSelectMarket].buy_price}}</span>
                 </div>
                 <div>
-                    <label for="">卖出价格</label>
+                    <label for="">买入价格</label>
                     
-                    <span class="price-down">{{getCurrentSymbolInfo.sell_price}}</span>
+                    <span :class="getClass('sell_price_direction')">{{getProductData && getProductData[getSelectMarket] && getProductData[getSelectMarket].sell_price}}</span>
                 </div>
             </div>
             <div class="row">
                 <label for="">交易手数</label>
                 <el-input
                     type="number"
-                    placeholder="数量"
                     v-model="form.volume"
                     clearable>
                 </el-input>
@@ -123,7 +102,6 @@
                 <label for="">止盈</label>
                 <el-input
                     type="number"
-                    placeholder="止盈价格"
                     v-model="form.tp"
                     clearable>
                 </el-input>
@@ -132,7 +110,6 @@
                 <label for="">止损</label>
                 <el-input
                     type="number"
-                    placeholder="止损价格"
                     v-model="form.sl"
                     clearable>
                 </el-input>
@@ -202,7 +179,8 @@ export default {
         ...mapGetters([
             "getSelectMarket",
             "getIsLogin",
-            "getCurrentSymbolInfo"
+            "getCurrentSymbolInfo",
+            "getProductData"
         ]),
         market () {
             return this.$route.query.market.replace('_','/');
@@ -222,6 +200,10 @@ export default {
         ...mapMutations([
             "setIsLogin"
         ]),
+        getClass (type) {
+            type = this.getProductData && this.getProductData[this.getSelectMarket] && this.getProductData[this.getSelectMarket][type]
+            return type === 'up' ? 'price-up' : 'price-down'
+        },
         changeBuyPrice (v) {
             this.buyData.price = v;
         },
@@ -245,19 +227,13 @@ export default {
             }
             let res = await this[fun](data)
             if(res.status == 200) {
-                this.$toast({
-                    type:'success',
-                    tips:'下单成功'
-                });
+                this.$message.success('下单成功')
             }else if(res.status == 700){
                 this.$router.replace('/login')
                 delCookie('userToken')
                 this.setIsLogin(false)
             }else {
-                this.$toast({
-                    type:'error',
-                    tips:res.msg
-                });
+                this.$message.error(res.msg)
             }
         }
     }
@@ -349,7 +325,10 @@ export default {
                 }
             }
             .primarily-btn {
-                background-color: #03A66D;
+                background-color: var(--color-green-);
+                span {
+                    font-size: 12px !important;
+                }
             }
             .secondary-btn {
                 margin-top:10px;

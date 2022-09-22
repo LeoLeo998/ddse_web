@@ -86,7 +86,7 @@ export default {
         ]),
         submitClick () {
             if(this.code.length < 6) {
-                this.$toast.error('验证码长度错误');
+                this.$message.error('验证码长度错误');
                 return;
             }
             if(this.$route.path == '/register/verification/email') {
@@ -124,13 +124,13 @@ export default {
             if(type) {
                 let res = await this.emailFetch(data)
                 if(res.code != 200) {
-                    this.$toast.error('邮件发送失败，请重试');
+                    this.$message.error('邮件发送失败，请重试');
                 }
             }else {
                 if(this.$route.path == '/register/verification/email') {
                     let res = await this.emailFetch(data)
                     if(res.code != 200) {
-                        this.$toast.error('邮件发送失败，请重试');
+                        this.$message.error('邮件发送失败，请重试');
                     }
                 }
             }
@@ -166,7 +166,7 @@ export default {
                 this.$router.push('/login')
                 return;
             }
-            this.$toast.error(res.msg);
+            this.$message.error(res.msg);
         },
         async login () {
             console.log(this.user)
@@ -178,7 +178,7 @@ export default {
                 
             })
             if(res.code == 200) {
-                this.$toast.success('登录成功，跳转中');
+                this.$message.success('登录成功，跳转中');
                 localStorage.setItem('user_name',this.user.email)
                 localStorage.setItem('isLogin',true)
                 localStorage.setItem('bearer',res.data)
@@ -187,7 +187,7 @@ export default {
                 this.$router.push('/wallet')
                 return;
             }
-            this.$toast.error(res.msg);
+            this.$message.error(res.msg);
         },
         goNextInput(){
             let txts = document.querySelectorAll('.code-input');

@@ -26,21 +26,9 @@
             <el-input v-if="type == 1" type="number" v-model="user.account" class="input-with-select">
               <template slot="prepend">
                 <VueCountryIntl schema="popover" v-model="user.code">
-                    <button type="button" slot="reference">+{{user.code}}</button>
+                  <button type="button" slot="reference">+{{ user.code }}</button>
                 </VueCountryIntl>
               </template>
-              <!-- <vue-country-intl v-model="user.code"></vue-country-intl> -->
-              <!-- <el-select v-model="user.code" slot="prepend" filterable placeholder="请选择">
-                <el-option
-                  v-for="item in cityCode"
-                  :key="item.code + item.en"
-                  :label="item.code"
-                  :value="item.code">
-                  <span style="float: left">{{ item.en }}</span>
-                  <span style="float: right; color: #8492a6; font-size: 13px">{{ item.code }}</span>
-                </el-option>
-              </el-select> -->
-  
             </el-input>
             <el-input v-else label="email" size="large" v-model="user.account" clearable />
           </div>
@@ -51,13 +39,13 @@
             <el-input size="large" type="password" show-password v-model="user.password" clearable />
           </div>
         </el-form-item>
-        
+
         <div class="row">
           <el-button class="submit-btn" type="success" @click="submitClick('login')">登录</el-button>
         </div>
         <div class="row">
           <div class="forget">
-            <a href="" @click="$router.push('/FindPwd')">忘记密码？</a>
+            <el-button type="text" @click="$router.push('/FindPwd')">忘记密码?</el-button>
           </div>
         </div>
       </el-form>
@@ -75,26 +63,26 @@ export default {
   },
   data() {
     var validatePass = (rule, value, callback) => {
-        var passReg= /(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,20}/;
-        let emailReg = /^[A-Za-z\d]+([-_\.][A-Za-z\d]+)*@([A-Za-z\d]+[-\.])+[A-Za-z\d]{2,4}(,[A-Za-z\d]+([-_\.][A-Za-z\d]+)*@([A-Za-z\d]+[-\.])+[A-Za-z\d]{2,4})*$/
-        let text = ''
-        if(rule.field === 'account') {
-            text = '账户'
-        }else if(rule.field === "password") {
-            text = '密码'
-        }else if(rule.field === 'verifyCode') {
-            text = '验证码'
-        }
-        if (value === '') {
-            callback(new Error(`${text}不可为空`));
-        }
-        if (rule.field === "password" && !passReg.test(value)) {
-            callback(new Error('密码长度至少8位，最多20位, 必须包括数字和字母'));
-        }
-        if(rule.field === "account" && this.type == 2 && !emailReg.test(value)) {
-            callback(new Error('请检查邮箱格式'));
-        }
-        callback()
+      var passReg = /(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,20}/
+      let emailReg = /^[A-Za-z\d]+([-_\.][A-Za-z\d]+)*@([A-Za-z\d]+[-\.])+[A-Za-z\d]{2,4}(,[A-Za-z\d]+([-_\.][A-Za-z\d]+)*@([A-Za-z\d]+[-\.])+[A-Za-z\d]{2,4})*$/
+      let text = ''
+      if (rule.field === 'account') {
+        text = '账户'
+      } else if (rule.field === 'password') {
+        text = '密码'
+      } else if (rule.field === 'verifyCode') {
+        text = '验证码'
+      }
+      if (value === '') {
+        callback(new Error(`${text}不可为空`))
+      }
+      if (rule.field === 'password' && !passReg.test(value)) {
+        callback(new Error('密码长度至少8位，最多20位, 必须包括数字和字母'))
+      }
+      if (rule.field === 'account' && this.type == 2 && !emailReg.test(value)) {
+        callback(new Error('请检查邮箱格式'))
+      }
+      callback()
     }
     return {
       cityCode,
@@ -106,13 +94,9 @@ export default {
         password: '',
         invCode: ''
       },
-      rules:{
-          account:[
-              { validator: validatePass, trigger: 'blur' }
-          ],
-          password: [
-              { validator: validatePass, trigger: 'blur' }
-          ],
+      rules: {
+        account: [{ validator: validatePass, trigger: 'blur' }],
+        password: [{ validator: validatePass, trigger: 'blur' }]
       }
     }
   },
@@ -124,10 +108,14 @@ export default {
       this.$router.go(-1)
       return
     }
+    // this.getIP()
   },
   methods: {
-    ...mapActions(['loginFetch']),
-    ...mapMutations(['setIsLogin']),
+    ...mapActions(['loginFetch','getIPFetch']),
+    ...mapMutations(['setIsLogin','setTRANSocket']),
+    async getIP () {
+      let res = await this.getIPFetch()
+    },
     checkType() {
       if (this.type == 1) {
         this.$router.push('/register')
@@ -136,34 +124,34 @@ export default {
       }
     },
     submitClick(formName) {
-      this.$refs[formName].validate((valid) => {
+      this.$refs[formName].validate(valid => {
         if (valid) {
           this.firstLogin()
         } else {
-          return false;
+          return false
         }
-      });
+      })
     },
-    inspect () {
-      let reg = new RegExp("^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$");
-      if(!this.user.account) {
-          this.$toast.error('请输入账号');
-          return true;
+    inspect() {
+      let reg = new RegExp('^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$')
+      if (!this.user.account) {
+        this.$message.error('请输入账号')
+        return true
       }
-      if(this.type == 2 && !this.user.account) {
-          this.$toast.error('请输入正确的邮箱地址');
-          return true;
-      }else if(!this.user.password) {
-          this.$toast.error('请输入您的密码');
-          return true;
-      }else if (this.type == 2 && !reg.test(this.user.account)) {
-          this.$toast.error('请检查邮箱格式');
-          return true;
+      if (this.type == 2 && !this.user.account) {
+        this.$message.error('请输入正确的邮箱地址')
+        return true
+      } else if (!this.user.password) {
+        this.$message.error('请输入您的密码')
+        return true
+      } else if (this.type == 2 && !reg.test(this.user.account)) {
+        this.$message.error('请检查邮箱格式')
+        return true
       }
       return false
     },
     async firstLogin() {
-      let account = this.type == 1 ? String(this.user.code)+String(this.user.account) : this.user.account
+      let account = this.type == 1 ? String(this.user.code) + String(this.user.account) : this.user.account
       let res = await this.loginFetch({
         account,
         password: this.user.password
@@ -171,10 +159,12 @@ export default {
       if (res.status == 200) {
         setCookie('userToken', res.token, 36000)
         this.setIsLogin(true)
-        this.$message.success('登录成功');
-        this.$router.push('/exchange')
+        this.$message.success('登录成功')
+        setTimeout(() => {
+          this.$router.push('/exchange')
+        },1000)
       } else {
-        this.$message.error(res.msg);
+        this.$message.error(res.msg)
       }
     }
   }
@@ -189,22 +179,24 @@ export default {
   //height: calc(~"100vh - 65px");
   height: 100vh;
   .el-input-group__prepend .vue-country-popover-container button {
-      border:none;
-      background: transparent;
-      width: 70px;
-      cursor: pointer;
+    border: none;
+    background: transparent;
+    width: 70px;
+    cursor: pointer;
   }
-  .el-input-group__append, .el-input-group__prepend {
-      padding:0;
-      width: 70px;
-      text-align: center;
+  .el-input-group__append,
+  .el-input-group__prepend {
+    border: none;
+    padding: 0;
+    width: 70px;
+    text-align: center;
   }
   .el-form-item__content {
-      line-height: 16px;
+    line-height: 16px;
   }
   .el-form-item {
-      width: 100%;
-      margin-bottom:20px;
+    width: 100%;
+    margin-bottom: 20px;
   }
   .login-bg {
     position: relative;
@@ -298,6 +290,8 @@ export default {
         }
         .el-input {
           input {
+            background: #f5f6f7;
+            border: none;
             height: 50px;
           }
         }
@@ -309,8 +303,9 @@ export default {
         }
         .forget {
           text-align: right;
-          a {
+          .el-button {
             color: rgba(0, 20, 42, 0.6);
+            font-size: 12px;
           }
         }
       }

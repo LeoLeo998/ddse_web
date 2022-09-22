@@ -59,7 +59,9 @@ import bus from '@/util/bus'
 export default {
   data() {
     return {
-      list: [],
+      list1: [],
+      list2: [],
+      list3: [],
       showAlert: true,
       PositionOrderDialogVisible: false,
       EntrustOrderDialogVisible: false,
@@ -72,46 +74,54 @@ export default {
     EntrustOrderDialog
   },
   watch: {
-    activeName(val) {
-      if (val === 1) {
-        this.getPositionList()
-      } else if (val === 2) {
-        this.getEntrustList()
-      } else {
-        this.getCloseOrderList()
-      }
-    },
     getIsLogin () {
       this.getPositionList()
     },
   },
   mounted () {
-    bus.$on('updatePosition',(data) => {
-      this.getPositionList()
+    bus.$on('updateOrder',(data) => {
+      if(data.type === 'add') {
+        this[`list${data.order}`].unshift(data.data)
+      }
+      if(data.type === 'remove') {
+        this[`list${data.order}`] = this[`list${data.order}`].filter(v => {
+          return v.TICKET != data.data.TICKET
+        })
+      }
+      if(data.type === 'update') {
+        this[`list${data.order}`] = this[`list${data.order}`].map(v => {
+          return v.TICKET === data.data.TICKET ? data.data : v
+        })
+      }
     })
   },
   created() {
-    this.getPositionList()
+    this.getPositionList();
+    this.getEntrustList();
+    this.getCloseOrderList();
   },
   computed:{
-    ...mapGetters(['getIsLogin','getProductData'])
+    ...mapGetters(['getIsLogin','getProductData']),
+    list () {
+      return this[`list${this.activeName}`]
+    }
   },
   methods: {
     ...mapActions(['positionListFetch', 'entrustListFetch', 'getCloseOrderListFetch']),
     // 持仓
     async getPositionList() {
       let res = await this.positionListFetch()
-      this.list = res.rows
+      this.list1 = res.rows
     },
     // 挂单
     async getEntrustList() {
       let res = await this.entrustListFetch()
-      this.list = res.rows
+      this.list2 = res.rows
     },
     //平仓
     async getCloseOrderList() {
       let res = await this.getCloseOrderListFetch()
-      this.list = res.rows
+      this.list3 = res.rows
     },
     formatPrice (data) {
       let currencyData = this.getProductData[data.SYMBOL]
@@ -119,9 +129,9 @@ export default {
         return '--'
       }
       if(data.CMD == '0'){
-        return currencyData.buy_price
+        return this.mathFloor(currencyData.buy_price,currencyData.digits)
       }else {
-        return currencyData.sell_price
+        return this.mathFloor(currencyData.sell_price,currencyData.digits)
       }
     },
     formatProfit (data) {
@@ -149,7 +159,7 @@ export default {
         profit = (data.OPEN_PRICE - currencyData.sell_price )  *data.VOLUME * currencyData.contract_size
       }
       if(profit) {
-        return profit.toFixed(4)
+        return profit.toFixed(2)
       }
       return '--'
     },

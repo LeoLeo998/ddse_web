@@ -33,6 +33,9 @@ import OrderBook from './components/OrderBook.vue'
 import MarketBox from './components/MarketBox.vue'
 import CreateOrder from './components/CreateOrder.vue'
 import DealHistory from './components/DealHistory.vue'
+import Socket from '@/config/socket'
+import config from '@/config/index'
+import { getCookie } from '@/common/cookie'
 export default {
   components: {
     ExLeft,
@@ -54,12 +57,17 @@ export default {
       this.$router.replace('/exchange?market=BTCUSDm')
     }
     this.setSelectMarket(this.$route.query.market)
+    if (getCookie('userToken')) {
+      const _socket2 = new Socket(config.TRAN_WSURL+getCookie('userToken'),this);
+      this.setTRANSocket(_socket2);
+    }
+    
   },
   computed: {
-    ...mapGetters(['getIsLight', 'getSelectMarket'])
+    ...mapGetters(['getIsLight', 'getSelectMarket','getIsLogin'])
   },
   methods: {
-    ...mapMutations(['setMainCoinList', 'setSelectMarket'])
+    ...mapMutations(['setMainCoinList', 'setSelectMarket','setTRANSocket'])
   }
 }
 </script>

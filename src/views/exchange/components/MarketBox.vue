@@ -32,10 +32,10 @@
               </div>
             </div>
             <div class="li-item" :class="item.buy_price_direction == 'up' ? 'price-up' : 'price-down'">
-              {{ item.buy_price }}
+              {{ mathFloor(item.buy_price,item.digits) }}
             </div>
             <div class="li-item" :class="item.sell_price_direction == 'up' ? 'price-up' : 'price-down'">
-              {{ item.sell_price }}
+              {{ mathFloor(item.sell_price,item.digits) }}
             </div>
             <div class="li-item" :class="getRange(item) > 0 ? 'price-up' : 'price-down'">{{ getRange(item) }}%</div>
           </li>
@@ -192,12 +192,12 @@ export default {
     height: 24px;
     background-color: @bg1;
     border-radius: 3px;
-    margin: 8px;
+    margin: 10px;
     i {
       position: absolute;
       left: 8px;
       top: 5px;
-      color: @color1;
+      color: var(--font-color1-);
     }
     input {
       width: 100%;
@@ -214,11 +214,12 @@ export default {
     display: flex;
     align-items: center;
     height: 26px;
-    margin: 8px;
+    margin: 10px;
     p,
     div,
     span {
-      color: var(--font-color2-);
+      color: var(--font-body-);
+      font-weight: 400;
     }
     i {
       transform: translateY(1px);
@@ -310,7 +311,7 @@ export default {
             margin-right: 10px;
           }
           .left-coin {
-            color: @color3;
+            color: var(--font-body-);
             font-size: 12px;
           }
           .left-description {
@@ -323,10 +324,10 @@ export default {
             font-size: 12px;
           }
           &:first-child {
-            padding-left: 8px;
+            padding-left: 10px;
           }
           &:last-child {
-            padding-right: 8px;
+            padding-right: 10px;
           }
         }
         .li-head,
@@ -353,7 +354,7 @@ export default {
       }
     }
     .li-head {
-      color: @color2;
+      color: var(--font-body-);
       font-size: 12px;
       height: 20px;
       &:first-child {
@@ -367,7 +368,7 @@ export default {
       font-size: 12px;
       overflow: hidden;
       i {
-        color: @color2;
+        color: var(--font-body-);
       }
       .left-coin {
         color: @color3;

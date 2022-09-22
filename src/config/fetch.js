@@ -14,7 +14,7 @@ const service = axios.create({
     'Content-Type': 'application/x-www-form-urlencoded',
   }
 })
-const base64 = ['password']
+const base64 = ['password','re_password']
 // request拦截器
 service.interceptors.request.use(
   config => {
@@ -24,24 +24,13 @@ service.interceptors.request.use(
     }
     base64.forEach(item => {
       if(data && data[item]) {
-        // data[item] = encryption(data[item],key)
-        
+        data[item] = encryption(data[item],key)
       }
     })
     if(!config.headers.authorization) {
       config.headers.authorization = ''
       config.headers.authorization = 'Bearer ' + getCookie('userToken')
     }
-    
-    // if(config.headers && config.headers.authorization) {
-
-    // }
-    // for(let item in data) {
-    //   if(base64.indexOf(item) > -1) {
-    //     data[item] = btoa(data[item])
-    //   }
-    // }
-    // config.data = data;
     if (data) {
       data = qs.stringify(data)
     }
