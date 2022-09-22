@@ -32,7 +32,7 @@
         </tr>
       </table>
     </div>
-    <div class="tab">
+    <div class="tab" v-if="getIsLogin">
       <table>
         <tr v-for="(item, key) in list" :key="key" @click="orderClick(item)">
           <td>{{ item.TICKET }}</td>
@@ -42,10 +42,20 @@
           <td>{{ item.OPEN_PRICE }}</td>
           <td>{{ item.SL }}</td>
           <td>{{ item.TP }}</td>
-          <td>{{formatPrice(item)}}</td>
-          <td>{{formatProfit(item)}}</td>
+          <td :class="formatClass(item)">{{formatPrice(item)}}</td>
+          <td :class="formatProfit(item) == '--' ? '' : formatProfit(item) > 0 ? 'price-up' : 'price-down'">{{formatProfit(item)}}</td>
         </tr>
       </table>
+    </div>
+    <div class="tab" v-else>
+      <div class="tip">
+        <div>
+          <router-link to="/register">注册</router-link>
+          或
+          <router-link to="/login">登录</router-link>
+          后查看
+        </div>
+      </div>
     </div>
     <PositionOrderDialog :visible.sync="PositionOrderDialogVisible" :oderInfo="oderInfo" @positionListFetch="getPositionList" />
     <EntrustOrderDialog :visible.sync="EntrustOrderDialogVisible" :oderInfo="oderInfo" @entrustListFetch="getEntrustList" />
@@ -123,6 +133,17 @@ export default {
       let res = await this.getCloseOrderListFetch()
       this.list3 = res.rows
     },
+    formatClass (data){
+      let currencyData = this.getProductData[data.SYMBOL]
+      if(currencyData && currencyData.buy_price_direction && currencyData.sell_price_direction) {
+        if(data.CMD == '0'){
+          return `price-${currencyData.buy_price_direction}`
+        }else {
+          return `price-${currencyData.sell_price_direction}`
+        }
+      }
+      return ''
+    },
     formatPrice (data) {
       let currencyData = this.getProductData[data.SYMBOL]
       if(!currencyData) {
@@ -145,6 +166,7 @@ export default {
       }else{
         rate = 1;
       }
+      console.log((currencyData.buy_price - data.OPEN_PRICE) , data.VOLUME , currencyData.contract_size ,rate)
       if(data.CMD == '0' && currencyData.profit_mode=='1' ){
         profit = (currencyData.buy_price - data.OPEN_PRICE) * data.VOLUME  * currencyData.contract_size * rate;
       }else if(data.CMD == '1' && currencyData.profit_mode=='1' ){
@@ -227,6 +249,17 @@ export default {
   .tab {
     height: 300px;
     overflow-y: auto;
+    .tip {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color:var(--font-body-);
+      a {
+        color:var(--color-green-);
+      }
+    }
     .red-color{
       color:var(--color-red-);
     }

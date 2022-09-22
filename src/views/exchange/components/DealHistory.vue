@@ -159,10 +159,8 @@ export default {
     align-items: center;
     padding-top:50px;
     letter-spacing:1px;
-    font-size: 12px;
     a {
       color:var(--color-green-);
-      font-size: 12px;
     }
   }
   .el-form-item {
