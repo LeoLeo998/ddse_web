@@ -23,23 +23,22 @@
         <el-form-item prop="account">
           <div class="row">
             <label for="">{{ type === 1 ? '手机号码' : '邮箱/子账号' }}</label>
-            <el-input v-if="type == 1" type="number" v-model="user.account" class="input-with-select">
+            <el-input v-if="type == 1" type="number" v-model="user.account" class="input-with-select" @keyup.enter.native="submitClick('login')">
               <template slot="prepend">
                 <VueCountryIntl schema="popover" v-model="user.code">
                   <button type="button" slot="reference">+{{ user.code }}</button>
                 </VueCountryIntl>
               </template>
             </el-input>
-            <el-input v-else label="email" size="large" v-model="user.account" clearable />
+            <el-input v-else label="email" size="large" v-model="user.account" clearable @keyup.enter.native="submitClick('login')" />
           </div>
         </el-form-item>
         <el-form-item prop="password">
           <div class="row">
             <label for="">登录密码</label>
-            <el-input size="large" type="password" show-password v-model="user.password" clearable />
+            <el-input size="large" type="password" show-password v-model="user.password" clearable @keyup.enter.native="submitClick('login')" />
           </div>
         </el-form-item>
-
         <div class="row">
           <el-button class="submit-btn" type="success" @click="submitClick('login')">登录</el-button>
         </div>
@@ -82,6 +81,9 @@ export default {
       if (rule.field === 'account' && this.type == 2 && !emailReg.test(value)) {
         callback(new Error('请检查邮箱格式'))
       }
+      if (rule.field === 'account' && this.type == 2 && value.length > 50) {
+        callback(new Error('邮箱不可大于50字符'))
+      }
       callback()
     }
     return {
@@ -110,10 +112,15 @@ export default {
     }
     // this.getIP()
   },
+  watch: {
+    type(val) {
+      this.$refs.login.resetFields()
+    }
+  },
   methods: {
-    ...mapActions(['loginFetch','getIPFetch']),
-    ...mapMutations(['setIsLogin','setTRANSocket']),
-    async getIP () {
+    ...mapActions(['loginFetch', 'getIPFetch']),
+    ...mapMutations(['setIsLogin', 'setTRANSocket']),
+    async getIP() {
       let res = await this.getIPFetch()
     },
     checkType() {
@@ -162,7 +169,7 @@ export default {
         this.$message.success('登录成功')
         setTimeout(() => {
           this.$router.push('/exchange')
-        },1000)
+        }, 1000)
       } else {
         this.$message.error(res.msg)
       }

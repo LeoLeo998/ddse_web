@@ -11,65 +11,66 @@
           <span v-show="item.symbol !== 'USDCNHm'"> ≈ ¥{{ numRate(item) }}</span>
         </div>
         <div class="flex-start-center updown">
-          <div :class="upDown(item) > 0 ? 'price-up' : 'price-down'">{{ upDown(item) }}%</div>
+          <div :class="upDown(item) > 0 ? 'price-up' : 'price-down'">{{ upDown(item) > 0 ? '+' + upDown(item) : upDown(item) }}%</div>
         </div>
       </div>
     </div>
-    <div class="header">
-      <div class="search-box">
-        <div class="title">
-          <p class="css-1xamyaw">DDSE币种行情</p>
-          <div>发现好币,寻找机会</div>
-        </div>
-      </div>
-      <div class="content-box">
-        <div class="item" v-for="(item, key) in topSockets" :key="key">
-          <span class="title">{{ topTitle[key] }}</span>
-          <div class="market-info">
-            <div class="item-left">
-              <img src="https://upload-hotbit-io.oss-ap-southeast-1.aliyuncs.com/files/asset_logos/BTC_LOGO.png" alt="" />
-              <span class="market">{{ item.market }}</span>
-            </div>
-            <div class="item-right">
-              <span :class="item.change > 0 ? 'price-up' : 'price-down'">
-                <!-- /// -->
-                {{ item.change > 0 ? '+' : '' }}{{ (item.change * 100).toFixed(2) }}%
-              </span>
-            </div>
-          </div>
-          <div class="market-info">
-            <div class="item-left">
-              <span class="price price-up">{{ item.price }}</span>
-            </div>
-          </div>
-          <div class="market-info">
-            <div class="item-left">
-              <span>${{ item.usd }}</span>
-            </div>
-            <div class="item-right">
-              <i class="fa fa-chevron-circle-right"></i>
-            </div>
+    <div class="market-product">
+      <div class="header">
+        <div class="search-box">
+          <div class="title">
+            <p class="css-1xamyaw">DDSE币种行情</p>
+            <div>发现好币,寻找机会</div>
           </div>
         </div>
-      </div>
-    </div>
-    <div class="market-box">
-      <div class="market-type-box flex-center-between">
-        <div>
-          <el-tabs v-model="marketType">
-            <el-tab-pane :label="item.title" :name="item.id" v-for="(item, index) in groupList" :key="index">
-              <span slot="label" v-if="item.id == -1"
-                ><i class="fa fa-star"></i><span style="margin-left:10px">{{ item.title }}</span></span
-              >
-            </el-tab-pane>
-          </el-tabs>
+        <div class="content-box">
+          <div class="item" v-for="(item, key) in topSockets" :key="key">
+            <span class="title">{{ topTitle[key] }}</span>
+            <div class="market-info">
+              <div class="item-left">
+                <img src="https://upload-hotbit-io.oss-ap-southeast-1.aliyuncs.com/files/asset_logos/BTC_LOGO.png" alt="" />
+                <span class="market">{{ item.market }}</span>
+              </div>
+              <div class="item-right">
+                <span :class="item.change > 0 ? 'price-up' : 'price-down'">
+                  <!-- /// -->
+                  {{ item.change > 0 ? '+' : '' }}{{ (item.change * 100).toFixed(2) }}%
+                </span>
+              </div>
+            </div>
+            <div class="market-info">
+              <div class="item-left">
+                <span class="price price-up">{{ item.price }}</span>
+              </div>
+            </div>
+            <div class="market-info">
+              <div class="item-left">
+                <span>${{ item.usd }}</span>
+              </div>
+              <div class="item-right">
+                <i class="fa fa-chevron-circle-right"></i>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="search-ipt">
-          <i class="fa fa-search"></i>
-          <input type="text" placeholder="搜索" />
-        </div>
       </div>
-      <!-- <div class="class-coin">
+      <div class="market-box">
+        <div class="market-type-box flex-center-between">
+          <div>
+            <el-tabs v-model="marketType" @tab-click="marketChange">
+              <el-tab-pane :label="item.title" :name="item.id" v-for="(item, index) in groupList" :key="index">
+                <span slot="label" v-if="item.id == -1"
+                  ><i class="fa fa-star"></i><span style="margin-left:10px">{{ item.title }}</span></span
+                >
+              </el-tab-pane>
+            </el-tabs>
+          </div>
+          <div class="search-ipt">
+            <i class="fa fa-search"></i>
+            <input type="text" placeholder="名称"/>
+          </div>
+        </div>
+        <!-- <div class="class-coin">
         <button :class="screenType == 1 && 'active'" @click="mainCoinClick(1)">BTC</button>
         <button :class="screenType == 2 && 'active'" @click="mainCoinClick(2)">ALTS</button>
         <button :class="screenType == 3 && 'active'" @click="mainCoinClick(3)">
@@ -99,73 +100,74 @@
         <button :class="screenType == 4 && 'active'" @click="mainCoinClick(4)">USDT</button>
         <button :class="screenType == 5 && 'active'" @click="mainCoinClick(5)">ETF</button>
       </div> -->
-      <div class="child-coin" v-if="screenType == 2">
-        <button :class="childCoin == 1 && 'active'" @click="childCoin = 1">
-          ALL
-        </button>
-        <button :class="childCoin == 2 && 'active'" @click="childCoin = 2">
-          ETH
-        </button>
-        <button :class="childCoin == 3 && 'active'" @click="childCoin = 3">
-          BNB
-        </button>
-        <button :class="childCoin == 4 && 'active'" @click="childCoin = 4">
-          TRX
-        </button>
-        <button :class="childCoin == 5 && 'active'" @click="childCoin = 5">
-          XRP
-        </button>
-        <button :class="childCoin == 6 && 'active'" @click="childCoin = 6">
-          DOGE
-        </button>
-      </div>
-      <div class="list-box">
-        <table>
-          <tr class="table-header">
-            <th>
-              名称
-              <span class="sort">
-                <i class="fa fa-sort-up"></i>
-                <i class="fa fa-sort-down"></i>
-              </span>
-            </th>
-            <th>
-              价格
-              <span class="sort">
-                <i class="fa fa-sort-up"></i>
-                <i class="fa fa-sort-down"></i>
-              </span>
-            </th>
-            <th>
-              24H涨跌
-              <span class="sort">
-                <i class="fa fa-sort-up"></i>
-                <i class="fa fa-sort-down"></i>
-              </span>
-            </th>
-            <th>24H最高</th>
-            <th>24H最低</th>
-            <th>操作</th>
-          </tr>
-          <tr v-for="(item, key) in productList" :key="key" class="cursor" @click.stop="toExchange(item)">
-            <td>
-              <div class="flex-start-center">
-                <i class="fa fa-star" :class="item.isFavorite === 1 ? 'fa-star-fav' : 'fa-star'" @click.stop="isFavorite(item)"></i>
-                <div>
-                  <div class="sym">{{ item.symbol }}</div>
-                  <div class="des">{{ item.description }}</div>
+        <div class="child-coin" v-if="screenType == 2">
+          <button :class="childCoin == 1 && 'active'" @click="childCoin = 1">
+            ALL
+          </button>
+          <button :class="childCoin == 2 && 'active'" @click="childCoin = 2">
+            ETH
+          </button>
+          <button :class="childCoin == 3 && 'active'" @click="childCoin = 3">
+            BNB
+          </button>
+          <button :class="childCoin == 4 && 'active'" @click="childCoin = 4">
+            TRX
+          </button>
+          <button :class="childCoin == 5 && 'active'" @click="childCoin = 5">
+            XRP
+          </button>
+          <button :class="childCoin == 6 && 'active'" @click="childCoin = 6">
+            DOGE
+          </button>
+        </div>
+        <div class="list-box">
+          <table>
+            <tr class="table-header">
+              <th>
+                名称
+                <span class="sort">
+                  <i class="fa fa-sort-up"></i>
+                  <i class="fa fa-sort-down"></i>
+                </span>
+              </th>
+              <th>
+                价格
+                <span class="sort">
+                  <i class="fa fa-sort-up"></i>
+                  <i class="fa fa-sort-down"></i>
+                </span>
+              </th>
+              <th>
+                24H涨跌
+                <span class="sort">
+                  <i class="fa fa-sort-up"></i>
+                  <i class="fa fa-sort-down"></i>
+                </span>
+              </th>
+              <th>24H最高</th>
+              <th>24H最低</th>
+              <th>操作</th>
+            </tr>
+            <tr v-for="(item, key) in productList" :key="key" class="cursor" @click.stop="toExchange(item)">
+              <td>
+                <div class="flex-start-center">
+                  <i class="fa fa-star" :class="item.isFavorite === 1 ? 'fa-star-fav' : 'fa-star'" @click.stop="isFavorite(item)"></i>
+                  <div>
+                    <div class="sym">{{ item.symbol }}</div>
+                    <div class="des">{{ item.description }}</div>
+                  </div>
                 </div>
-              </div>
-            </td>
-            <td>$ {{ item.buy_price }}</td>
-            <td :class="upDown(item) > 0 ? 'price-up' : 'price-down'">{{ upDown(item) }}%</td>
-            <td>$ {{ item.high }}</td>
-            <td>$ {{ item.low }}</td>
-            <td>
-              <el-button type="text" @click.stop="toExchange(item)">交易</el-button>
-            </td>
-          </tr>
-        </table>
+              </td>
+              <td>$ {{ item.buy_price }}</td>
+              <td :class="upDown(item) > 0 ? 'price-up' : 'price-down'">{{ upDown(item) }}%</td>
+              <td>$ {{ item.high }}</td>
+              <td>$ {{ item.low }}</td>
+              <td>
+                <el-button type="text" @click.stop="toExchange(item)">交易</el-button>
+              </td>
+            </tr>
+          </table>
+        </div>
       </div>
     </div>
   </div>
@@ -178,11 +180,13 @@ export default {
     return {
       screenType: 1,
       marketType: '0',
+      searchVal: '',
       childCoin: 1,
       showSelectChild: false,
       topTitle: ['最大涨幅（24h）', '最大跌幅（24h）', '成交量（24h）', '亮点'],
       groupList: [],
       allProductList: [],
+      productListCopy: [],
       myFavorite: []
     }
   },
@@ -215,9 +219,6 @@ export default {
       // 最热门
       if (this.marketType == 0) {
         return this.allProductList.filter(item => {
-          if (item.hot == 1) {
-            console.log(item)
-          }
           return item.hot == 1
         })
         // 自选
@@ -255,6 +256,24 @@ export default {
           item.buy_price = val.buy_price
         }
       })
+    },
+    searchVal(val) {
+      let filterArr = []
+      if (val) {
+        for (let item of this.allProductList) {
+          for (let k in item) {
+            if (k == 'description' || k == 'symbol') {
+              if (item[k].toLowerCase().includes(val.toLowerCase())) {
+                filterArr.push(item)
+              }
+            }
+          }
+        }
+        this.allProductList = filterArr
+      } else {
+        filterArr = []
+        this.allProductList = this.productListCopy
+      }
     }
   },
   methods: {
@@ -295,6 +314,7 @@ export default {
     async getProductList() {
       let res = await this.productListFetch()
       this.allProductList = res.rows
+      this.productListCopy = res.rows
       let favorites = this.isLogin ? this.myFavorite : JSON.parse(localStorage.getItem('ddse_favorite_product')) || []
       let favSymbolArr = favorites.map(a => {
         return a.symbol
@@ -345,6 +365,10 @@ export default {
           market: item.symbol
         }
       })
+    },
+    marketChange(item) {
+      // this.allProductList = this.productListCopy
+      // this.searchVal = ''
     }
   },
 
@@ -365,16 +389,20 @@ export default {
 @green: #2dbd96;
 
 .market-page {
+  padding: 0 150px 100px 150px;
+  min-height: 100vh;
   .hot {
-    padding: 0 30px;
     display: flex;
-    justify-content: center;
+    align-items: center;
     .hot-item {
-      width: 350px;
-      margin: 10px 10px;
-      border-radius: 10px;
+      border-radius: 5px;
       background: #fff;
       padding: 25px 25px;
+      flex: 1;
+      margin: 20px 0;
+      &:not(:last-child) {
+        margin-right: 20px;
+      }
       cursor: pointer;
       .symbol {
         div {
@@ -408,12 +436,8 @@ export default {
     }
   }
   .header {
-    background-color: @bgcolor2;
-    text-align: center;
-    padding-left: 120px;
     .search-box {
-      width: 1280px;
-      padding: 20px 0 0 530px;
+      padding: 20px 0 0 30px;
       .title {
         width: 300px;
         text-align: left;
@@ -427,7 +451,6 @@ export default {
       }
     }
     .content-box {
-      width: 1280px;
       margin: 20px auto 0;
       display: flex;
       .item {
@@ -478,9 +501,12 @@ export default {
       }
     }
   }
-
+  .market-product {
+    background: #fff;
+    border-radius: 5px;
+    padding-bottom: 80px;
+  }
   .market-box {
-    width: 1280px;
     margin: 0 auto;
     padding: 0px 20px;
     .market-type-box {

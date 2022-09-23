@@ -23,7 +23,7 @@
         <el-form-item prop="account">
           <div class="row">
             <label for="">{{ type === 1 ? '手机号码' : '邮箱' }}</label>
-            <el-input v-if="type == 1" type="number" v-model="user.account" class="input-with-select">
+            <el-input v-if="type == 1" type="number" v-model="user.account" class="input-with-select" @keyup.enter.native="submitClick('register')">
               <template slot="prepend">
                 <VueCountryIntl schema="popover" v-model="user.code">
                   <button type="button" slot="reference">+{{ user.code }}</button>
@@ -41,21 +41,21 @@
                                 </el-option>
                             </el-select> -->
             </el-input>
-            <el-input v-else label="email" size="large" v-model="user.account" clearable />
+            <el-input v-else label="email" size="large" v-model="user.account" clearable @keyup.enter.native="submitClick('register')"/>
           </div>
         </el-form-item>
 
         <el-form-item prop="password">
           <div class="row">
             <label for="">设置登录密码</label>
-            <el-input size="large" type="password" show-password v-model="user.password" clearable />
+            <el-input size="large" type="password" show-password v-model="user.password" clearable @keyup.enter.native="submitClick('register')"/>
           </div>
         </el-form-item>
 
         <el-form-item prop="verifyCode">
           <div class="row">
             <label for="">验证码</label>
-            <el-input type="number" v-model="user.verifyCode">
+            <el-input type="number" v-model="user.verifyCode" @keyup.enter.native="submitClick('register')">
               <template slot="append">
                 <div class="send-btn" :class="sendDisable && 'disabled'" @click="sendMsg">{{ sendText }}</div>
               </template>
@@ -65,7 +65,7 @@
 
         <div class="row">
           <label for="">邀请码（选填）</label>
-          <el-input size="large" type="text" v-model="user.invCode" clearable />
+          <el-input size="large" type="text" v-model="user.invCode" clearable @keyup.enter.native="submitClick('register')"/>
         </div>
         <!-- <div class="row">
                     
@@ -112,6 +112,9 @@ export default {
       }
       if (rule.field === 'account' && this.type == 2 && !emailReg.test(value)) {
         callback(new Error('请检查邮箱格式'))
+      }
+      if (rule.field === 'account' && this.type == 2 && value.length > 50) {
+        callback(new Error('邮箱不可大于50字符'))
       }
       callback()
     }
@@ -217,6 +220,9 @@ export default {
       } else {
         this.type = 2
       }
+    },
+    type(val) {
+      this.$refs.register.resetFields()
     }
   }
 }
