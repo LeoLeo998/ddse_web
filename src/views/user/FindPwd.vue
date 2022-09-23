@@ -27,14 +27,14 @@
                 <label for="">{{ type === 1 ? '手机号码' : '邮箱/子账号' }}</label>
                 <div class="flex-center-between">
                   <div>
-                    <el-input v-if="type == 1" type="number" placeholder="手机" v-model="user.account" class="input-with-select" style="width:350px">
+                    <el-input v-if="type == 1" type="number" placeholder="手机" v-model="user.account" class="input-with-select" style="width:350px" @keyup.enter.native="stepNext">
                       <template slot="prepend">
                         <VueCountryIntl schema="popover" v-model="user.code">
                           <button type="button" slot="reference">+{{ user.code }}</button>
                         </VueCountryIntl>
                       </template>
                     </el-input>
-                    <el-input v-else label="email" size="large" v-model="user.account" placeholder="邮箱/子账号" clearable style="width:350px" />
+                    <el-input v-else label="email" size="large" v-model="user.account" placeholder="邮箱/子账号" clearable style="width:350px" @keyup.enter.native="stepNext"/>
                   </div>
                   <el-button class="submit-btn" :class="sendDisable ? 'submit-btn-dis' : 'submit-btn'" type="success" @click="sendMsg" :disabled="sendDisable" style="width:130px">{{ sendText }}</el-button>
                 </div>
@@ -43,7 +43,7 @@
             <el-form-item prop="verifyCode">
               <div class="row row2">
                 <label for="">验证码</label>
-                <el-input size="large" v-model="user.verifyCode" placeholder="" />
+                <el-input size="large" v-model="user.verifyCode" placeholder="" @keyup.enter.native="stepNext"/>
               </div>
             </el-form-item>
             <div class="row row2">
@@ -53,10 +53,10 @@
           <div v-else style="width:100%">
             <div class="row row2">
               <el-form-item prop="password">
-                <el-input label="email" size="large" type="password" show-password v-model="user.password" placeholder="新密码" clearable style="margin:10px 0" />
+                <el-input label="email" size="large" type="password" show-password v-model="user.password" placeholder="新密码" clearable style="margin:10px 0" @keyup.enter.native="submitClick"/>
               </el-form-item>
               <el-form-item prop="re_password">
-                <el-input label="email" size="large" type="password" show-password v-model="user.re_password" placeholder="确认密码" clearable style="margin:10px 0" />
+                <el-input label="email" size="large" type="password" show-password v-model="user.re_password" placeholder="确认密码" clearable style="margin:10px 0" @keyup.enter.native="submitClick"/>
               </el-form-item>
             </div>
             <div class="row row2">
@@ -96,6 +96,9 @@ export default {
       if (rule.field === 'account' && this.type == 2 && !emailReg.test(value)) {
         callback(new Error('请检查邮箱格式'))
       }
+      if (rule.field === 'account' && this.type == 2 && value.length > 50) {
+        callback(new Error('邮箱不可大于50字符'))
+      }
       callback()
     }
     return {
@@ -123,6 +126,11 @@ export default {
   },
   computed: {
     ...mapGetters(['getIsLogin'])
+  },
+  watch: {
+    type(val) {
+      this.$refs.form.resetFields()
+    }
   },
   created() {
     if (getCookie('userToken')) {
