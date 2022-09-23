@@ -67,13 +67,13 @@ import bus from '@/util/bus';
 		disabled_features: [
 			//"use_localstorage_for_settings"
 			'header_symbol_search',//头部搜索
-			//'header_widget_dom_node',//隐藏头部组件
+			// 'header_widget_dom_node',//隐藏头部组件
 			//'source_selection_markers',//禁用系列和指示器的选择标记
-			//'header_indicators',//图标指标
+			// 'header_indicators',//图标指标
 			'adaptive_logo',//移动端可以隐藏logo
 			//'constraint_dialogs_movement',
-			//'header_interval_dialog_button',
-			//'show_interval_dialog_on_key_press',
+			// 'header_interval_dialog_button',
+			// 'show_interval_dialog_on_key_press',
 			//'symbol_search_hot_key',
 			//'study_dialog_search_control',
 			'display_market_status',
@@ -99,7 +99,7 @@ import bus from '@/util/bus';
 			'compare_symbol',
 			'border_around_the_chart',
 			'timezone_menu',
-			//'header_resolutions',// todo：przetestowac //头部的时间
+			// 'header_resolutions',// todo：przetestowac //头部的时间
 			'control_bar',// todo：przetestowac
 			'edit_buttons_in_legend',// todo：przetestowac
 			'remove_library_container_border',		

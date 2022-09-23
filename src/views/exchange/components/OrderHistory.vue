@@ -1,15 +1,15 @@
 <template>
-  <div class="order-history">
+  <div class="order-history hlist">
     <div class="menu">
       <div class="left">
         <div class="item" :class="activeName == 1 && 'active'" @click="activeName = 1">
-          持仓列表
+          持仓列表 <span v-if="getIsLogin">[{{list1.length}}]</span>
         </div>
         <div class="item" :class="activeName == 2 && 'active'" @click="activeName = 2">
-          挂单列表
+          挂单列表 <span v-if="getIsLogin">[{{list2.length}}]</span>
         </div>
         <div class="item" :class="activeName == 3 && 'active'" @click="activeName = 3">
-          历史记录
+          历史记录 <span v-if="getIsLogin">[{{list3.length}}]</span>
         </div>
       </div>
       <div class="right">
@@ -17,43 +17,45 @@
         <span>隐藏其他交易对</span> -->
       </div>
     </div>
-    <div class="tab-head">
-      <table>
-        <tr>
-          <th>订单号</th>
-          <th>产品</th>
-          <th>方向</th>
-          <th>成交量</th>
-          <th>开仓价格</th>
-          <th>止损价格</th>
-          <th>止盈价格</th>
-          <th>最新价格</th>
-          <th>盈亏</th>
-        </tr>
-      </table>
-    </div>
-    <div class="tab" v-if="getIsLogin">
-      <table>
-        <tr v-for="(item, key) in list" :key="key" @click="orderClick(item)">
-          <td>{{ item.TICKET }}</td>
-          <td>{{ item.SYMBOL }}</td>
-          <td :class="item.CMD == 0 ? 'green-color' : 'red-color'">{{ item.CMD | orderType }}</td>
-          <td class="green-color">{{ item.VOLUME }}</td>
-          <td>{{ item.OPEN_PRICE }}</td>
-          <td>{{ item.SL }}</td>
-          <td>{{ item.TP }}</td>
-          <td :class="formatClass(item)">{{formatPrice(item)}}</td>
-          <td :class="formatProfit(item) == '--' ? '' : formatProfit(item) > 0 ? 'price-up' : 'price-down'">{{formatProfit(item)}}</td>
-        </tr>
-      </table>
-    </div>
-    <div class="tab" v-else>
-      <div class="tip">
-        <div>
-          <router-link to="/register">注册</router-link>
-          或
-          <router-link to="/login">登录</router-link>
-          后查看
+    <div class="tab-box">
+      <div class="tab-head">
+        <table>
+          <tr>
+            <th>订单号</th>
+            <th>产品</th>
+            <th>方向</th>
+            <th>成交量</th>
+            <th>开仓价格</th>
+            <th>止损价格</th>
+            <th>止盈价格</th>
+            <th>最新价格</th>
+            <th>盈亏</th>
+          </tr>
+        </table>
+      </div>
+      <div class="tab" v-if="getIsLogin">
+        <table>
+          <tr v-for="(item, key) in list" :key="key" @click="orderClick(item)">
+            <td>{{ item.TICKET }}</td>
+            <td>{{ item.SYMBOL }}</td>
+            <td :class="item.CMD == 0 ? 'green-color' : 'red-color'">{{ item.CMD | orderType }}</td>
+            <td class="green-color">{{ item.VOLUME }}</td>
+            <td>{{ item.OPEN_PRICE }}</td>
+            <td>{{ item.SL }}</td>
+            <td>{{ item.TP }}</td>
+            <td :class="formatClass(item)">{{formatPrice(item)}}</td>
+            <td :class="formatProfit(item) == '--' ? '' : formatProfit(item) > 0 ? 'price-up' : 'price-down'">{{formatProfit(item)}}</td>
+          </tr>
+        </table>
+      </div>
+      <div class="tab" v-else>
+        <div class="tip">
+          <div>
+            <router-link to="/register">注册</router-link>
+            或
+            <router-link to="/login">登录</router-link>
+            后查看
+          </div>
         </div>
       </div>
     </div>
@@ -166,7 +168,6 @@ export default {
       }else{
         rate = 1;
       }
-      console.log((currencyData.buy_price - data.OPEN_PRICE) , data.VOLUME , currencyData.contract_size ,rate)
       if(data.CMD == '0' && currencyData.profit_mode=='1' ){
         profit = (currencyData.buy_price - data.OPEN_PRICE) * data.VOLUME  * currencyData.contract_size * rate;
       }else if(data.CMD == '1' && currencyData.profit_mode=='1' ){
@@ -192,7 +193,6 @@ export default {
       } else if (this.activeName === 2) {
         this.EntrustOrderDialogVisible = true
       }
-      console.log(data)
     }
   },
   filters: {
@@ -207,23 +207,35 @@ export default {
 </script>
 <style lang="less" scoped>
 .order-history {
-  padding: 15px 0;
   border: 1px solid rgb(70, 70, 70);
   border-top: none;
   background-color: #fff;
+  
   height: 395px;
-  //   overflow-y: scroll;
+  &.hlist {
+    background-color: var(--hover-color-);
+  }
+  .tab-box {
+    background-color: #fff;
+  }
   .menu {
+    width: 100%;
     display: flex;
     justify-content: space-between;
-    margin-bottom: 15px;
-    padding:0 15px;
+    padding:0 8px;
+    height:40px;
+    
     .left {
       display: flex;
       .item {
         color: rgb(132, 142, 156);
         cursor: pointer;
-        margin-right: 25px;
+        height: 100%;
+        padding:10px 20px;
+        &.active {
+          background: #fff;
+          font-weight: 400;
+        }
       }
     }
   }
@@ -235,7 +247,7 @@ export default {
       
       th {
         color: var(--font-body-);
-        background-color: var(--hover-color-);
+        background-color: #fff;
         height:40px;
         width: 11.111%;
         text-align: left;

@@ -72,7 +72,7 @@
                 </div> -->
         <div class="row checkedbox">
           <el-form-item prop="read">
-            <el-checkbox v-model="user.read">我已阅读并同意 <a href="" class="agreement">服务协议</a></el-checkbox>
+            <el-checkbox v-model="user.read">我已阅读并同意 <router-link to="/agreement" class="agreement">服务协议</router-link></el-checkbox>
           </el-form-item>
           <el-button class="submit-btn" type="success" @click="submitClick('register')">注册</el-button>
         </div>

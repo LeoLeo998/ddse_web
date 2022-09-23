@@ -2,7 +2,7 @@
   <div class="ex-market-box">
     <div class="search-box">
       <i class="fa fa-search"></i>
-      <input type="text" />
+      <input type="text" v-model="searchVal"/>
     </div>
     <div class="coin-list">
       <i class="fa fa-star" @click="coinIndex = -1" :class="coinIndex == -1 && 'active'"></i>
@@ -16,10 +16,36 @@
     <div class="tab-box">
       <ul>
         <li>
-          <div class="li-head">名称</div>
-          <div class="li-head">卖出价格</div>
-          <div class="li-head">买入价格</div>
-          <div class="li-head">涨幅</div>
+          <div class="li-head">
+            <span>名称</span>
+            <span class="sort-box" @click="sortClick('name')">
+              <i class="fa fa-sort-up" :class="sort.name == 1 && 'select'"></i>
+              <i class="fa fa-sort-down" :class="sort.name == 2 && 'select'"></i>
+            </span>
+          </div>
+          <div class="li-head">
+            <span>卖出价格</span>
+            <span class="sort-box" @click="sortClick('sellP')">
+              <i class="fa fa-sort-up" :class="sort.sellP == 1 && 'select'"></i>
+              <i class="fa fa-sort-down" :class="sort.sellP == 2 && 'select'"></i>
+            </span>
+          </div>
+          <div class="li-head">
+            <span>买入价格</span>
+            <span class="sort-box" @click="sortClick('buyP')">
+              <i class="fa fa-sort-up" :class="sort.buyP == 1 && 'select'"></i>
+              <i class="fa fa-sort-down" :class="sort.buyP == 2 && 'select'"></i>
+            </span>
+          </div>
+          <div class="li-head">
+            <span>
+              涨幅
+            </span>
+            <span class="sort-box" @click="sortClick('range')">
+              <i class="fa fa-sort-up" :class="sort.range == 1 && 'select'"></i>
+              <i class="fa fa-sort-down" :class="sort.range == 2 && 'select'"></i>
+            </span>
+          </div>
         </li>
         <div class="market-list">
           <li v-for="(item, key) in marketList" :key="key" @click="setCoin(item)">
@@ -54,7 +80,14 @@ export default {
       selectMarket: '',
       group: [],
       dataList: [],
-      collectionList: []
+      collectionList: [],
+      searchVal:'',
+      sort:{
+        name:0,
+        sellP:0,
+        buyP:0,
+        range:0
+      }
     }
   },
   computed: {
@@ -77,6 +110,49 @@ export default {
         obj[v.symbol] = {}
         obj[v.symbol] = v
       })
+      data = data.filter(v => {
+        return v.symbol.toUpperCase().indexOf(this.searchVal.toUpperCase()) > -1
+      })
+      if(this.sort.name == 1) {
+        data = data.sort((a,b) => {
+          if( a.symbol < b.symbol) return -1
+        })
+      }
+      if(this.sort.name == 2) {
+        data = data.sort((a,b) => {
+          if( a.symbol > b.symbol) return -1
+        })
+      }
+      if(this.sort.buyP == 1) {
+        data = data.sort((a,b) => {
+          return a.sell_price - b.sell_price
+        })
+      }
+      if(this.sort.buyP == 2) {
+        data = data.sort((a,b) => {
+          return b.sell_price - a.sell_price
+        })
+      }
+      if(this.sort.sellP == 1) {
+        data = data.sort((a,b) => {
+          return a.buy_price - b.buy_price
+        })
+      }
+      if(this.sort.sellP == 2) {
+        data = data.sort((a,b) => {
+          return b.buy_price - a.buy_price
+        })
+      }
+      if(this.sort.range == 1) {
+        data = data.sort((a,b) => {
+          return this.getRange(a) - this.getRange(b)
+        })
+      }
+      if(this.sort.range == 2) {
+        data = data.sort((a,b) => {
+          return this.getRange(b) - this.getRange(a)
+        })
+      }
       return data
     }
   },
@@ -92,6 +168,9 @@ export default {
       return this.collectionList.find(v => {
         return v.symbol == symbol
       })
+    },
+    sortClick (type) {
+      this.sort[type] = this.sort[type] == 0 ? 1 : this.sort[type] == 1 ? this.sort[type] = 2 : 0
     },
     async starClick(symbol) {
       let fun = ''
@@ -184,7 +263,7 @@ export default {
 @bg1: rgb(51, 51, 51);
 .ex-market-box {
   background-color: #fff;
-  min-width: 300px;
+  min-width: 396px;
   border: 1px solid #e1e1e1;
   height: 484px;
   .search-box {
@@ -283,7 +362,7 @@ export default {
         height: 50px;
         align-items: center;
         span {
-          width: 100%;
+          //width: 100%;
           display: inline-block;
           overflow: hidden;
           white-space: nowrap;
@@ -297,9 +376,15 @@ export default {
         height: 358px;
         overflow: auto;
         &::-webkit-scrollbar {
-          width: 3px;
+          width: 4px;
           height: 1px;
           border-radius: 10px;
+        }
+        &::-webkit-scrollbar-thumb {
+          /*滚动条里面小方块*/
+          border-radius: 10px;
+          box-shadow: inset 0 0 5px rgba(97, 184, 179, 0.1);
+          background: #78b4b4;
         }
         .li-item {
           font-size: 12px;
@@ -357,6 +442,20 @@ export default {
       color: var(--font-body-);
       font-size: 12px;
       height: 20px;
+      .sort-box {
+        cursor: pointer;
+        i {
+          &.fa-sort-up {
+            margin-left:1px;
+          }
+          &.fa-sort-down {
+            margin-left:-12.7px;
+          }
+          &.select {
+            color:var(--color-green-);
+          }
+        }
+      }
       &:first-child {
         padding-left: 8px;
       }
@@ -397,6 +496,17 @@ export default {
       &:first-child {
         width: 40%;
         text-align: left;
+      }
+      &:nth-child(2) {
+        width: 20%;
+      }
+      &:nth-child(3) {
+        width: 20%;
+      }
+      &:nth-child(4) {
+        display: block;
+        //text-align: right;
+        width: 20%;
       }
     }
   }
