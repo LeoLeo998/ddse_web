@@ -50,7 +50,7 @@
         <div class="market-list">
           <li v-for="(item, key) in marketList" :key="key" @click="setCoin(item)">
             <div class="li-item">
-              <i class="fa fa-star" :class="isStar(item.symbol) && 'active'" @click="starClick(item.symbol)"></i>
+              <i class="fa el-icon-star-off" :class="isStar(item.symbol) && 'active'" @click="starClick(item.symbol)"></i>
               <div>
                 <span class="left-coin">{{ item.symbol }}</span>
                 <br />

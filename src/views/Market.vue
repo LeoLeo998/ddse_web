@@ -1,7 +1,7 @@
 <template>
   <div class="market-page">
     <div class="hot">
-      <div class="hot-item" v-for="(item, index) in hotProductList" :key="index" @click="toExchange(item)">
+      <div class="hot-item" v-for="(item, index) in mostHot" :key="index" @click="toExchange(item)">
         <div class="flex-center-between symbol">
           <div>{{ item.symbol }}</div>
           <img src="https://huobicfg.s3.amazonaws.com/currency_icon/btc.png" alt="" />
@@ -11,18 +11,31 @@
           <span v-show="item.symbol !== 'USDCNHm'"> ≈ ¥{{ numRate(item) }}</span>
         </div>
         <div class="flex-start-center updown">
-          <div :class="upDown(item) > 0 ? 'price-up' : 'price-down'">{{ upDown(item) > 0 ? '+' + upDown(item) : upDown(item) }}%</div>
+          <div :class="upDown(item) > 0 ? 'price-up2' : 'price-down2'">{{ upDown(item) > 0 ? '+' + upDown(item) : upDown(item) }}%</div>
         </div>
+      </div>
+    </div>
+    <div class="product-tab flex-center-between">
+      <el-tabs v-model="marketType" @tab-click="marketChange">
+        <el-tab-pane :label="item.title" :name="item.id" v-for="(item, index) in groupList" :key="index">
+          <span slot="label" v-if="item.id == -1"
+            ><i class="fa el-icon-star-off"></i><span style="margin-left:10px">{{ item.title }}</span></span
+          >
+        </el-tab-pane>
+      </el-tabs>
+      <div class="search-ipt">
+        <i class="fa el-icon-search"></i>
+        <input type="text" placeholder="名称" v-model="searchVal" />
       </div>
     </div>
     <div class="market-product">
       <div class="header">
-        <div class="search-box">
+        <!-- <div class="search-box">
           <div class="title">
             <p class="css-1xamyaw">DDSE币种行情</p>
             <div>发现好币,寻找机会</div>
           </div>
-        </div>
+        </div> -->
         <div class="content-box">
           <div class="item" v-for="(item, key) in topSockets" :key="key">
             <span class="title">{{ topTitle[key] }}</span>
@@ -32,7 +45,7 @@
                 <span class="market">{{ item.market }}</span>
               </div>
               <div class="item-right">
-                <span :class="item.change > 0 ? 'price-up' : 'price-down'">
+                <span :class="item.change > 0 ? 'price-up2' : 'price-down2'">
                   <!-- /// -->
                   {{ item.change > 0 ? '+' : '' }}{{ (item.change * 100).toFixed(2) }}%
                 </span>
@@ -40,7 +53,7 @@
             </div>
             <div class="market-info">
               <div class="item-left">
-                <span class="price price-up">{{ item.price }}</span>
+                <span class="price price-up2">{{ item.price }}</span>
               </div>
             </div>
             <div class="market-info">
@@ -55,21 +68,6 @@
         </div>
       </div>
       <div class="market-box">
-        <div class="market-type-box flex-center-between">
-          <div>
-            <el-tabs v-model="marketType" @tab-click="marketChange">
-              <el-tab-pane :label="item.title" :name="item.id" v-for="(item, index) in groupList" :key="index">
-                <span slot="label" v-if="item.id == -1"
-                  ><i class="fa fa-star"></i><span style="margin-left:10px">{{ item.title }}</span></span
-                >
-              </el-tab-pane>
-            </el-tabs>
-          </div>
-          <div class="search-ipt">
-            <i class="fa fa-search"></i>
-            <input type="text" placeholder="名称"/>
-          </div>
-        </div>
         <!-- <div class="class-coin">
         <button :class="screenType == 1 && 'active'" @click="mainCoinClick(1)">BTC</button>
         <button :class="screenType == 2 && 'active'" @click="mainCoinClick(2)">ALTS</button>
@@ -151,7 +149,7 @@
             <tr v-for="(item, key) in productList" :key="key" class="cursor" @click.stop="toExchange(item)">
               <td>
                 <div class="flex-start-center">
-                  <i class="fa fa-star" :class="item.isFavorite === 1 ? 'fa-star-fav' : 'fa-star'" @click.stop="isFavorite(item)"></i>
+                  <i class="fa el-icon-star-on" :class="item.isFavorite === 1 ? 'fa-star-fav' : 'fa-star'" @click.stop="isFavorite(item)"></i>
                   <div>
                     <div class="sym">{{ item.symbol }}</div>
                     <div class="des">{{ item.description }}</div>
@@ -159,11 +157,11 @@
                 </div>
               </td>
               <td>$ {{ item.buy_price }}</td>
-              <td :class="upDown(item) > 0 ? 'price-up' : 'price-down'">{{ upDown(item) }}%</td>
+              <td :class="upDown(item) > 0 ? 'price-up2' : 'price-down2'">{{ upDown(item) }}%</td>
               <td>$ {{ item.high }}</td>
               <td>$ {{ item.low }}</td>
               <td>
-                <el-button type="text" @click.stop="toExchange(item)">交易</el-button>
+                <div @click.stop="toExchange(item)" style="font-size:18px" class="price-up">交易</div>
               </td>
             </tr>
           </table>
@@ -174,6 +172,7 @@
 </template>
 
 <script>
+import { re } from 'semver'
 import { mapState, mapActions } from 'vuex'
 export default {
   data() {
@@ -187,6 +186,7 @@ export default {
       groupList: [],
       allProductList: [],
       productListCopy: [],
+      mostHot: [],
       myFavorite: []
     }
   },
@@ -197,7 +197,7 @@ export default {
     },
     //获取汇率
     getRate() {
-      return this.allProductList.find(item => {
+      return this.mostHot.find(item => {
         return item.symbol === 'USDCNHm'
       })
     },
@@ -206,13 +206,6 @@ export default {
       return function(data) {
         return (data.buy_price * this.getRate.buy_price).toFixed(2)
       }
-    },
-    //头部热门
-    hotProductList() {
-      let arr = ['XAUUSDm', 'BTCUSDm', 'USDCNHm', 'US30m', 'AAPLm']
-      return this.allProductList.filter(item => {
-        return arr.includes(item.symbol)
-      })
     },
     // 产品列表处理
     productList() {
@@ -258,21 +251,14 @@ export default {
       })
     },
     searchVal(val) {
-      let filterArr = []
-      if (val) {
-        for (let item of this.allProductList) {
-          for (let k in item) {
-            if (k == 'description' || k == 'symbol') {
-              if (item[k].toLowerCase().includes(val.toLowerCase())) {
-                filterArr.push(item)
-              }
-            }
-          }
-        }
-        this.allProductList = filterArr
-      } else {
-        filterArr = []
+      if (!val) {
         this.allProductList = this.productListCopy
+      } else {
+        let filterArr = []
+        filterArr = this.productListCopy.filter(item => {
+          return item.symbol.toLowerCase().indexOf(val.toLowerCase()) !== -1
+        })
+        this.allProductList = filterArr
       }
     }
   },
@@ -315,11 +301,16 @@ export default {
       let res = await this.productListFetch()
       this.allProductList = res.rows
       this.productListCopy = res.rows
+      // 头部热门产品
+      let arr = ['XAUUSDm', 'BTCUSDm', 'USDCNHm', 'US30m', 'AAPLm']
+      this.mostHot = res.rows.filter(item => {
+        return arr.includes(item.symbol)
+      })
+      // 自选
       let favorites = this.isLogin ? this.myFavorite : JSON.parse(localStorage.getItem('ddse_favorite_product')) || []
       let favSymbolArr = favorites.map(a => {
         return a.symbol
       })
-      // 是否自选
       this.allProductList.forEach(a => {
         favSymbolArr.includes(a.symbol) ? (a.isFavorite = 1) : (a.isFavorite = 0)
       })
@@ -367,8 +358,7 @@ export default {
       })
     },
     marketChange(item) {
-      // this.allProductList = this.productListCopy
-      // this.searchVal = ''
+      this.searchVal = ''
     }
   },
 
@@ -386,20 +376,79 @@ export default {
 @fontcolor: #707a8a;
 @fontcolor2: rgb(112, 122, 138);
 @tabline: #eaecef;
-@green: #2dbd96;
-
+@green: #49c5a8;
+.price-down2 {
+  color: #ef6b7b;
+}
+.price-up2 {
+  color: #49c5a8;
+}
 .market-page {
-  padding: 0 150px 100px 150px;
+  padding: 0 0 100px 0;
   min-height: 100vh;
+
+  .product-tab {
+    padding: 0 300px;
+    .search-ipt {
+      position: relative;
+      input {
+        width: 220px;
+        height: 50px;
+        border-radius: 5px;
+        border: none;
+        outline: none;
+        padding: 0 30px;
+        background-color: #f5f6f6;
+      }
+      i {
+        position: absolute;
+        left: 0px;
+        top: 12px;
+        color: @fontcolor;
+      }
+    }
+    .fa {
+      font-size: 24px;
+    }
+    /deep/ .el-tabs {
+      .el-tabs__header {
+        margin: 0 0;
+      }
+      .el-tabs__nav {
+        padding: 15px 0;
+      }
+      .el-tabs__item {
+        color: rgba(0, 20, 42, 0.6);
+        font-size: 17px;
+        span {
+          font-size: 17px;
+        }
+        &:hover {
+          color: @green;
+        }
+      }
+      .el-tabs__item.is-active {
+        color: @green;
+      }
+      .el-tabs__nav-wrap::after {
+        display: none;
+      }
+      .el-tabs__active-bar {
+        background-color: @green;
+      }
+    }
+  }
+
   .hot {
     display: flex;
     align-items: center;
+    padding: 0 300px;
     .hot-item {
       border-radius: 5px;
       background: #fff;
       padding: 25px 25px;
       flex: 1;
-      margin: 20px 0;
+      margin-top: 20px;
       &:not(:last-child) {
         margin-right: 20px;
       }
@@ -415,6 +464,7 @@ export default {
       }
       .price {
         margin: 5px 0 10px 0;
+        width: 80%;
         div {
           font-size: 25px;
           font-weight: bold;
@@ -436,20 +486,6 @@ export default {
     }
   }
   .header {
-    .search-box {
-      padding: 20px 0 0 30px;
-      .title {
-        width: 300px;
-        text-align: left;
-        div {
-          margin-top: 10px;
-          color: #b7bdc3;
-        }
-        .css-1xamyaw {
-          font-size: 30px;
-        }
-      }
-    }
     .content-box {
       margin: 20px auto 0;
       display: flex;
@@ -504,51 +540,27 @@ export default {
   .market-product {
     background: #fff;
     border-radius: 5px;
-    padding-bottom: 80px;
+    padding: 10px 300px 80px 300px;
   }
   .market-box {
     margin: 0 auto;
-    padding: 0px 20px;
+    .search-box {
+      padding: 20px 0 0 30px;
+      .title {
+        width: 300px;
+        text-align: left;
+        div {
+          margin-top: 10px;
+          color: #b7bdc3;
+        }
+        .css-1xamyaw {
+          font-size: 30px;
+        }
+      }
+    }
     .market-type-box {
       display: flex;
       margin: 0 0 20px 0;
-      /deep/ .el-tabs {
-        .el-tabs__item {
-          font-size: 16px;
-          color: #6b7682;
-          &:hover {
-            color: @green;
-          }
-        }
-        .el-tabs__item.is-active {
-          color: @green;
-        }
-        .el-tabs__nav-wrap::after {
-          display: none;
-        }
-        .el-tabs__active-bar {
-          background-color: @green;
-        }
-      }
-      .search-ipt {
-        position: relative;
-        margin-bottom: 10px;
-        input {
-          width: 280px;
-          height: 42px;
-          border-radius: 5px;
-          border: none;
-          outline: none;
-          padding: 0 30px;
-          background-color: #e3e1e17c;
-        }
-        i {
-          position: absolute;
-          left: 10px;
-          top: 14px;
-          color: @fontcolor;
-        }
-      }
       button {
         outline: none;
         border: none;
@@ -644,16 +656,17 @@ export default {
           background-color: #03a66d0d;
         }
         th {
-          background-color: #e3e1e17c;
+          background-color: #f5f6f6;
           color: #6b7682;
-          height: 40px;
-          font-size: 12px;
+          height: 50px;
+          font-size: 14px;
+          font-weight: normal;
           .sort {
             display: inline-flex;
             -webkit-box-orient: vertical;
             flex-direction: column;
             height: 1px;
-            color: #6b7682;
+            color: rgba(0, 20, 42, 0.6);
             cursor: pointer;
             i {
               height: 12px;
@@ -667,7 +680,7 @@ export default {
           }
         }
         td {
-          height: 60px;
+          height: 80px;
           font-size: 16px;
           border-bottom: 1px solid @tabline;
           i {
@@ -680,35 +693,39 @@ export default {
         }
         th:nth-child(1),
         td:nth-child(1) {
-          width: 18%;
+          width: 14%;
           text-align: left;
           padding-left: 20px;
         }
         th:nth-child(2),
         td:nth-child(2) {
-          width: 12%;
-          text-align: left;
+          width: 14%;
+          text-align: right;
+          font-size: 17px;
         }
         th:nth-child(3),
         td:nth-child(3) {
-          width: 12%;
-          text-align: left;
+          width: 14%;
+          text-align: right;
+          font-size: 17px;
         }
         th:nth-child(4),
         td:nth-child(4) {
-          width: 12%;
-          text-align: left;
+          width: 14%;
+          text-align: right;
+          font-size: 17px;
         }
         th:nth-child(5),
         td:nth-child(5) {
-          width: 12%;
-          text-align: left;
+          width: 14%;
+          text-align: right;
+      font-size: 17px;
         }
         th:nth-child(6),
         td:nth-child(6) {
-          width: 12%;
+          width: 14%;
           padding-right: 20px;
-          text-align: left;
+          text-align: right;
           .el-button {
             color: @green;
           }
@@ -717,22 +734,28 @@ export default {
         td:nth-child(7) {
           width: 14%;
           padding-right: 20px;
-          text-align: left;
+          text-align: right;
         }
       }
 
       .sym {
         margin-bottom: 5px;
+        font-weight: bold;
+        font-size: 18px;
       }
       .des {
         font-size: 13px;
-        color: #848e9c;
+        color: #b3b9bc;
       }
+
       .fa-star {
+        margin-right: 20px;
         cursor: pointer;
-        margin-right: 10px;
+        font-size: 24px;
       }
       .fa-star-fav {
+        margin-right: 20px;
+        font-size: 24px;
         cursor: pointer;
         color: rgb(247, 186, 42);
       }

@@ -66,7 +66,7 @@ export default {
 <style lang="less">
 #app {
   // @ex-border-night:'#464646';
-  background-color: #F9F9F9;
+  background-color: #f5f6f6;
 }
 </style>
 
