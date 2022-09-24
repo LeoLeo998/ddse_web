@@ -681,7 +681,7 @@ export default {
         }
         td {
           height: 80px;
-          font-size: 16px;
+          font-size: 17px;
           border-bottom: 1px solid @tabline;
           i {
             color: @bgcolor;
@@ -701,25 +701,21 @@ export default {
         td:nth-child(2) {
           width: 14%;
           text-align: right;
-          font-size: 17px;
         }
         th:nth-child(3),
         td:nth-child(3) {
           width: 14%;
           text-align: right;
-          font-size: 17px;
         }
         th:nth-child(4),
         td:nth-child(4) {
           width: 14%;
           text-align: right;
-          font-size: 17px;
         }
         th:nth-child(5),
         td:nth-child(5) {
           width: 14%;
           text-align: right;
-      font-size: 17px;
         }
         th:nth-child(6),
         td:nth-child(6) {
