@@ -8,5 +8,6 @@ export default {
   setUserInfo: (state, v) => (state.userInfo = v),
   setCurrentSymbolInfo: (state, v) => (state.currenSymbolInfo = v),
   setQuotesWsData: (state, v) => (state.quotes_ws_data = v),
-  setProductData: (state, v) => (state.productData = v)
+  setProductData: (state, v) => (state.productData = v),
+  setPositionList: (state,v) => (state.positionList = v),
 }

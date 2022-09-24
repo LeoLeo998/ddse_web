@@ -64,7 +64,7 @@
   </div>
 </template>
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import PositionOrderDialog from '@/components/PositionOrderDialog'
 import EntrustOrderDialog from '@/components/EntrustOrderDialog'
 import bus from '@/util/bus'
@@ -89,6 +89,9 @@ export default {
     getIsLogin () {
       this.getPositionList()
     },
+    list1 (v) {
+      this.setPositionList(v)
+    }
   },
   mounted () {
     bus.$on('updateOrder',(data) => {
@@ -120,10 +123,12 @@ export default {
   },
   methods: {
     ...mapActions(['positionListFetch', 'entrustListFetch', 'getCloseOrderListFetch']),
+    ...mapMutations(["setPositionList"]),
     // 持仓
     async getPositionList() {
       let res = await this.positionListFetch()
       this.list1 = res.rows
+      this.setPositionList(res.rows)
     },
     // 挂单
     async getEntrustList() {
@@ -214,6 +219,7 @@ export default {
   height: 395px;
   &.hlist {
     background-color: var(--hover-color-);
+    border-bottom:1px solid #e1e1e1;
   }
   .tab-box {
     background-color: #fff;
@@ -259,7 +265,7 @@ export default {
     }
   }
   .tab {
-    height: 300px;
+    height: 314px;
     overflow-y: auto;
     .tip {
       width: 100%;

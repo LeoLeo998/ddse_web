@@ -1,21 +1,29 @@
 <template>
     <header class="msb-header">
         <div class="header-left">
-            <!-- <img @click="$router.push('/')" src="/static/images/logo.svg" alt=""> -->
-            <span @click="$router.push('/')">logo</span>
+            <img @click="$router.push('/')" src="/static/images/logo.png" alt="">
             <div class="menu">
-                <router-link to="/market">
-                    行情
-                </router-link>
-                <router-link to="/exchange">
-                    交易
-                </router-link>
+                <div class="left-a">
+                    <router-link to="/">
+                        首页
+                    </router-link>
+                    <router-link to="/market">
+                        行情
+                    </router-link>
+                    <router-link to="/exchange">
+                        交易
+                    </router-link>
+                </div>
             </div>
         </div>
         <div class="header-right">
             <div class="login-box" v-if="!getIsLogin">
-                <router-link to="/login">登录</router-link>
-                <router-link to="/register">注册</router-link>
+                <div class="a-item">
+                    <router-link to="/login">登录</router-link>
+                </div>
+                <div class="a-item major">
+                    <router-link to="/register">注册</router-link>
+                </div>
             </div>
             <div class="user-name" v-else>
                 <div class="item1">
@@ -96,8 +104,8 @@ export default {
 
 <style lang="less" scoped>
 .msb-header {
-    height: 65px;
-    line-height: 65px;
+    height: 80px;
+    line-height: 80px;
     padding:0 20px;
     display: flex;
     justify-content: space-between;
@@ -147,16 +155,43 @@ export default {
     
     .menu,.login-box {
         margin-left:50px;
-        a {
-            font-size: 14px;
-            text-decoration: none;
-            margin:0 10px;
-            color:var(--font-color2-);
-            font-weight: 400;
-            &:hover {
-                color:var(--color-green-);
+        display: flex;
+        align-items: center;
+        .a-item {
+            width: 54px;
+            height: 36px;
+            margin: 0 8px 0 0;
+            border-radius: 4px;
+            border: solid 1px #000;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            a {
+                text-decoration: none;
+                color: #000;
+            }
+            &.major {
+                background-color: var(--color-green-);
+                border:none;
+                a {
+                    color:#fff; 
+                }
             }
         }
+        .left-a {
+            a {
+                font-size: 16px;
+                text-decoration: none;
+                color:var(--font-color2-);
+                font-weight: 400;
+                margin-right:38px;
+                &:hover {
+                    color:var(--color-green-);
+                }
+            }
+        }
+        
     }
     .user-name {
         margin-right:20px;
@@ -165,7 +200,7 @@ export default {
     }
     .item1 {
         margin-right:15px;
-        font-size: 14px;
+        font-size: 16px;
         text-decoration: none;
         margin:0 10px;
         color:var(--font-color2-);
@@ -178,6 +213,9 @@ export default {
         display: flex;
         align-items: center;
         z-index:101;
+        span {
+            font-size: 16px;
+        }
         &:hover {
             color:var(--color-green-);
             .child-menu {
@@ -193,10 +231,12 @@ export default {
             box-shadow:rgb(221, 228, 241) 0 0 10px 0;
             top:35px;
             left:-18px;
-            text-align:left; 
+            text-align:left;
+            font-size: 16px;
             .a-item {
                 display: block;
                 padding: 18px;
+                font-size: 16px;
                 text-decoration: none;
                 color:var(--font-color2-);
                 &:hover {
@@ -209,23 +249,6 @@ export default {
             transform: translateY(-2px);
             margin-left:5px;
         }
-        // &.item2 {
-        //     display: inline-block;
-        //     width: 35px;
-        //     height: 35px;
-        //     border-radius: 35px;
-        //     border:1px solid #111;
-        //     text-align: center;
-        //     p {
-        //         margin-top:15px;
-        //     }
-        //     i {
-        //         transform: translateY(2px);
-        //         margin-left:0;
-        //     }
-        // }
-        
-
     }
 }
 </style>

@@ -1,25 +1,45 @@
 <template>
   <div class="ex-index-page default-bg" :class="getIsLight ? 'light-css' : 'night-css'">
-    <el-row>
-      <el-col :span="5">
+    <el-container>
+      <el-aside width="400px;overflow: hidden;">
         <market-box />
-      </el-col>
-      <el-col :span="15">
+      </el-aside>
+      <el-main>
         <trading-view />
-      </el-col>
-      <el-col :span="4">
+      </el-main>
+      <el-aside width="318px">
         <create-order />
-      </el-col>
-    </el-row>
-    <el-row>
+      </el-aside>
+      <!-- <el-row>
+        <el-col :span="5" >
+          <market-box />
+        </el-col>
+        <el-col :span="15">
+          <trading-view />
+        </el-col>
+        <el-col :span="4">
+          <create-order />
+        </el-col>
+      </el-row> -->
+    </el-container>
+    
+    <el-container>
+      <el-main>
+        <order-history />
+      </el-main>
+      
+      <el-aside width="318px">
+        <deal-history />
+      </el-aside>
+    </el-container>
+    <!-- <el-row>
       <el-col :span="20">
         <order-history />
       </el-col>
       <el-col :span="4">
-        <!-- <create-order /> -->
         <deal-history />
       </el-col>
-    </el-row>
+    </el-row> -->
   </div>
 </template>
 <script>
@@ -72,6 +92,12 @@ export default {
 }
 </script>
 <style lang="less">
+.el-main {
+  padding:0;
+}
+.el-aside {
+  overflow: hidden;
+}
 .el-row {
   &:last-child {
     margin-bottom: 0;

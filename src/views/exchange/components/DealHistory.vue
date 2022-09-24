@@ -24,7 +24,7 @@
           当前杠杆
         </span>
         <span>
-          {{userInfo.level}}
+          {{userInfo.leverage}}
         </span>
       </div>
       <div class="info-row">
@@ -48,7 +48,7 @@
           净值
         </span>
         <span class="major-text">
-          {{ (balance.balance - total_profit) | number }}
+          {{ (balance.balance + total_profit) | number }}
         </span>
       </div>
       <div class="info-row">
@@ -64,7 +64,8 @@
           可用预付款
         </span>
         <span class="major-text">
-          {{ (balance.balance - balance.margin) | number }}
+          <!-- {{ (balance.balance - balance.margin) | number }} -->
+          {{ (balance.balance + total_profit - balance.margin) | number}}
         </span>
       </div>
       <div class="info-row">
@@ -72,7 +73,8 @@
           预付款比例
         </span>
         <span>
-          {{ (balance.margin / (balance.balance - balance.margin + total_profit)) | number }}%
+          <!-- {{ (balance.margin / (balance.balance - balance.margin + total_profit)) | number }}% -->
+          {{ (balance.balance + total_profit) / balance.margin * 100 | number}}%
         </span>
       </div>
     </div>
@@ -97,11 +99,20 @@ export default {
   },
   computed: {
     ...mapState(['isLogin']),
+    ...mapGetters([
+      "getPositionList",
+      "getProductData"
+    ]),
     total_profit() {
-      return this.position.reduce((pre, cur) => {
-        return pre + cur.PROFIT
+      let total = this.getPositionList.reduce((pre, cur) => {
+        return pre + Number(this.formatProfit(cur))
       }, 0)
-    }
+      let TOTAL_COMMISSION = this.getPositionList.reduce((pre, cur) => {
+        return pre + Number(cur.COMMISSION)
+      }, 0)
+      return total - TOTAL_COMMISSION
+    },
+
   },
   filters: {
     number(data) {
@@ -111,6 +122,35 @@ export default {
   methods: {
     ...mapActions(['getUserBalanceFetch', 'getUserInfoFetch', 'positionListFetch']),
     ...mapMutations(["setIsLogin"]),
+    formatProfit (data) {
+      let currencyData = this.getProductData[data.SYMBOL]
+      if(!currencyData) {
+        return '--'
+      }
+      let rate,profit;
+      if(currencyData.currency != currencyData.margin_currency) {
+        rate = currencyData.buy_price;
+      }else{
+        rate = 1;
+      }
+      if(data.CMD == '0' && currencyData.profit_mode=='1' ){
+        profit = (currencyData.buy_price - data.OPEN_PRICE) * data.VOLUME  * currencyData.contract_size * rate;
+      }else if(data.CMD == '1' && currencyData.profit_mode=='1' ){
+        profit = (data.OPEN_PRICE - currencyData.sell_price )  *data.VOLUME * currencyData.contract_size * rate
+      }else if(data.CMD == '0' && currencyData.profit_mode=='0' && currencyData.currency=='USD' && currencyData.margin_currency=='USD' ){
+        profit = (currencyData.buy_price - data.OPEN_PRICE)  *data.VOLUME  * currencyData.contract_size / currencyData.buy_price
+      }else if(data.CMD == '1' && currencyData.profit_mode=='0' && currencyData.currency=='USD' && currencyData.margin_currency=='USD' ){
+        profit = (data.OPEN_PRICE - currencyData.sell_price )  *data.VOLUME  * currencyData.contract_size / currencyData.sell_price
+      }else if(data.CMD == '0' && currencyData.profit_mode=='0' && currencyData.currency!='USD' && currencyData.margin_currency=='USD' ){
+        profit = (currencyData.buy_price - data.OPEN_PRICE)  *data.VOLUME * currencyData.contract_size 
+      }else if(data.CMD == '1' && currencyData.profit_mode=='0' && currencyData.currency!='USD' && currencyData.margin_currency=='USD' ){
+        profit = (data.OPEN_PRICE - currencyData.sell_price )  *data.VOLUME * currencyData.contract_size
+      }
+      if(profit) {
+        return profit.toFixed(2)
+      }
+      return '--'
+    },
     async getUserBalance() {
       let res = await this.getUserBalanceFetch()
       this.balance = res
@@ -149,6 +189,7 @@ export default {
   padding:15px;
   padding-bottom:0;
   height: 395px;
+  border-bottom:1px solid #e1e1e1;
   .account-info {
     font-size: 14px;
     margin-bottom:20px;

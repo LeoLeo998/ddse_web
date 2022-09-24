@@ -8,5 +8,6 @@ export default {
   userInfo: {},
   currenSymbolInfo: {},
   quotes_ws_data: {},
-  productData: {}
+  productData: {},
+  positionList:[]
 }
