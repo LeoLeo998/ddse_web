@@ -1,21 +1,28 @@
 <template>
     <div class="home-page">
-        <div class="content">
-            <div class="head">
-                <div>
-                    <p class="big-title">
-                        买币上MSB
-                    </p>
+        <div class="head">
+            <div class="head-content">
+                <div class="left">
+                    <p class="title">全球首家数字资产结算全品种衍生品交易平台</p>
                     <p class="small-title">
-                        专业的区块链资产交易平台
+                        全品种覆盖、去中心化资产托管
                     </p>
-                    <div class="to-register-btn" @click="$router.push('/register')">
-                        去注册
+                    <div class="btn-box">
+                        <button class="major">
+                            立即注册
+                        </button>
+                        <button>
+                            立即交易
+                        </button>
                     </div>
                 </div>
+                <div class="right">
+                    <img src="/static/images/home/part1-1.png" alt="">
+                </div>
             </div>
-            <div class="swiper-box">
-                
+        </div>
+        <div class="content">
+            <!-- <div class="swiper-box">
                 <div class="item" v-for="i in 5">
                     <slider ref="slider" :options="options" @slide='slide' @tap='onTap' @init='onInit'>
                         <slideritem v-for="(item,index) in 3" :key="index">
@@ -23,33 +30,31 @@
                             <p class="price">58700.23</p>
                             <p class="usd-price">$58700.23</p>
                         </slideritem>
-                        <!-- 设置loading,可自定义 -->
-                        <!-- <div slot="loading">loading...</div> -->
                     </slider>
                 </div>
-            </div>
+            </div> -->
             <div class="banner-box">
                 <div class="item">
-                    banner图
+                    <img src="/static/images/home/banner1.png" alt="">
                 </div>
                 <div class="item">
-                    banner图
+                    <img src="/static/images/home/banner1.png" alt="">
                 </div>
                 <div class="item">
-                    banner图
+                    <img src="/static/images/home/banner1.png" alt="">
                 </div>
                 <div class="item">
-                    banner图
+                    <img src="/static/images/home/banner1.png" alt="">
                 </div>
             </div>
             <div class="market-trend">
-                <p class="title">市场趋势</p>
+                <p class="title">热门榜</p>
                 <ul>
                     <div class="th-box">
                         <li class="th">名称</li>
                         <li class="th">最新价</li>
                         <li class="th">24h涨跌</li>
-                        <!-- <li class="th">行情</li> -->
+                        <li class="th">行情</li>
                         <li class="th">24H Volume</li>
                     </div>
                     <div class="td-box" v-for="item in 4">
@@ -68,7 +73,13 @@
                                 4.5%
                             </span>
                         </li>
-                        <!-- <li class="td"></li> -->
+                        <li class="td">
+                            <!-- <HCharts
+                            symbol="BTC"
+                            :backgroundColor="getThemeType == 1?'#b6d991':'#1f303d'"
+                            :themeType="getThemeType"
+                            :borderColor="getThemeType == 1?'#7dbb3e':'#204046'"/> -->
+                        </li>
                         <li class="td txt1">
                             340K
                             <!-- <button class="buy-btn">
@@ -78,65 +89,184 @@
                     </div>
                 </ul>
             </div>
-            <div class="novice-guide">
-                <p class="title">新手指引</p>
-                <p class="small-title">即刻开启数字货币交易学习</p>
-                <div class="item-box">
-                    <div class="item"></div>
-                    <div class="item"></div>
-                    <div class="item"></div>
+            <div class="part2">
+                <div class="left">
+                    <p class="big-txt">
+                        全球第一的数字资产结算全球衍生品交易所
+                    </p>
+                    <p class="small-txt">
+                        加密数字货币合约&nbsp;&nbsp;&nbsp;贵金属&nbsp;&nbsp;&nbsp;能源 <br>
+                        全球指数&nbsp;&nbsp;&nbsp;主流股票合约&nbsp;&nbsp;&nbsp;外汇
+                    </p>
+                </div>
+                <div class="right">
+                    <img src="/static/images/home/part2.png" alt="">
                 </div>
             </div>
-            <div class="mobile-down-box">
-                <p class="title">随时随地开启交易</p>
-                <p class="small-title">与多种装置相容，可以既安全又便利地开始交易</p>
-                <div class="content">
-                    下载页图片盒子
+            <div class="part3">
+                <div class="left">
+                    <img src="/static/images/home/part3.png" alt="">
+                </div>
+                <div class="right">
+                    <p class="big-txt">
+                        去中心化Web3钱包授权登陆
+                    </p>
+                    <p class="small-txt">
+                        去中心化Web3钱包授权登陆，全智能合约管理保证金资产，没有后台和管理员权限
+                        无需担心资产安全，专注 于您的交易
+                    </p>
                 </div>
             </div>
-            <div class="introduce-box">
-                <p class="title">开启您的数字货币之旅</p>
-                <div class="item-box">
-                    <div class="item">
-                        <img src="" alt="">
-                        <p class="txt1">0手续费买卖数字货币</p>
-                        <p class="txt2">使用多种支付方式交易数字货币，0手续费，安全快捷</p>
-                    </div>
-                    <div class="item">
-                        <img src="" alt="">
-                        <p class="txt1">最优的交易费率</p>
-                        <p class="txt2">优惠的交易费率，富有竞争力的VIP权益，享受最优品质的服务</p>
-                    </div>
-                    <div class="item">
-                        <img src="" alt="">
-                        <p class="txt1">可信赖的安全保障</p>
-                        <p class="txt2">我们复杂的安全措施和SAFU基金保护您的数字资产免受所有风险。</p>
-                    </div>
-                    <div class="item">
-                        <img src="" alt="">
-                        <p class="txt1">24*7小时客服支持</p>
-                        <p class="txt2">24*7小时全天候、全日制运营模式，第一时间为您解答相关咨询。</p>
-                    </div>
-                </div>
-            </div>
-            <div class="to-trans-box">
-                <p class="title">
-                    开始交易
+            <div class="part4">
+                <p class="big-txt">欢迎加入DDSE社区</p>
+                <p class="small-txt">
+                    关注我们即可获得5 USDT奖励！
                 </p>
-                <div class="btn-box">
-                    <button class="register-btn" @click="$router.push('/register')">
-                        立即注册
-                    </button>
-                    <button class="trans-btn" @click="$router.push('/exchange')">
-                        开始交易
-                    </button>
+                <div class="link-box">
+                    <img class="item" src="/static/images/home/p4-1.png" alt="">
+                    <img class="item" src="/static/images/home/p4-2.png" alt="">
+                    <img class="item" src="/static/images/home/p4-3.png" alt="">
+                    <img class="item" src="/static/images/home/p4-4.png" alt="">
+                    <img class="item" src="/static/images/home/p4-5.png" alt="">
                 </div>
+            </div>
+            <div class="part5">
+                <div class="left">
+                    <p class="big-txt">
+                        安全,易用的数字货币市场
+                    </p>
+                    <p class="small-txt">
+                        下载SuperEx 手机应用程序，随时关注市场，在玩的时刻进行交易，无论你身在何处。
+                    </p>
+                    <div class="download-box">
+                        <img class="code" src="/static/images/home/p5-code.png" alt="">
+                        <div class="right-download">
+                            <img class="item" src="/static/images/home/p5-1.png" alt="">
+                            <img class="item" src="/static/images/home/p5-2.png" alt="">
+                            <br>
+                            <img class="item item2" src="/static/images/home/p5-3.png" alt="">
+                            <img class="item item2" src="/static/images/home/p5-4.png" alt="">
+                        </div>
+                    </div>
+                </div>
+                <div class="right">
+                    <img src="/static/images/home/p5-banner.png" alt="">
+                </div>
+            </div>
+            <div class="part6">
+                <p class="title">
+                    FAQ
+                </p>
+                <div class="content-box">
+                    <div class="item">
+                        <p class="big-txt">
+                            什么是比特币？
+                        </p>
+                        <div class="small-txt">
+                            比特币是世界上最大、最著名的去中心化加密货币。 它采用区块链作为底层技术，允许用户通过点对点网络传输数据和资产，且无需任何中间人和中央银行。
+                        </div>
+                    </div>
+                    <div class="item" style="padding-left:200px;">
+                        <p class="big-txt">
+                            在 KuCoin 上交易安全吗？
+                        </p>
+                        <div class="small-txt">
+                            KuCoin及其团队部署了全球最专业的安全网络架构体系，并不断优化和升级安全系统，以确保用户资产和账户安全。
+                        </div>
+                    </div>
+                    <div class="item item2">
+                        <p class="big-txt">
+                            什么是比特币？
+                        </p>
+                        <div class="small-txt">
+                            由于数字资产具有无限分割的特性，在KuCoin即使1美元也可以购买数字资产。
+                        </div>
+                    </div>
+                    <div class="item item2" style="padding-left:200px;">
+                        <p class="big-txt">
+                            法定货币出入金是否有限制？
+                        </p>
+                        <div class="small-txt">
+                            KuCoin严格遵守所在国的各项法律法规，不同国家的出入金规则不同。在法律允许的国家，KuCoin 对法定货币出入金不收取任何费用且没有限制，目前C2C市场支持多种法定货币，为用户提供7*24小时的出入金服务。
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="part7">
+                <p class="big-txt">即将开启您的数字货币交易，准备好了吗？</p>
+                <p class="small-txt">只需3分钟即可完成账户设置 并开始交易</p>
+                <button class="ks">开立账户</button>
+            </div>
+            <div class="part8">
+                <div class="content">
+                    <div class="left">
+                        <img class="logo" src="/static/images/logo.png" alt="">
+                        <p class="lx">
+                            联系我们
+                        </p>
+                        <img class="link-p" src="/static/images/home/p7-link.png" alt="">
+                        <div class="email-box">
+                            客户支持: support@xt.com<br>
+                            上币支持: bd@xt.com<br>
+                            上币申请: listing@xt.com<br>
+                            IDO/IGO申请: xtstarter@xt.com<br>
+                            合作伙伴: partnerships@xt.com
+                        </div>
+                    </div>
+                    <div class="right">
+                        <div class="cell">
+                            <p class="title">
+                                技术支持
+                            </p>
+                            <p class="txt">
+                                APP下载<br>
+                                API文档<br>
+                                常见问题<br>
+                                提交工单<br>
+                                清除缓存
+                            </p>
+                        </div>
+                        <div class="cell">
+                            <p class="title">
+                                技术支持
+                            </p>
+                            <p class="txt">
+                                关于XT.com<br>
+                                加入我们<br>
+                                官方公告<br>
+                                费率说明<br>
+                                数字资产介绍<br>
+                                日程表<br>
+                                XT媒体工具包<br>
+                                官方验证通道<br>
+                                P2P商家申请<br>
+                                代理商<br>
+                                Ecosystem
+                            </p>
+                        </div>
+                        <div class="cell">
+                            <p class="title">
+                                条款说明
+                            </p>
+                            <p class="txt">
+                                隐私保护<br>
+                                用户协议<br>
+                                执法请求
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="foot">
+                <p class="hz">合作伙伴</p>
+                <img src="/static/images/home/foot.png" alt="">
             </div>
         </div>
     </div>
 </template>
 <script>
 import { slider, slideritem } from 'vue-concise-slider'
+import HCharts from '@/components/chart/Index'
 export default {
     data () {
         return {
@@ -157,7 +287,8 @@ export default {
     },
     components: {
         slider,
-        slideritem
+        slideritem,
+        HCharts
     },
     methods:{
         slide (data) {
@@ -174,36 +305,90 @@ export default {
 </script>
 <style lang="less" scoped>
 .home-page {
-    .content {
-        width: 1280px;
-        margin:0 auto;
-        padding: 50px 0;
-        .head {
-            // margin-top:50px;
-            height: 300px;
+    .head {
+        height: 442px;
+        display: flex;
+        align-items: center;
+        background-image: url("/static/images/home/part1-bg.png");
+        background-repeat: no-repeat;
+        background-position: 0 -170px;
+        background-size: 100% ;
+        .head-content {
+            width: 1440px;
+            margin:0 auto;
             display: flex;
+            justify-content:space-between;
             align-items: center;
-            .big-title {
-                font-size: 48px;
+            .left,.right {
+                flex:1;
             }
-            .small-title {
-                font-size: 16px;
-                margin-top: 16px;
-                color: #474D57;
-                font-weight: 400;
+            .left {
+                .title {
+                    width: 495px;
+                    font-family: PingFang-SC;
+                    font-size: 45px;
+                    font-weight: 900;
+                    font-stretch: normal;
+                    font-style: normal;
+                    line-height: 1.33;
+                    letter-spacing: normal;
+                    color: #000;
+                }
+                .small-title {
+                    font-size: 18px;
+                    color: #000;
+                    margin-top:18px;
+                }
+                .btn-box {
+                    margin-top:50px;
+                    button {
+                        height: 54px;
+                        padding: 14px 37px 14px 38px;
+                        
+                        border-radius: 6px;
+                        color: #000;
+                        font-size: 22.4px;
+                        line-height: 1.14;
+                        text-align: center;
+                        border:1px solid rgb(145, 145, 145);
+                    }
+                    .major {
+                        background-color: var(--color-green-);
+                        color: #fff;
+                        margin-right:20px;
+                        border:none;
+                    }
+                }
             }
-            .to-register-btn {
-                border:none;
-                background-color: transparent;
-                width: 200px;
-                padding: 10px 15px;
-                margin-top:20px;
-                background-color: #03A66D;
-                text-align: center;
-                color:#fff;
-                border-radius:5px;
+            .right {
+                img {
+                    width: 562px;
+                    height: 308px;
+                }
             }
         }
+        .big-title {
+            font-size: 48px;
+        }
+        .small-title {
+            font-size: 16px;
+            margin-top: 16px;
+            color: #474D57;
+            font-weight: 400;
+        }
+        .to-register-btn {
+            border:none;
+            background-color: transparent;
+            width: 200px;
+            padding: 10px 15px;
+            margin-top:20px;
+            background-color: #03A66D;
+            text-align: center;
+            color:#fff;
+            border-radius:5px;
+        }
+    }
+    .content {
         .swiper-box {
             display: flex;
             .item {
@@ -236,48 +421,44 @@ export default {
         }
         .banner-box {
             display: flex;
-            margin-top:100px;
+            width: 1440px;
+            margin:0 auto;
+            margin-top:38px;
             .item {
+                height: 161px;
                 text-align: center;
                 line-height: 135px;
                 color:#fff;
                 flex: 1;
-                height: 135px;
-                margin-right:20px;
+                margin-right:24px;
                 background-color: forestgreen;
                 border-radius:5px;
                 &:last-child {
                     margin-right:0;
                 }
                 img {
-                    // width: 100%;
+                    width: 100%;
+                    height: 100%;
                 }
             }
         }
         .market-trend {
-            margin-top:100px;
+            width: 1440px;
+            margin:0 auto;
+            margin-top:60px;
             .title {
-                font-size: 32px;
-                font-weight: 600;
+                display: inline-block;
+                padding-bottom:7px;
+                font-size: 24px;
                 margin-bottom:20px;
+                border-bottom:3px solid var(--color-green-);
             }
             ul {
                 list-style: none;
                 width: 100%;
                 .th-box,.td-box {
                     .th,.td {
-                        &:nth-child(1) {
-                            width: 25%;
-                        }
-                        &:nth-child(2) {
-                            width: 25%;
-                        }
-                        &:nth-child(3) {
-                            width: 25%;
-                        }
-                        &:nth-child(4) {
-                            width: 25%;
-                        }
+                        width: 20%;
                     }
                 }
                 .th-box {
@@ -287,7 +468,7 @@ export default {
                     align-items: center;
                     .th {
                         font-size: 14px;
-                        color:#707A8A;
+                        color: #68727e;
                     }
                 }
                 .td-box {
@@ -308,21 +489,21 @@ export default {
                         }
                     }
                     img {
-                        width: 32px;
-                        height: 32px;
-                        border-radius:32px;
+                        width: 24px;
+                        height: 24px;
+                        border-radius:24px;
                     }
                     .coin-name,.txt1 {
-                        font-size: 20px;
-                        color:#1e2329;
+                        font-size: 14px;
+                        color: #051527;
                     }
                     .coin-fullname {
-                        font-size: 20px;
-                        color: #707A8A;
+                        font-size: 13px;
+                        color: #68727e;
                     }
                     .txt2 {
-                        font-size: 20px;
-                        color:rgb(3, 166, 109);
+                        font-size: 14px;
+                        color: var(--color-green-);
                     }
                     .buy-btn {
                         padding: 5px 12px;
@@ -332,117 +513,282 @@ export default {
                 }
             }
         }
-        .novice-guide {
-            margin-top:100px;
-            .title {
-                font-size: 32px;
-                color:#1e2329;
+        .part2 {
+            display: flex;
+            align-items: center;
+            width: 1440px;
+            margin:0 auto;
+            margin-top:70px;
+            img {
+                width: 490px;
             }
-            .small-title {
-                color: #474D57;
-                margin-top: 16px;
-                font-size: 16px;
+            .left {
+                width: 60%;
+                .big-txt {
+                    width: 583px;
+                    font-size: 52px;
+                    color: #000;
+                }
+                .small-txt {
+                    font-size: 18px;
+                    line-height: 1.78;
+                    color: #000;
+                    margin-top:40px;
+                }
             }
-            .item-box {
-                display: flex;
-                margin-top:20px;
+            .right {
+                width: 40%;
+            }
+        }
+        .part3 {
+            display: flex;
+            align-items: center;
+            width: 1440px;
+            margin:0 auto;
+            margin-top:70px;
+            img {
+                width: 490px;
+            }
+            .left {
+                width: 40%;
+            }
+            .right {
+                width: 60%;
+                .big-txt {
+                    font-size: 52px;
+                    color: #000;
+                }
+                .small-txt {
+                    width: 661px;
+                    font-size: 18px;
+                    line-height: 1.78;
+                    color: #000;
+                    margin-top:40px;
+                }
+            }
+        }
+        .part4 {
+            height: 393px;
+            background-image: url('/static/images/home/part4-bg.png');
+            background-repeat: no-repeat;
+            background-position: 0 0 ;
+            background-size: 100% 100%;
+            margin:0 auto;
+            margin-top:130px;
+            display: flex;
+            align-content: center;
+            flex-wrap: wrap;
+            .big-txt {
+                width: 100%;
+                text-align: center;
+                font-size: 52px;
+                line-height: 1.33;
+                color: #000;
+            }
+            .small-txt{
+                width: 100%;
+                text-align: center;
+                font-size: 18px;
+                line-height: 1.78;
+                color: #000;
+                margin-top:18px;
+            }
+            .link-box {
+                width: 100%;
+                text-align: center;
+                margin-top:63px;
                 .item {
-                    flex: 1;
-                    height:208px;
-                    margin-right:20px;
-                    border-radius:5px;
-                    background-color: gold;
+                    width: 51px;
+                    height: 51px;
+                    margin-right:43px;
                     &:last-child {
                         margin:0;
                     }
                 }
             }
         }
-        .mobile-down-box {
-            margin-top:100px;
-            .title {
-                font-size: 32px;
-                color:#1e2329;
+        .part5 {
+            display: flex;
+            align-items: center;
+            width: 1440px;
+            margin:0 auto;
+            padding-top:180px;
+            .left {
+                flex:1;
+                .big-txt {
+                    font-size: 52px;
+                    color: #000;
+                }
+                .small-txt {
+                    font-size: 18px;
+                    line-height: 1.78;
+                    color: #000;
+                    margin-top:34px;
+                }
+                .download-box {
+                    margin-top:50px;
+                    display: flex;
+                    .code {
+                        width: 210px;
+                        height: 210px;
+                        margin-right:17px;
+                    }
+                    .right-download {
+                        .item {
+                            width: 147px;
+                            height: 97px;
+                            margin-right:14px;
+                            &.item2 {
+                                margin-top:11px;
+                            }
+                        }
+                    }
+                }
             }
-            .small-title {
-                color: #474D57;
-                margin-top: 16px;
-                font-size: 16px;
-            }
-            .content {
-                text-align: center;
-                padding:100px 0;
+            .right {
+                img {
+                    width: 719px;
+                    height: 488px;
+                }
             }
         }
-        .introduce-box {
-            margin-top:100px;
+        .part6 {
+            width: 1440px;
+            margin:0 auto;
+            padding-top:100px;
             .title {
-                font-size: 32px;
-                color:#1e2329;
+                font-size: 34px;
+                font-weight: 500;
+                color: #000;
+                text-align: center;
             }
-            .item-box {
+            .content-box {
                 display: flex;
-                align-items: center;
-                margin-top:50px;
+                justify-content: space-between;
+                flex-wrap: wrap;
+                margin-top:44px;
                 .item {
                     flex:1;
-                    margin-right:20px;
-                    padding:20px;
-                    border-radius:5px;
-                    &:hover {
-                        background-color: #f5f5f5;
+                    text-align: left;
+                    .big-txt {
+                        font-size: 26px;
+                        color: #000;
                     }
-                    &:last-child {
-                        margin:0;
-                    }
-                    img {
-                        width: 64px;
-                        height: 64px;
-                    }
-                    .txt1 {
-                        font-size: 16px;
-                        color:#1E2329;
-                        margin-top:24px;
-                    }
-                    .txt2 {
+                    .small-txt {
                         font-size: 14px;
-                        color: #474D57;
-                        margin-top: 16px;
+                        line-height: 1.57;
+                        color: #68727e;
+                        margin-top:17px;
+                        width: 490px;
+                    }
+                    &.item2 {
+                        margin-top:63px;
                     }
                 }
             }
         }
-        .to-trans-box {
-            background-color: #FAFAFA;
-            padding:40px 0;
+        .part7 {
+            background-image: url('/static/images/home/p7-bg.png');
+            background-repeat: no-repeat;
+            background-position: 100% 100%;
+            background-size: 100% 100%;
+            padding:158px 0 67px;
             text-align: center;
-            margin-top:100px;
-            .title {
-                font-size: 32px;
-                margin-bottom:32px;
-                font-weight: 600;
+            .big-txt {
+                width: 100%;
+                font-size: 36px;
+                line-height: 1;
+                text-align: center;
+                color: #000;
             }
-            .btn-box {
+            .small-txt {
+                width: 100%;
+                font-size: 20px;
+                line-height: 1.6;
+                text-align: center;
+                color: #65707c;
+                margin-top:16px;
+            }
+            .ks {
+                margin-top:50px;
+                width: 98px;
+                height: 40px;
+                margin: 51px 293px 0;
+                padding: 12px 17px;
+                border-radius: 4px;
+                background-color: #08ae7a;
+                font-size: 16px;
+                line-height: 1;
+                text-align: center;
+                border:none;
+                color: #fff;
+            }
+        }
+        .part8 {
+            
+            background-color: #fff;
+            padding-top:64px;
+            padding-bottom:100px;
+            .content {
+                width: 1440px;
+                margin:0 auto;
                 display: flex;
-                align-items: center;
-                justify-content: center;
             }
-            .register-btn {
-                width: 120px;
-                height:35px;
-                border:none;
-                border-radius: 5px;
-                background-color: #03A66D;
+            .left{
+                flex:1;
+                .logo {
+                    width: 146px;
+                    height: 39px;
+                }
+                .lx {
+                    font-size: 20px;
+                    line-height: 1;
+                    margin-top:46px;
+                    color: #31333a;
+                }
+                .link-p {
+                    width: 381px;
+                    height: 66px;
+                    margin-top:29px;
+                }
+                .email-box {
+                    margin-top:24px;
+                    font-size: 16px;
+                    line-height: 2;
+                    color: #68727e;
+                }
+            }
+            .right {
+                flex:1;
+                display: flex;
+                
+                .cell {
+                    flex:1;
+                    .title {
+                        font-size: 20px;
+                        color: #31333a;
+                    }
+                    .txt {
+                        margin-top:24px;
+                        font-size: 16px;
+                        line-height: 2;
+                        color: #68727e;
+                    }
+                }
+            }
+        }
+        .foot {
+            width: 1440px;
+            margin:0 auto;
+            .hz {
+                padding-top:11px;
                 font-size: 14px;
-                color:#fff;
-                margin:0 10px;
+                color: #68727e;
             }
-            .trans-btn {
-                width: 120px;
-                height: 35px;
-                border:none;
-                border-radius: 5px;
-                margin:0 10px;
+            img {
+                width: 1207px;
+                height: 59px;
+                margin-top:14px;
             }
         }
     }
