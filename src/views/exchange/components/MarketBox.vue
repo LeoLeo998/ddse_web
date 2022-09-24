@@ -384,7 +384,7 @@ export default {
           /*滚动条里面小方块*/
           border-radius: 10px;
           box-shadow: inset 0 0 5px rgba(97, 184, 179, 0.1);
-          background: #78b4b4;
+          background: #dbdddf;
         }
         .li-item {
           font-size: 12px;
