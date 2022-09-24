@@ -656,6 +656,7 @@ export default {
             width: 1440px;
             margin:0 auto;
             padding-top:100px;
+            padding-bottom:100px;
             .title {
                 font-size: 34px;
                 font-weight: 500;
