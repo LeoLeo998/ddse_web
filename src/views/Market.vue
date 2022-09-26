@@ -707,7 +707,6 @@ export default {
             font-size: 14px !important;
             color: #fff !important;
             background: #08ae7a !important;
-            width: 55px;
             padding: 7px 13px 7px 14px;
             box-sizing: border-box;
           }
