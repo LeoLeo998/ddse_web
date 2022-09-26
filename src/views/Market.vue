@@ -378,10 +378,10 @@ export default {
 @tabline: #eaecef;
 @green: #49c5a8;
 .price-down2 {
-  color: #ef6b7b;
+  color:#f24b3a;
 }
 .price-up2 {
-  color: #49c5a8;
+  color: #29be8f;
 }
 .market-page {
   padding: 0 0 100px 0;
