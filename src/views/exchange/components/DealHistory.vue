@@ -213,6 +213,7 @@ export default {
     display: flex;
     justify-content: space-between;
     span {
+      font-size: 14PX;
       &.account-id {
         //border-bottom:1px dashed #eee;
       }
