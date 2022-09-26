@@ -1,272 +1,266 @@
 <template>
-    <div class="home-page">
-        <div class="head">
-            <div class="head-content">
-                <div class="left">
-                    <p class="title">全球首家数字资产结算全品种衍生品交易平台</p>
-                    <p class="small-title">
-                        全品种覆盖、去中心化资产托管
-                    </p>
-                    <div class="btn-box">
-                        <button class="major">
-                            立即注册
-                        </button>
-                        <button>
-                            立即交易
-                        </button>
-                    </div>
-                </div>
-                <div class="right">
-                    <img src="/static/images/home/part1-1.png" alt="">
-                </div>
-            </div>
-        </div>
-        <div class="content">
-            <!-- <div class="swiper-box">
-                <div class="item" v-for="i in 5">
-                    <slider ref="slider" :options="options" @slide='slide' @tap='onTap' @init='onInit'>
-                        <slideritem v-for="(item,index) in 3" :key="index">
-                            <p class="market">BTC/USDT <span>0.17%</span></p>
-                            <p class="price">58700.23</p>
-                            <p class="usd-price">$58700.23</p>
-                        </slideritem>
-                    </slider>
-                </div>
-            </div> -->
-            <div class="banner-box">
-                <div class="item">
-                    <img src="/static/images/home/banner1.png" alt="">
-                </div>
-                <div class="item">
-                    <img src="/static/images/home/banner1.png" alt="">
-                </div>
-                <div class="item">
-                    <img src="/static/images/home/banner1.png" alt="">
-                </div>
-                <div class="item">
-                    <img src="/static/images/home/banner1.png" alt="">
-                </div>
-            </div>
-            <div class="market-trend">
-                <p class="title">热门榜</p>
-                <ul>
-                    <div class="th-box">
-                        <li class="th">名称</li>
-                        <li class="th">最新价</li>
-                        <li class="th">24h涨跌</li>
-                        <li class="th">行情</li>
-                        <li class="th">24H Volume</li>
-                    </div>
-                    <div class="td-box" v-for="item in 4">
-                        <li class="td">
-                            <img src="https://huobicfg.s3.amazonaws.com/currency_icon/btc.png" alt="">
-                            <span class="coin-name">BTC</span>
-                            <span class="coin-fullname">Bitcoin</span>
-                        </li>
-                        <li class="td">
-                            <span class="txt1">
-                                $58140.23
-                            </span>
-                        </li>
-                        <li class="td">
-                            <span class="txt2">
-                                4.5%
-                            </span>
-                        </li>
-                        <li class="td">
-                            <!-- <HCharts
-                            symbol="BTC"
-                            :backgroundColor="getThemeType == 1?'#b6d991':'#1f303d'"
-                            :themeType="getThemeType"
-                            :borderColor="getThemeType == 1?'#7dbb3e':'#204046'"/> -->
-                        </li>
-                        <li class="td txt1">
-                            340K
-                            <!-- <button class="buy-btn">
-                                购买
-                            </button> -->
-                        </li>
-                    </div>
-                </ul>
-            </div>
-            <div class="part2">
-                <div class="left">
-                    <p class="big-txt">
-                        全球第一的数字资产结算全球衍生品交易所
-                    </p>
-                    <p class="small-txt">
-                        加密数字货币合约&nbsp;&nbsp;&nbsp;贵金属&nbsp;&nbsp;&nbsp;能源 <br>
-                        全球指数&nbsp;&nbsp;&nbsp;主流股票合约&nbsp;&nbsp;&nbsp;外汇
-                    </p>
-                </div>
-                <div class="right">
-                    <img src="/static/images/home/part2.png" alt="">
-                </div>
-            </div>
-            <div class="part3">
-                <div class="left">
-                    <img src="/static/images/home/part3.png" alt="">
-                </div>
-                <div class="right">
-                    <p class="big-txt">
-                        去中心化Web3钱包授权登陆
-                    </p>
-                    <p class="small-txt">
-                        去中心化Web3钱包授权登陆，全智能合约管理保证金资产，没有后台和管理员权限
-                        无需担心资产安全，专注 于您的交易
-                    </p>
-                </div>
-            </div>
-            <div class="part4">
-                <p class="big-txt">欢迎加入DDSE社区</p>
-                <p class="small-txt">
-                    关注我们即可获得5 USDT奖励！
-                </p>
-                <div class="link-box">
-                    <img class="item" src="/static/images/home/p4-1.png" alt="">
-                    <img class="item" src="/static/images/home/p4-2.png" alt="">
-                    <img class="item" src="/static/images/home/p4-3.png" alt="">
-                    <img class="item" src="/static/images/home/p4-4.png" alt="">
-                    <img class="item" src="/static/images/home/p4-5.png" alt="">
-                </div>
-            </div>
-            <div class="part5">
-                <div class="left">
-                    <p class="big-txt">
-                        安全,易用的数字货币市场
-                    </p>
-                    <p class="small-txt">
-                        下载SuperEx 手机应用程序，随时关注市场，在玩的时刻进行交易，无论你身在何处。
-                    </p>
-                    <div class="download-box">
-                        <img class="code" src="/static/images/home/p5-code.png" alt="">
-                        <div class="right-download">
-                            <img class="item" src="/static/images/home/p5-1.png" alt="">
-                            <img class="item" src="/static/images/home/p5-2.png" alt="">
-                            <br>
-                            <img class="item item2" src="/static/images/home/p5-3.png" alt="">
-                            <img class="item item2" src="/static/images/home/p5-4.png" alt="">
-                        </div>
-                    </div>
-                </div>
-                <div class="right">
-                    <img src="/static/images/home/p5-banner.png" alt="">
-                </div>
-            </div>
-            <div class="part6">
-                <p class="title">
-                    FAQ
-                </p>
-                <div class="content-box">
-                    <div class="item">
-                        <p class="big-txt">
-                            什么是比特币？
-                        </p>
-                        <div class="small-txt">
-                            比特币是世界上最大、最著名的去中心化加密货币。 它采用区块链作为底层技术，允许用户通过点对点网络传输数据和资产，且无需任何中间人和中央银行。
-                        </div>
-                    </div>
-                    <div class="item" style="padding-left:200px;">
-                        <p class="big-txt">
-                            在 KuCoin 上交易安全吗？
-                        </p>
-                        <div class="small-txt">
-                            KuCoin及其团队部署了全球最专业的安全网络架构体系，并不断优化和升级安全系统，以确保用户资产和账户安全。
-                        </div>
-                    </div>
-                    <div class="item item2">
-                        <p class="big-txt">
-                            什么是比特币？
-                        </p>
-                        <div class="small-txt">
-                            由于数字资产具有无限分割的特性，在KuCoin即使1美元也可以购买数字资产。
-                        </div>
-                    </div>
-                    <div class="item item2" style="padding-left:200px;">
-                        <p class="big-txt">
-                            法定货币出入金是否有限制？
-                        </p>
-                        <div class="small-txt">
-                            KuCoin严格遵守所在国的各项法律法规，不同国家的出入金规则不同。在法律允许的国家，KuCoin 对法定货币出入金不收取任何费用且没有限制，目前C2C市场支持多种法定货币，为用户提供7*24小时的出入金服务。
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="part7">
-                <p class="big-txt">即将开启您的数字货币交易，准备好了吗？</p>
-                <p class="small-txt">只需3分钟即可完成账户设置 并开始交易</p>
-                <button class="ks">开立账户</button>
-            </div>
-            <div class="part8">
-                <div class="content">
+    <div v-if="!getIsMobile">
+        <div class="home-page">
+            <div class="head" >
+                <div class="head-content">
                     <div class="left">
-                        <img class="logo" src="/static/images/logo.png" alt="">
-                        <p class="lx">
-                            联系我们
+                        <p class="title">全球首家数字资产结算全品种衍生品交易平台</p>
+                        <p class="small-title">
+                            全品种覆盖、去中心化资产托管
                         </p>
-                        <img class="link-p" src="/static/images/home/p7-link.png" alt="">
-                        <div class="email-box">
-                            客户支持: support@xt.com<br>
-                            上币支持: bd@xt.com<br>
-                            上币申请: listing@xt.com<br>
-                            IDO/IGO申请: xtstarter@xt.com<br>
-                            合作伙伴: partnerships@xt.com
+                        <div class="btn-box">
+                            <button class="major" @click="$router.push('/register')">
+                                立即注册
+                            </button>
+                            <button @click="$router.push('/exchange')">
+                                立即交易
+                            </button>
                         </div>
                     </div>
                     <div class="right">
-                        <div class="cell">
-                            <p class="title">
-                                技术支持
-                            </p>
-                            <p class="txt">
-                                APP下载<br>
-                                API文档<br>
-                                常见问题<br>
-                                提交工单<br>
-                                清除缓存
-                            </p>
-                        </div>
-                        <div class="cell">
-                            <p class="title">
-                                技术支持
-                            </p>
-                            <p class="txt">
-                                关于XT.com<br>
-                                加入我们<br>
-                                官方公告<br>
-                                费率说明<br>
-                                数字资产介绍<br>
-                                日程表<br>
-                                XT媒体工具包<br>
-                                官方验证通道<br>
-                                P2P商家申请<br>
-                                代理商<br>
-                                Ecosystem
-                            </p>
-                        </div>
-                        <div class="cell">
-                            <p class="title">
-                                条款说明
-                            </p>
-                            <p class="txt">
-                                隐私保护<br>
-                                用户协议<br>
-                                执法请求
-                            </p>
-                        </div>
+                        <img src="/static/images/home/part1-1.png" alt="">
                     </div>
                 </div>
             </div>
-            <div class="foot">
-                <p class="hz">合作伙伴</p>
-                <img src="/static/images/home/foot.png" alt="">
+            <div class="content">
+                <div class="banner-box">
+                    <div class="item">
+                        <img src="/static/images/home/banner1.png" alt="">
+                    </div>
+                    <div class="item">
+                        <img src="/static/images/home/banner1.png" alt="">
+                    </div>
+                    <div class="item">
+                        <img src="/static/images/home/banner1.png" alt="">
+                    </div>
+                    <div class="item">
+                        <img src="/static/images/home/banner1.png" alt="">
+                    </div>
+                </div>
+                <div class="market-trend">
+                    <p class="title">热门榜</p>
+                    <ul>
+                        <div class="th-box">
+                            <li class="th">名称</li>
+                            <li class="th">最新价</li>
+                            <li class="th">24h涨跌</li>
+                            <li class="th">行情</li>
+                            <li class="th">24H Volume</li>
+                        </div>
+                        <div class="td-box" v-for="item in 4">
+                            <li class="td">
+                                <img src="https://huobicfg.s3.amazonaws.com/currency_icon/btc.png" alt="">
+                                <span class="coin-name">BTC</span>
+                                <span class="coin-fullname">Bitcoin</span>
+                            </li>
+                            <li class="td">
+                                <span class="txt1">
+                                    $58140.23
+                                </span>
+                            </li>
+                            <li class="td">
+                                <span class="txt2">
+                                    4.5%
+                                </span>
+                            </li>
+                            <li class="td">
+                                <!-- <HCharts
+                                symbol="BTC"
+                                :backgroundColor="getThemeType == 1?'#b6d991':'#1f303d'"
+                                :themeType="getThemeType"
+                                :borderColor="getThemeType == 1?'#7dbb3e':'#204046'"/> -->
+                            </li>
+                            <li class="td txt1">
+                                <button class="buy-btn" @click="$router.push('/exchange')">
+                                    交易
+                                </button>
+                            </li>
+                        </div>
+                    </ul>
+                </div>
+                <div class="part2">
+                    <div class="left">
+                        <p class="big-txt">
+                            全球第一的数字资产结算全球衍生品交易所
+                        </p>
+                        <p class="small-txt">
+                            加密数字货币合约&nbsp;&nbsp;&nbsp;贵金属&nbsp;&nbsp;&nbsp;能源 <br>
+                            全球指数&nbsp;&nbsp;&nbsp;主流股票合约&nbsp;&nbsp;&nbsp;外汇
+                        </p>
+                    </div>
+                    <div class="right">
+                        <img src="/static/images/home/part2.png" alt="">
+                    </div>
+                </div>
+                <div class="part3">
+                    <div class="left">
+                        <img src="/static/images/home/part3.png" alt="">
+                    </div>
+                    <div class="right">
+                        <p class="big-txt">
+                            去中心化Web3钱包授权登陆
+                        </p>
+                        <p class="small-txt">
+                            去中心化Web3钱包授权登陆，全智能合约管理保证金资产，没有后台和管理员权限
+                            无需担心资产安全，专注 于您的交易
+                        </p>
+                    </div>
+                </div>
+                <div class="part4">
+                    <p class="big-txt">欢迎加入DDSE社区</p>
+                    <p class="small-txt">
+                        关注我们即可获得5 USDT奖励！
+                    </p>
+                    <div class="link-box">
+                        <img class="item" src="/static/images/home/p4-1.png" alt="">
+                        <img class="item" src="/static/images/home/p4-2.png" alt="">
+                        <img class="item" src="/static/images/home/p4-3.png" alt="">
+                        <img class="item" src="/static/images/home/p4-4.png" alt="">
+                        <img class="item" src="/static/images/home/p4-5.png" alt="">
+                    </div>
+                </div>
+                <div class="part5">
+                    <div class="left">
+                        <p class="big-txt">
+                            安全,易用的数字货币市场
+                        </p>
+                        <p class="small-txt">
+                            下载SuperEx 手机应用程序，随时关注市场，在玩的时刻进行交易，无论你身在何处。
+                        </p>
+                        <div class="download-box">
+                            <img class="code" src="/static/images/home/p5-code.png" alt="">
+                            <div class="right-download">
+                                <img class="item" src="/static/images/home/p5-1.png" alt="">
+                                <img class="item" src="/static/images/home/p5-2.png" alt="">
+                                <br>
+                                <img class="item item2" src="/static/images/home/p5-3.png" alt="">
+                                <img class="item item2" src="/static/images/home/p5-4.png" alt="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="right">
+                        <img src="/static/images/home/p5-banner.png" alt="">
+                    </div>
+                </div>
+                <div class="part6">
+                    <p class="title">
+                        FAQ
+                    </p>
+                    <div class="content-box">
+                        <div class="faq-box">
+                            <div class="item">
+                                <p class="big-txt">
+                                    什么是比特币？
+                                </p>
+                                <div class="small-txt">
+                                    比特币是世界上最大、最著名的去中心化加密货币。 它采用区块链作为底层技术，允许用户通过点对点网络传输数据和资产，且无需任何中间人和中央银行。
+                                </div>
+                            </div>
+                            <div class="item" style="padding-left:200px;">
+                                <p class="big-txt">
+                                    在 KuCoin 上交易安全吗？
+                                </p>
+                                <div class="small-txt">
+                                    KuCoin及其团队部署了全球最专业的安全网络架构体系，并不断优化和升级安全系统，以确保用户资产和账户安全。
+                                </div>
+                            </div>
+                            <div class="item item2">
+                                <p class="big-txt">
+                                    什么是比特币？
+                                </p>
+                                <div class="small-txt">
+                                    由于数字资产具有无限分割的特性，在KuCoin即使1美元也可以购买数字资产。
+                                </div>
+                            </div>
+                            <div class="item item2" style="padding-left:200px;">
+                                <p class="big-txt">
+                                    法定货币出入金是否有限制？
+                                </p>
+                                <div class="small-txt">
+                                    KuCoin严格遵守所在国的各项法律法规，不同国家的出入金规则不同。在法律允许的国家，KuCoin 对法定货币出入金不收取任何费用且没有限制，目前C2C市场支持多种法定货币，为用户提供7*24小时的出入金服务。
+                                </div>
+                            </div>
+                        </div>
+                        <div class="start-box">
+                            <p class="big-txt">即将开启您的数字货币交易，准备好了吗？</p>
+                            <p class="small-txt">只需3分钟即可完成账户设置 并开始交易</p>
+                            <button class="ks" @click="$router.push('/register')">开立账户</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="part8">
+                    <div class="content">
+                        <div class="left">
+                            <img class="logo" src="/static/images/logo.png" alt="">
+                            <p class="lx">
+                                联系我们
+                            </p>
+                            <img class="link-p" src="/static/images/home/p7-link.png" alt="">
+                            <div class="email-box">
+                                客户支持: support@xt.com<br>
+                                上币支持: bd@xt.com<br>
+                                上币申请: listing@xt.com<br>
+                                IDO/IGO申请: xtstarter@xt.com<br>
+                                合作伙伴: partnerships@xt.com
+                            </div>
+                        </div>
+                        <div class="right">
+                            <div class="cell">
+                                <p class="title">
+                                    技术支持
+                                </p>
+                                <p class="txt">
+                                    APP下载<br>
+                                    API文档<br>
+                                    常见问题<br>
+                                    提交工单<br>
+                                    清除缓存
+                                </p>
+                            </div>
+                            <div class="cell">
+                                <p class="title">
+                                    技术支持
+                                </p>
+                                <p class="txt">
+                                    关于XT.com<br>
+                                    加入我们<br>
+                                    官方公告<br>
+                                    费率说明<br>
+                                    数字资产介绍<br>
+                                    日程表<br>
+                                    XT媒体工具包<br>
+                                    官方验证通道<br>
+                                    P2P商家申请<br>
+                                    代理商<br>
+                                    Ecosystem
+                                </p>
+                            </div>
+                            <div class="cell">
+                                <p class="title">
+                                    条款说明
+                                </p>
+                                <p class="txt">
+                                    隐私保护<br>
+                                    用户协议<br>
+                                    执法请求
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="foot">
+                    <p class="hz">合作伙伴</p>
+                    <img src="/static/images/home/foot.png" alt="">
+                </div>
             </div>
         </div>
     </div>
+    <MobileHome v-else/>
 </template>
 <script>
 import { slider, slideritem } from 'vue-concise-slider'
 import HCharts from '@/components/chart/Index'
+import MobileHome from '@/views/mobile/Home'
 export default {
     data () {
         return {
@@ -288,7 +282,8 @@ export default {
     components: {
         slider,
         slideritem,
-        HCharts
+        HCharts,
+        MobileHome
     },
     methods:{
         slide (data) {
@@ -305,16 +300,17 @@ export default {
 </script>
 <style lang="less" scoped>
 .home-page {
+    background-color: #fff;
     .head {
         height: 442px;
         display: flex;
         align-items: center;
         background-image: url("/static/images/home/part1-bg.png");
         background-repeat: no-repeat;
-        background-position: 0 -170px;
         background-size: 100% ;
+        background-position: 0px -80px;
         .head-content {
-            width: 1440px;
+            width: 1200px;
             margin:0 auto;
             display: flex;
             justify-content:space-between;
@@ -344,7 +340,7 @@ export default {
                     button {
                         height: 54px;
                         padding: 14px 37px 14px 38px;
-                        
+                        cursor: pointer;
                         border-radius: 6px;
                         color: #000;
                         font-size: 22.4px;
@@ -421,11 +417,11 @@ export default {
         }
         .banner-box {
             display: flex;
-            width: 1440px;
+            width: 1200px;
             margin:0 auto;
             margin-top:38px;
             .item {
-                height: 161px;
+                height: 163px;
                 text-align: center;
                 line-height: 135px;
                 color:#fff;
@@ -443,7 +439,7 @@ export default {
             }
         }
         .market-trend {
-            width: 1440px;
+            width: 1200px;
             margin:0 auto;
             margin-top:60px;
             .title {
@@ -459,6 +455,19 @@ export default {
                 .th-box,.td-box {
                     .th,.td {
                         width: 20%;
+                        &:first-child{
+                            padding-left:16px;
+                        }
+                        &:last-child {
+                            text-align: right;
+                            padding-right:16px;
+                        }
+                    }
+                    .td {
+                        &:last-child {
+                            display: flex;
+                            justify-content: end;
+                        }
                     }
                 }
                 .th-box {
@@ -506,9 +515,20 @@ export default {
                         color: var(--color-green-);
                     }
                     .buy-btn {
-                        padding: 5px 12px;
                         border-radius: 4px;
                         border:1px solid #eee;
+                        background: transparent;
+                        padding: 9px 14px 8px;
+                        border-radius: 4px;
+                        border: solid 1px var(--font-primary-);
+                        font-size: 15px;
+                        font-weight: normal;
+                        font-stretch: normal;
+                        font-style: normal;
+                        line-height: 1;
+                        letter-spacing: normal;
+                        color: var(--font-primary-);
+                        cursor: pointer;
                     }
                 }
             }
@@ -516,7 +536,7 @@ export default {
         .part2 {
             display: flex;
             align-items: center;
-            width: 1440px;
+            width: 1200px;
             margin:0 auto;
             margin-top:70px;
             img {
@@ -543,7 +563,7 @@ export default {
         .part3 {
             display: flex;
             align-items: center;
-            width: 1440px;
+            width: 1200px;
             margin:0 auto;
             margin-top:70px;
             img {
@@ -610,11 +630,11 @@ export default {
         .part5 {
             display: flex;
             align-items: center;
-            width: 1440px;
+            width: 1200px;
             margin:0 auto;
             padding-top:180px;
             .left {
-                flex:1;
+                width: 50%;
                 .big-txt {
                     font-size: 52px;
                     color: #000;
@@ -646,6 +666,7 @@ export default {
                 }
             }
             .right {
+                width: 50%;
                 img {
                     width: 719px;
                     height: 488px;
@@ -653,10 +674,15 @@ export default {
             }
         }
         .part6 {
-            width: 1440px;
-            margin:0 auto;
-            padding-top:100px;
+            
+            
+            padding-top:227px;
             padding-bottom:100px;
+            background-image: url('/static/images/home/p7-bg.png');
+
+            background-repeat: no-repeat;
+            background-position: 100% 100%;
+            background-size: 100% 100%;
             .title {
                 font-size: 34px;
                 font-weight: 500;
@@ -664,10 +690,14 @@ export default {
                 text-align: center;
             }
             .content-box {
-                display: flex;
-                justify-content: space-between;
-                flex-wrap: wrap;
+                width: 1200px;
+                margin:0 auto;
                 margin-top:44px;
+                .faq-box {
+                    display: flex;
+                    justify-content: space-between;
+                    flex-wrap: wrap;
+                }
                 .item {
                     flex:1;
                     text-align: left;
@@ -687,42 +717,39 @@ export default {
                     }
                 }
             }
-        }
-        .part7 {
-            background-image: url('/static/images/home/p7-bg.png');
-            background-repeat: no-repeat;
-            background-position: 100% 100%;
-            background-size: 100% 100%;
-            padding:158px 0 67px;
-            text-align: center;
-            .big-txt {
-                width: 100%;
-                font-size: 36px;
-                line-height: 1;
+            .start-box {
                 text-align: center;
-                color: #000;
-            }
-            .small-txt {
-                width: 100%;
-                font-size: 20px;
-                line-height: 1.6;
-                text-align: center;
-                color: #65707c;
-                margin-top:16px;
-            }
-            .ks {
-                margin-top:50px;
-                width: 98px;
-                height: 40px;
-                margin: 51px 293px 0;
-                padding: 12px 17px;
-                border-radius: 4px;
-                background-color: #08ae7a;
-                font-size: 16px;
-                line-height: 1;
-                text-align: center;
-                border:none;
-                color: #fff;
+                margin-top:120px;
+                .big-txt {
+                    width: 100%;
+                    font-size: 36px;
+                    line-height: 1;
+                    text-align: center;
+                    color: #000;
+                }
+                .small-txt {
+                    width: 100%;
+                    font-size: 20px;
+                    line-height: 1.6;
+                    text-align: center;
+                    color: #65707c;
+                    margin-top:16px;
+                }
+                .ks {
+                    margin-top:50px;
+                    width: 98px;
+                    height: 40px;
+                    margin: 51px 293px 0;
+                    padding: 12px 17px;
+                    border-radius: 4px;
+                    background-color: var(--font-primary-);
+                    font-size: 16px;
+                    line-height: 1;
+                    text-align: center;
+                    border:none;
+                    color: #fff;
+                    cursor: pointer;
+                }
             }
         }
         .part8 {
@@ -731,7 +758,7 @@ export default {
             padding-top:64px;
             padding-bottom:100px;
             .content {
-                width: 1440px;
+                width: 1200px;
                 margin:0 auto;
                 display: flex;
             }
@@ -779,7 +806,7 @@ export default {
             }
         }
         .foot {
-            width: 1440px;
+            width: 1200px;
             margin:0 auto;
             .hz {
                 padding-top:11px;
@@ -794,4 +821,16 @@ export default {
         }
     }
 }
+@media (max-width:768px) {
+    .home-page {
+        .head {
+            .head-content {
+                width: 90%;
+            }
+        }
+    }
+    
+    
+}
+
 </style>

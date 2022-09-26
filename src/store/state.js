@@ -9,5 +9,6 @@ export default {
   currenSymbolInfo: {},
   quotes_ws_data: {},
   productData: {},
-  positionList:[]
+  positionList:[],
+  isMobile:false,
 }

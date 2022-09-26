@@ -10,4 +10,5 @@ export default {
   setQuotesWsData: (state, v) => (state.quotes_ws_data = v),
   setProductData: (state, v) => (state.productData = v),
   setPositionList: (state,v) => (state.positionList = v),
+  setIsMobile: (state,v) => (state.isMobile = v),
 }

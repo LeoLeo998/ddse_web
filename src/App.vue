@@ -35,6 +35,11 @@ export default {
       this.setIsLogin(true)
     }
   },
+  mounted () {
+    if(document.body.clientWidth <= 768) {
+      this.setIsMobile(true)
+    }
+  },
   methods:{
     ...mapMutations([
         "setQUOSocket",
@@ -42,7 +47,8 @@ export default {
         "setMarketData",
         "setIsLogin",
         "setUserInfo",
-        "setCurrentSymbolInfo"
+        "setCurrentSymbolInfo",
+        "setIsMobile"
     ]),
     ...mapActions([
       "getUserInfoFetch"

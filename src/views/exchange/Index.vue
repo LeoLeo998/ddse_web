@@ -48,7 +48,6 @@ import ExLeft from './components/ExLeft.vue'
 import ExRight from './components/ExRight.vue'
 import OrderHistory from './components/OrderHistory.vue'
 import TradingView from '@/components/TradingView.vue'
-// import tradingView from './components/tradingView.vue'
 import OrderBook from './components/OrderBook.vue'
 import MarketBox from './components/MarketBox.vue'
 import CreateOrder from './components/CreateOrder.vue'
@@ -124,7 +123,6 @@ export default {
 
 @exBg: rgb(22, 26, 30);
 .ex-index-page {
-  //padding:20px 0;
   color: #fff;
   // &.night-css {
   //     // background-color: red;
