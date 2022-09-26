@@ -199,7 +199,7 @@ export default {
         opacity: 1;
         pointer-events: auto;
         font-family: URWDIN, -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei";
-        margin-bottom: 8PX;
+        margin-bottom: 20PX;
         height: 48PX;
         font-size: 18PX;
         padding: 0PX 18PX;

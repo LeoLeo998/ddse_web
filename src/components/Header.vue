@@ -359,9 +359,15 @@ export default {
             button {
                 width: 100%;
                 height:35PX;
+                color: rgb(45, 189, 150);
+                span {
+                    font-size: 14PX;
+                }
                 &.register-btn {
                     background-color: var(--color-green-);
                     margin-top:16PX;
+                    border-radius:4PX;
+                    color: #fff;
                 }
             }
         }
