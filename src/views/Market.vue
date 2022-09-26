@@ -363,7 +363,6 @@ export default {
   }
 }
 </script>
-
 <style lang="less" scoped>
 @bgcolor: #eaecef;
 @bgcolor2: #fafafa;
@@ -431,7 +430,7 @@ export default {
         font-size: 18px;
         span {
           font-size: 18px;
-          i{
+          i {
             color: #9ca5b3;
           }
         }
@@ -773,6 +772,12 @@ export default {
         cursor: pointer;
         color: rgb(247, 186, 42);
       }
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .hot {
+      display: none;
     }
   }
 }
