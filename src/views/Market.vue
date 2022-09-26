@@ -19,23 +19,17 @@
       <el-tabs v-model="marketType" @tab-click="marketChange">
         <el-tab-pane :label="item.title" :name="item.id" v-for="(item, index) in groupList" :key="index">
           <span slot="label" v-if="item.id == -1"
-            ><i class="fa el-icon-star-off"></i><span style="margin-left:10px">{{ item.title }}</span></span
+            ><i class="fa el-icon-star-on"></i><span style="margin-left:10px">{{ item.title }}</span></span
           >
         </el-tab-pane>
       </el-tabs>
       <div class="search-ipt">
         <i class="fa el-icon-search"></i>
-        <input type="text" placeholder="名称" v-model="searchVal" />
+        <input type="text" placeholder="搜索币种" v-model="searchVal" />
       </div>
     </div>
     <div class="market-product">
       <div class="header">
-        <!-- <div class="search-box">
-          <div class="title">
-            <p class="css-1xamyaw">DDSE币种行情</p>
-            <div>发现好币,寻找机会</div>
-          </div>
-        </div> -->
         <div class="content-box">
           <div class="item" v-for="(item, key) in topSockets" :key="key">
             <span class="title">{{ topTitle[key] }}</span>
@@ -161,7 +155,7 @@
               <td>$ {{ item.high }}</td>
               <td>$ {{ item.low }}</td>
               <td>
-                <div @click.stop="toExchange(item)" style="font-size:18px" class="price-up">交易</div>
+                <el-button @click.stop="toExchange(item)" class="deal-btn">交易</el-button>
               </td>
             </tr>
           </table>
@@ -376,35 +370,49 @@ export default {
 @fontcolor: #707a8a;
 @fontcolor2: rgb(112, 122, 138);
 @tabline: #eaecef;
-@green: #49c5a8;
+@green: #29be8f;
+@red: #f24b3a;
 .price-down2 {
-  color:#f24b3a;
+  color: @red;
 }
 .price-up2 {
-  color: #29be8f;
+  color: @green;
 }
 .market-page {
-  padding: 0 0 100px 0;
+  padding: 30px 30px;
   min-height: 100vh;
 
   .product-tab {
-    padding: 0 300px;
+    padding: 20px 32px;
+    box-sizing: border-box;
+    height: 74px;
+    margin: 20px 0;
+    box-sizing: border-box;
+    background: #fff;
     .search-ipt {
       position: relative;
       input {
-        width: 220px;
-        height: 50px;
-        border-radius: 5px;
-        border: none;
+        width: 400px;
+        height: 53px;
         outline: none;
-        padding: 0 30px;
-        background-color: #f5f6f6;
+        padding: 17px 35px;
+        border-radius: 26.5px;
+        border: solid 2px #ebeff4;
+        background-color: #fff;
+        color: #9ca5b3;
+        font-size: 18px;
+        &::placeholder {
+          color: #9ca5b3;
+          font-size: 18px;
+        }
       }
       i {
         position: absolute;
-        left: 0px;
-        top: 12px;
+        color: #9ca5b3;
+        left: 15px;
+        top: 18px;
         color: @fontcolor;
+        font-size: 18px;
       }
     }
     .fa {
@@ -418,10 +426,14 @@ export default {
         padding: 15px 0;
       }
       .el-tabs__item {
-        color: rgba(0, 20, 42, 0.6);
-        font-size: 17px;
+        color: #9ca5b3;
+        font-weight: normal;
+        font-size: 18px;
         span {
-          font-size: 17px;
+          font-size: 18px;
+          i{
+            color: #9ca5b3;
+          }
         }
         &:hover {
           color: @green;
@@ -435,6 +447,7 @@ export default {
       }
       .el-tabs__active-bar {
         background-color: @green;
+        height: 3px;
       }
     }
   }
@@ -442,13 +455,13 @@ export default {
   .hot {
     display: flex;
     align-items: center;
-    padding: 0 300px;
     .hot-item {
       border-radius: 5px;
       background: #fff;
       padding: 25px 25px;
+      box-sizing: border-box;
+      height: 143px;
       flex: 1;
-      margin-top: 20px;
       &:not(:last-child) {
         margin-right: 20px;
       }
@@ -459,23 +472,25 @@ export default {
           color: #000;
         }
         img {
-          width: 40px;
+          width: 37px;
         }
       }
       .price {
         margin: 5px 0 10px 0;
         width: 80%;
         div {
-          font-size: 25px;
+          font-size: 26px;
           font-weight: bold;
           color: #000;
           margin-right: 5px;
         }
         span {
-          color: @fontcolor;
+          color: #4c5765;
+          font-size: 16px;
         }
       }
       .updown {
+        font-size: 14px !important;
         div {
           margin-right: 5px;
         }
@@ -540,7 +555,7 @@ export default {
   .market-product {
     background: #fff;
     border-radius: 5px;
-    padding: 10px 300px 80px 300px;
+    padding: 0 71px;
   }
   .market-box {
     margin: 0 auto;
@@ -656,8 +671,7 @@ export default {
           background-color: #03a66d0d;
         }
         th {
-          background-color: #f5f6f6;
-          color: #6b7682;
+          color: #9ca5b3;
           height: 50px;
           font-size: 14px;
           font-weight: normal;
@@ -681,14 +695,21 @@ export default {
         }
         td {
           height: 80px;
-          font-size: 17px;
-          border-bottom: 1px solid @tabline;
+          font-size: 16px;
           i {
             color: @bgcolor;
           }
           .to-trans {
             font-size: 16px;
             color: #03a66d;
+          }
+          .deal-btn {
+            font-size: 14px !important;
+            color: #fff !important;
+            background: #08ae7a !important;
+            width: 55px;
+            padding: 7px 13px 7px 14px;
+            box-sizing: border-box;
           }
         }
         th:nth-child(1),
@@ -740,8 +761,8 @@ export default {
         font-size: 18px;
       }
       .des {
-        font-size: 13px;
-        color: #b3b9bc;
+        font-size: 10px;
+        color: #9ca0aa;
       }
 
       .fa-star {

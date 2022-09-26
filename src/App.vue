@@ -65,7 +65,7 @@ export default {
 
 <style lang="less">
 #app {
-  background-color: #F9F9F9;
+  background-color: #f7f8fa;
 }
 </style>
 

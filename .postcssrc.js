@@ -5,13 +5,13 @@ module.exports = {
     'postcss-import': {},
     'postcss-url': {},
     // to edit target browsers: use "browserslist" field in package.json
-    'autoprefixer': {},
+    autoprefixer: {},
     'postcss-pxtorem': {
-      rootValue: 37.5,
+      rootValue: 16,
       propList: ['*'],
       replace: true,
       mediaQuery: false,
-      minPixelValue: 0,
+      minPixelValue: 0
       // exclude: /emoji/i
     }
   }
