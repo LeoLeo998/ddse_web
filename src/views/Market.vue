@@ -458,9 +458,7 @@ export default {
     .hot-item {
       border-radius: 5px;
       background: #fff;
-      padding: 25px 25px;
-      box-sizing: border-box;
-      height: 143px;
+      padding: 23px 23px;
       flex: 1;
       &:not(:last-child) {
         margin-right: 20px;
