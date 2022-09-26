@@ -2,7 +2,7 @@
   <div class="msb-login">
     <div class="login-bg">
       <div class="home" @click="$router.push('/')">
-        MSB LOGO
+        <img src="/static/images/logo.png" alt="">
       </div>
       <img src="/static/images/login-banner.png" alt="" />
     </div>
@@ -217,6 +217,9 @@ export default {
       left: 40px;
       top: 20px;
       cursor: pointer;
+      img {
+        height:24px;
+      }
     }
     img {
       width: 100%;

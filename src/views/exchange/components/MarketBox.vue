@@ -1,11 +1,11 @@
 <template>
   <div class="ex-market-box">
     <div class="search-box">
-      <i class="fa fa-search"></i>
+      <i class="fa el-icon-search"></i>
       <input type="text" v-model="searchVal"/>
     </div>
     <div class="coin-list">
-      <i class="fa fa-star" @click="coinIndex = -1" :class="coinIndex == -1 && 'active'"></i>
+      <i class="fa el-icon-star-off" @click="coinIndex = -1" :class="coinIndex == -1 && 'active'"></i>
       <span :class="coinIndex == 100 && 'active'" @click="coinIndex = 100">
         热门
       </span>
@@ -18,33 +18,33 @@
         <li>
           <div class="li-head">
             <span>名称</span>
-            <span class="sort-box" @click="sortClick('name')">
-              <i class="fa fa-sort-up" :class="sort.name == 1 && 'select'"></i>
-              <i class="fa fa-sort-down" :class="sort.name == 2 && 'select'"></i>
-            </span>
+            <div class="sort-box" @click="sortClick('name')">
+              <i class="el-icon-caret-top" :class="sort.name == 1 && 'select'"></i>
+              <i class="el-icon-caret-bottom" :class="sort.name == 2 && 'select'"></i>
+            </div>
           </div>
           <div class="li-head">
             <span>卖出价格</span>
-            <span class="sort-box" @click="sortClick('sellP')">
-              <i class="fa fa-sort-up" :class="sort.sellP == 1 && 'select'"></i>
-              <i class="fa fa-sort-down" :class="sort.sellP == 2 && 'select'"></i>
-            </span>
+            <div class="sort-box" @click="sortClick('sellP')">
+              <i class="el-icon-caret-top" :class="sort.sellP == 1 && 'select'"></i>
+              <i class="el-icon-caret-bottom" :class="sort.sellP == 2 && 'select'"></i>
+            </div>
           </div>
           <div class="li-head">
             <span>买入价格</span>
-            <span class="sort-box" @click="sortClick('buyP')">
-              <i class="fa fa-sort-up" :class="sort.buyP == 1 && 'select'"></i>
-              <i class="fa fa-sort-down" :class="sort.buyP == 2 && 'select'"></i>
-            </span>
+            <div class="sort-box" @click="sortClick('buyP')">
+              <i class="el-icon-caret-top" :class="sort.buyP == 1 && 'select'"></i>
+              <i class="el-icon-caret-bottom" :class="sort.buyP == 2 && 'select'"></i>
+            </div>
           </div>
           <div class="li-head">
             <span>
               涨幅
             </span>
-            <span class="sort-box" @click="sortClick('range')">
-              <i class="fa fa-sort-up" :class="sort.range == 1 && 'select'"></i>
-              <i class="fa fa-sort-down" :class="sort.range == 2 && 'select'"></i>
-            </span>
+            <div class="sort-box" @click="sortClick('range')">
+              <i class="el-icon-caret-top" :class="sort.range == 1 && 'select'"></i>
+              <i class="el-icon-caret-bottom" :class="sort.range == 2 && 'select'"></i>
+            </div>
           </div>
         </li>
         <div class="market-list">
@@ -275,8 +275,9 @@ export default {
     i {
       position: absolute;
       left: 8px;
-      top: 5px;
+      top: 7px;
       color: var(--font-color1-);
+      font-size: 12PX;
     }
     input {
       width: 100%;
@@ -431,7 +432,6 @@ export default {
             width: 20%;
           }
           &:nth-child(4) {
-            display: block;
             //text-align: right;
             width: 20%;
           }
@@ -440,16 +440,27 @@ export default {
     }
     .li-head {
       color: var(--font-body-);
-      font-size: 12px;
-      height: 20px;
+      display: flex;
+      align-items: center;
+      height: 100%;
+      line-height: 50px;
+      span {
+        font-size: 12PX;
+      }
       .sort-box {
         cursor: pointer;
+        display: flex;
         i {
-          &.fa-sort-up {
-            margin-left:1px;
+          display: inline-block;
+          
+          height: 100%;
+          font-size: 12PX;
+          &.el-icon-caret-top {
+            top:3PX;
           }
-          &.fa-sort-down {
-            margin-left:-12.7px;
+          &.el-icon-caret-bottom {
+            margin-left:-11.9PX;
+            margin-top:5px;
           }
           &.select {
             color:var(--color-green-);
@@ -504,8 +515,9 @@ export default {
         width: 20%;
       }
       &:nth-child(4) {
-        display: block;
-        //text-align: right;
+        display: flex;
+        justify-content: end;
+        text-align: right;
         width: 20%;
       }
     }

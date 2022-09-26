@@ -238,6 +238,10 @@ export default {
         cursor: pointer;
         height: 100%;
         padding:10px 20px;
+        font-size: 14PX;
+        span {
+          font-size: 14PX;
+        }
         &.active {
           background: #fff;
           font-weight: 400;
@@ -258,6 +262,7 @@ export default {
         width: 11.111%;
         text-align: left;
         font-weight: 400;
+        font-size: 14PX;
         &:first-child {
           padding-left: 16px;
         }

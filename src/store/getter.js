@@ -9,5 +9,6 @@ export default {
   getCurrentSymbolInfo: state => state.currenSymbolInfo,
   getQuotesWsData: state => state.quotes_ws_data,
   getProductData: state => state.productData,
-  getPositionList: state => state.positionList
+  getPositionList: state => state.positionList,
+  getIsMobile: state => state.isMobile,
 }
