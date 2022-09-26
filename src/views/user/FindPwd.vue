@@ -26,15 +26,15 @@
               <div class="row row2">
                 <label for="">{{ type === 1 ? '手机号码' : '邮箱/子账号' }}</label>
                 <div class="flex-center-between">
-                  <div>
-                    <el-input v-if="type == 1" type="number" placeholder="手机" v-model="user.account" class="input-with-select" style="width:350px" @keyup.enter.native="stepNext">
+                  <div style="width:78%">
+                    <el-input v-if="type == 1" type="number" placeholder="手机" v-model="user.account" class="input-with-select" @keyup.enter.native="stepNext">
                       <template slot="prepend">
                         <VueCountryIntl schema="popover" v-model="user.code">
                           <button type="button" slot="reference">+{{ user.code }}</button>
                         </VueCountryIntl>
                       </template>
                     </el-input>
-                    <el-input v-else label="email" size="large" v-model="user.account" placeholder="邮箱/子账号" clearable style="width:350px" @keyup.enter.native="stepNext"/>
+                    <el-input v-else label="email" size="large" v-model="user.account" placeholder="邮箱/子账号" clearable style="width:100%" @keyup.enter.native="stepNext"/>
                   </div>
                   <el-button class="submit-btn" :class="sendDisable ? 'submit-btn-dis' : 'submit-btn'" type="success" @click="sendMsg" :disabled="sendDisable" style="width:130px">{{ sendText }}</el-button>
                 </div>
@@ -344,6 +344,7 @@ export default {
             height: 50px;
             background: #f5f6f7;
             border: none;
+            width: 100%;
           }
         }
         .submit-btn {
