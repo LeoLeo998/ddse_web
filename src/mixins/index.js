@@ -1,6 +1,12 @@
 import Vue from 'vue'
+import { mapGetters } from 'vuex';
 import floatObj from '../util/floatObj'
 Vue.mixin({
+    computed:{
+        ...mapGetters([
+            "getIsMobile"
+        ])
+    },
     methods:{
         mathFloor(value, bit=3) {
             let str = value.toString();
