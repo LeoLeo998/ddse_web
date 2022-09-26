@@ -92,9 +92,7 @@ export default {
 }
 </script>
 <style lang="less">
-.el-main {
-  padding:0;
-}
+
 .el-aside {
   overflow: hidden;
 }

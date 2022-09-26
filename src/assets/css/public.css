@@ -31,6 +31,12 @@
   --medium-emphasis: '#01081ede';
   --dark38-: rgba(1, 8, 30, 0.38);
 }
+.el-main {
+  padding: 0 !important;
+}
+.el-aside {
+  overflow: hidden !important;
+}
 .vue-country-intl-popover-content .vue-country-list-wrap .vue-country-list .vue-country-item.selected {
   background-color: var(--color-green-);
 }
