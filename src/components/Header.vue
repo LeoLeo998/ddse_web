@@ -1,5 +1,5 @@
 <template>
-    <div v-if="!isMobile">
+    <div v-if="!getIsMobile">
         <header class="msb-header">
             <div class="header-left">
                 <img @click="$router.push('/')" src="/static/images/logo.png" alt="">
@@ -84,7 +84,15 @@
                 </div>
                 
                 <!-- <el-tree :data="menuList" :props="elTreeProps" @node-click="menuClick"></el-tree> -->
-                <el-tree :data="menuList" :props="elTreeProps" @node-click="menuClick"></el-tree>
+                <!-- <el-tree :data="menuList" :props="elTreeProps" @node-click="menuClick"></el-tree> -->
+                <ul class="menu-ul">
+                    <li v-for="item in menuList" @click="menuClick(item)">
+                        <span>{{item.label}}</span>
+                        <span>
+                            <i class="el-icon-arrow-down"></i>
+                        </span>
+                    </li>
+                </ul>
                 <!-- <div class="menu-box">
                     <ul>
                         <li class="menu-li">
@@ -112,27 +120,7 @@ export default {
             menuList:[{
                 label:'行情',
             },{
-                label:'交易'
-            },{
-                label:'语言',
-                children:[{
-                    label:'简体中文',
-                },{
-                    label:'English'
-                },{
-                    label:'한국어'
-                },{
-                    label:'日本語'
-                }]
-            },{
-                label:'汇率',
-                children:[{
-                    label:'USD',
-                },{
-                    label:'CNY'
-                },{
-                    label:'KRW'
-                }]
+                label:'交易中心'
             }],
             elTreeProps:{
                 children: 'children',
@@ -159,8 +147,15 @@ export default {
         ...mapActions([
             "LogOutFetch"
         ]),
-        menuClick (){
-
+        menuClick (data){
+            console.log(data)
+            if(data.label === '交易中心') {
+                this.$router.push('/exchange')
+            }
+            if(data.label === '行情') {
+                this.$router.push('/market')
+            }
+            this.showDrawer = false
         },
         handleClose (){
             this.showDrawer = false
@@ -326,59 +321,78 @@ export default {
 }
 @media (max-width:768px) {
     .msb-header {
-        height: 50PX;
-        padding:0 16PX;
+        height: 80px;
+        padding:0 16px;
         .header-left {
             img {
-                height:26PX;
+                height:26px;
             }
         }
         .header-right {
             i {
-                font-size: 20PX;
+                font-size: 20px;
 
             }
         }
     }
     /deep/.el-drawer__header {
-        padding:20PX 20PX 0;
+        padding:20px 20px 0;
     }
     /deep/.el-tree-node__content {
-        height: 40PX;
+        height: 40px;
     }
     /deep/.el-tree-node__label {
-        font-size: 14PX;
+        font-size: 14px;
     }
     .mobile-menu {
         display: block;
     }
     .drawer-box {
-        padding:0 20PX 20PX;
-        min-height: 100PX;
+        padding:0 20px 20px;
+        min-height: 100px;
         .login-box {
             button {
                 width: 100%;
-                height:35PX;
+                height:35px;
                 color: rgb(45, 189, 150);
                 span {
-                    font-size: 14PX;
+                    font-size: 14px;
                 }
                 &.register-btn {
                     background-color: var(--color-green-);
-                    margin-top:16PX;
-                    border-radius:4PX;
+                    margin-top:16px;
+                    border-radius:4px;
                     color: #fff;
                 }
             }
         }
+        .menu-ul {
+            list-style: none;
+            li {
+                display: flex;
+                justify-content: space-between;
+                
+                height:48px;
+                line-height: 48px;
+                //border-bottom:1px solid #eee;
+                span {
+                    font-size: 14PX;
+                    color:var(--font-body-);
+                    i {
+                        font-size: 14PX;
+                        color:var(--font-body-);
+                    }
+                }
+            }
+        }
         .hr {
-            margin:20PX 0;
+            margin:20px 0;
         }
         .menu-box {
             ul {
                 list-style: none;
                 .menu-li {
-                    height:40PX;
+                    height:40px;
                     display: flex;
                     justify-content: space-between;
                 }

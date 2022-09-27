@@ -189,7 +189,6 @@ export default {
   padding:15px;
   padding-bottom:0;
   height: 395px;
-  border-bottom:1px solid #e1e1e1;
   .account-info {
     font-size: 14px;
     margin-bottom:20px;
@@ -213,7 +212,7 @@ export default {
     display: flex;
     justify-content: space-between;
     span {
-      font-size: 14PX;
+      font-size: 14px;
       &.account-id {
         //border-bottom:1px dashed #eee;
       }
@@ -278,6 +277,11 @@ export default {
         }
       }
     }
+  }
+}
+@media (max-width:768px) {
+  .deal-history {
+    margin-top:10px;
   }
 }
 </style>

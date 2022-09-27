@@ -242,8 +242,6 @@ export default {
 <style lang="less" scoped>
 .create-order {
     width: 100%;
-    min-width: 300px;
-    border:1px solid rgb(70, 70, 70);
     border-left:none;
     border-right:none;
     background-color: #fff;
@@ -353,6 +351,12 @@ export default {
                 margin-right:10px;
             }
         }
+    }
+}
+@media (max-width:768px) {
+    .create-order {
+        height:550px;
+        margin-top:10px;
     }
 }
 </style>
