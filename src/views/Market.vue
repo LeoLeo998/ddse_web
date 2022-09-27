@@ -29,7 +29,11 @@
       </div>
     </div>
     <div class="market-product">
-      <div class="header">
+      <div class="search-ipt">
+        <i class="fa el-icon-search"></i>
+        <input type="text" placeholder="搜索币种" v-model="searchVal" />
+      </div>
+      <!-- <div class="header">
         <div class="content-box">
           <div class="item" v-for="(item, key) in topSockets" :key="key">
             <span class="title">{{ topTitle[key] }}</span>
@@ -40,7 +44,6 @@
               </div>
               <div class="item-right">
                 <span :class="item.change > 0 ? 'price-up2' : 'price-down2'">
-                  <!-- /// -->
                   {{ item.change > 0 ? '+' : '' }}{{ (item.change * 100).toFixed(2) }}%
                 </span>
               </div>
@@ -60,7 +63,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
       <div class="market-box">
         <!-- <div class="class-coin">
         <button :class="screenType == 1 && 'active'" @click="mainCoinClick(1)">BTC</button>
@@ -166,7 +169,6 @@
 </template>
 
 <script>
-import { re } from 'semver'
 import { mapState, mapActions } from 'vuex'
 export default {
   data() {
@@ -497,62 +499,14 @@ export default {
       }
     }
   }
-  .header {
-    .content-box {
-      margin: 20px auto 0;
-      display: flex;
-      .item {
-        flex: 1;
-        text-align: left;
-        padding: 15px 30px;
-        border-radius: 5px;
-        &:hover {
-          background-color: rgb(236, 236, 236);
-        }
-        .title {
-          font-size: 12px;
-          color: @fontcolor;
-        }
-        .market-info {
-          display: flex;
-          justify-content: space-between;
-          margin-top: 12px;
-          .item-left {
-            display: flex;
-            align-items: center;
-            img {
-              width: 20px;
-              margin-right: 5px;
-            }
-            span {
-              color: @fontcolor;
-              font-weight: 600;
-              &.market {
-                color: #000000;
-                // font-size: 12px;
-              }
-              &.price {
-                font-size: 20px;
-              }
-            }
-          }
-          .item-right {
-            span {
-              font-weight: 600;
-            }
-            i {
-              font-size: 22px;
-              color: @fontcolor;
-            }
-          }
-        }
-      }
-    }
-  }
+
   .market-product {
     background: #fff;
     border-radius: 5px;
     padding: 0 71px;
+    .search-ipt {
+      display: none;
+    }
   }
   .market-box {
     margin: 0 auto;
@@ -787,8 +741,8 @@ export default {
       width: 100%;
       /deep/ .el-tabs {
         width: 100%;
-        .el-tabs__nav-prev{
-          left: -8px;
+        .el-tabs__nav-prev {
+          left: -6px;
           top: 13px;
         }
         .el-tabs__nav-next {
@@ -801,7 +755,35 @@ export default {
       }
     }
     .market-product {
-      padding: 0 0;
+      padding: 10px 0 0 0;
+      .search-ipt {
+        display: block;
+        position: relative;
+        padding: 0 20px;
+        input {
+          width: 100%;
+          height: 53px;
+          outline: none;
+          padding: 17px 35px;
+          border-radius: 5px;
+          border: solid 2px #ebeff4;
+          background-color: #fff;
+          color: #9ca5b3;
+          font-size: 18px;
+          &::placeholder {
+            color: #9ca5b3;
+            font-size: 18px;
+          }
+        }
+        i {
+          position: absolute;
+          color: #9ca5b3;
+          left: 30px;
+          top: 18px;
+          color: @fontcolor;
+          font-size: 18px;
+        }
+      }
     }
     .list-box {
       td {

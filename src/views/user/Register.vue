@@ -2,7 +2,7 @@
   <div class="msb-login">
     <div class="login-bg">
       <div class="home" @click="$router.push('/')">
-        <img src="/static/images/logo.png" alt="">
+        <img src="/static/images/logo.png" alt="" />
       </div>
       <img src="/static/images/login-banner.png" alt="" />
     </div>
@@ -41,14 +41,14 @@
                                 </el-option>
                             </el-select> -->
             </el-input>
-            <el-input v-else label="email" size="large" v-model="user.account" clearable @keyup.enter.native="submitClick('register')"/>
+            <el-input v-else label="email" size="large" v-model="user.account" clearable @keyup.enter.native="submitClick('register')" />
           </div>
         </el-form-item>
 
         <el-form-item prop="password">
           <div class="row">
             <label for="">设置登录密码</label>
-            <el-input size="large" type="password" show-password v-model="user.password" clearable @keyup.enter.native="submitClick('register')"/>
+            <el-input size="large" type="password" show-password v-model="user.password" clearable @keyup.enter.native="submitClick('register')" />
           </div>
         </el-form-item>
 
@@ -65,7 +65,7 @@
 
         <div class="row">
           <label for="">邀请码（选填）</label>
-          <el-input size="large" type="text" v-model="user.invCode" clearable @keyup.enter.native="submitClick('register')"/>
+          <el-input size="large" type="text" v-model="user.invCode" clearable @keyup.enter.native="submitClick('register')" />
         </div>
         <!-- <div class="row">
                     
@@ -281,7 +281,7 @@ export default {
       top: 20px;
       cursor: pointer;
       img {
-        height:24px;
+        height: 24px;
       }
     }
     img {
@@ -401,6 +401,33 @@ export default {
             color: rgba(0, 20, 42, 0.6);
           }
         }
+      }
+    }
+  }
+}
+@media screen and (max-width: 768px) {
+  .msb-login {
+    .login-bg {
+      display: none;
+    }
+    .go-login {
+      display: none;
+    }
+    .form-box {
+      max-width: none;
+      width: 100%;
+      flex: auto;
+      padding: 0 30px 0 30px;
+      .el-form {
+        width: 100%;
+      }
+      .el-input {
+        input {
+          height: 65px !important;
+        }
+      }
+      .submit-btn {
+        height: 65px !important;
       }
     }
   }

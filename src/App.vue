@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Header />
+    <Header></Header>
     <router-view/>
   </div>
 </template>
@@ -73,6 +73,7 @@ export default {
 <style lang="less">
 #app {
   background-color: #f7f8fa;
+  padding-top: 80px;
 }
 </style>
 

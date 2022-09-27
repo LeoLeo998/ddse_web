@@ -2,7 +2,7 @@
   <div class="msb-login">
     <div class="login-bg">
       <div class="home" @click="$router.push('/')">
-        <img src="/static/images/logo.png" alt="">
+        <img src="/static/images/logo.png" alt="" />
       </div>
       <img src="/static/images/login-banner.png" alt="" />
     </div>
@@ -44,7 +44,7 @@
         </div>
         <div class="row">
           <div class="forget">
-            <el-button type="text" @click="$router.push('/FindPwd')">忘记密码?</el-button>
+            <el-button type="text" @click="$router.push('/FindPwd')">忘记密码</el-button>
           </div>
         </div>
       </el-form>
@@ -218,7 +218,7 @@ export default {
       top: 20px;
       cursor: pointer;
       img {
-        height:24px;
+        height: 24px;
       }
     }
     img {
@@ -289,10 +289,11 @@ export default {
       }
       .row {
         width: 100%;
+        margin: 10px 0;
         label {
           font-size: 12px;
           color: rgba(0, 20, 42, 0.6);
-          margin-bottom: 6px;
+          margin-bottom: 15px;
           display: inline-block;
         }
         .el-select .el-input {
@@ -309,15 +310,45 @@ export default {
           width: 100%;
           height: 50px;
           background: rgb(45, 189, 150);
+          border: none;
           //margin-top: 30px;
         }
         .forget {
           text-align: right;
           .el-button {
-            color: rgba(0, 20, 42, 0.6);
-            font-size: 12px;
+            span {
+              color: rgba(0, 20, 42, 0.6);
+              font-size: 14px;
+            }
           }
         }
+      }
+    }
+  }
+}
+@media screen and (max-width: 768px) {
+  .msb-login {
+    .login-bg {
+      display: none;
+    }
+    .go-register {
+      display: none;
+    }
+    .form-box {
+      max-width: none;
+      width: 100%;
+      flex: auto;
+      padding: 0 30px 0 30px;
+      .el-form {
+        width: 100%;
+      }
+      .el-input {
+        input {
+          height: 65px !important;
+        }
+      }
+      .submit-btn {
+        height: 65px !important;
       }
     }
   }
