@@ -774,10 +774,67 @@ export default {
       }
     }
   }
-
-  @media screen and (max-width: 768px) {
+}
+@media screen and (max-width: 768px) {
+  .market-page {
+    padding: 0 0;
+    min-height: 100%;
     .hot {
       display: none;
+    }
+    .product-tab {
+      margin: 0 0;
+      width: 100%;
+      /deep/ .el-tabs {
+        width: 100%;
+        .el-tabs__nav-prev{
+          left: -8px;
+          top: 13px;
+        }
+        .el-tabs__nav-next {
+          right: -8px;
+          top: 13px;
+        }
+      }
+      .search-ipt {
+        display: none;
+      }
+    }
+    .market-product {
+      padding: 0 0;
+    }
+    .list-box {
+      td {
+        padding: 10px 0;
+      }
+      th:nth-child(1),
+      td:nth-child(1) {
+        width: 10% !important;
+      }
+      th:nth-child(2),
+      td:nth-child(2) {
+        text-align: center !important;
+      }
+      th:nth-child(3),
+      td:nth-child(3) {
+        text-align: center !important;
+      }
+      th:nth-child(4),
+      td:nth-child(4) {
+        display: none;
+      }
+      th:nth-child(5),
+      td:nth-child(5) {
+        display: none;
+      }
+      th:nth-child(6),
+      td:nth-child(6) {
+        display: none;
+      }
+      th:nth-child(7),
+      td:nth-child(7) {
+        display: none;
+      }
     }
   }
 }

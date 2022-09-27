@@ -6,6 +6,7 @@
 </template>
 
 <script>
+import '@/config/rem.js'
 import Header from '@/components/Header'
 import Socket from './config/socket'
 import config from './config/index'
