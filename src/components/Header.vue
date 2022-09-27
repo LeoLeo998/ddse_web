@@ -150,7 +150,7 @@ export default {
 <style lang="less" scoped>
 .msb-header {
   position: fixed;
-  z-index: 99999999999;
+  z-index: 1000;
   width: 100%;
   height: 80px;
   top: 0;
@@ -234,6 +234,63 @@ export default {
           color: var(--color-green-);
         }
       }
+    }
+}
+.user-name {
+    margin-right:20px;
+    display: flex;
+    align-items: center;
+}
+.item1 {
+    margin-right:15px;
+    font-size: 16px;
+    text-decoration: none;
+    margin:0 10px;
+    color:var(--font-color2-);
+    font-weight: 400;
+    line-height: 0;
+    cursor: pointer;
+    position: relative;
+    z-index: 100;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    z-index:101;
+    span {
+        font-size: 16px;
+    }
+    &:hover {
+        color:var(--color-green-);
+        .child-menu {
+            display: block;
+        }
+    }
+    .child-menu {
+        position: absolute;
+        display: none;
+        min-width: 100px;
+        // padding:20px 0;
+        background-color: #fff;
+        box-shadow:rgb(221, 228, 241) 0 0 10px 0;
+        top:35px;
+        left:-18px;
+        text-align:left;
+        font-size: 16px;
+        .a-item {
+            display: block;
+            padding: 18px;
+            font-size: 16px;
+            text-decoration: none;
+            color:var(--font-color3-);
+            &:hover {
+                background-color:var(--hover-color-);
+                color:var(--color-green-);
+            }
+        }
+    }
+    i {
+        transform: translateY(-2px);
+        margin-left:5px;
     }
 }
 @media (max-width:768px) {
