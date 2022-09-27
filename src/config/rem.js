@@ -31,13 +31,3 @@
   window.addEventListener('resize', autoRootFontSize)
   autoRootFontSize()
 })()
-
-// const baseSize = 16
-// function serRem() {
-//   const scale = document.documentElement.clientWidth / 1920
-//   document.documentElement.style.fontSize = 16 * Math.min(scale, 2) + 'px'
-// }
-// serRem()
-// window.onresize = function() {
-//   serRem()
-// }
