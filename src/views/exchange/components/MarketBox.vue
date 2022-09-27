@@ -1,17 +1,28 @@
 <template>
   <div class="ex-market-box">
-    <div class="search-box">
+    <!-- <div class="search-box">
       <i class="fa el-icon-search"></i>
       <input type="text" v-model="searchVal"/>
-    </div>
+    </div> -->
     <div class="coin-list">
-      <i class="fa el-icon-star-off" @click="coinIndex = -1" :class="coinIndex == -1 && 'active'"></i>
+
+      <el-tabs v-model="coinIndex" @tab-click="handleClick">
+        <el-tab-pane label="star" name="-1">
+          <span slot="label"><i class="fa el-icon-star-on"></i></span>
+        </el-tab-pane>
+        <el-tab-pane label="热门" name="100"></el-tab-pane>
+        <el-tab-pane v-for="(item, index) in group" :key="index" :label="item.title" :name="String(item.id)">
+          <!-- <span slot="label" v-if="item.id == -1"><i class="fa el-icon-star-on"></i><span style="margin-left:10px">{{ item.title }}</span></span> -->
+        </el-tab-pane>
+      </el-tabs>
+
+      <!-- <i class="fa el-icon-star-off" @click="coinIndex = -1" :class="coinIndex == -1 && 'active'"></i>
       <span :class="coinIndex == 100 && 'active'" @click="coinIndex = 100">
         热门
       </span>
       <span v-for="(item, key) in group" :key="key" :class="coinIndex == item.id && 'active'" @click="setMainCoin(item)">
         {{ item.title }}
-      </span>
+      </span> -->
     </div>
     <div class="tab-box">
       <ul>
@@ -76,12 +87,11 @@ import { mapGetters, mapMutations, mapActions } from 'vuex'
 export default {
   data() {
     return {
-      coinIndex: 100,
+      coinIndex: "100",
       selectMarket: '',
       group: [],
       dataList: [],
       collectionList: [],
-      searchVal:'',
       sort:{
         name:0,
         sellP:0,
@@ -90,19 +100,25 @@ export default {
       }
     }
   },
+  props:{
+    searchVal:{
+      type:String,
+      default:() => ''
+    }
+  },
   computed: {
     ...mapGetters(['getQUOSocket', 'getSelectMarket','getQuotesWsData','getProductData']),
     marketList() {
       let data = Object.values(this.getProductData)
-      if (this.coinIndex === -1) {
+      if (this.coinIndex == "-1") {
         data = this.collectionList 
-      }else if (this.coinIndex === 100) {
+      }else if (this.coinIndex == "100") {
         data = data.filter(v => {
           return v.hot == 1
         })
       } else {
         data = data.filter(v => {
-          return v.group === this.coinIndex
+          return v.group == this.coinIndex
         })
       }
       let obj = {}
@@ -164,6 +180,9 @@ export default {
   methods: {
     ...mapMutations(['setSelectMarket', 'setMarketData', 'setCurrentSymbolInfo','setProductData']),
     ...mapActions(['productListFetch', 'productGroupListFetch', 'marketListFetch', 'productUserListFetch', 'insertProductUserFetch', 'deleteProductUserFetch']),
+    handleClick (tab, event) {
+      // console.log(tab)
+    },
     isStar(symbol) {
       return this.collectionList.find(v => {
         return v.symbol == symbol
@@ -258,13 +277,12 @@ export default {
 </script>
 <style lang="less" scoped>
 @color1: rgb(119, 119, 119);
-@color2: rgb(132, 142, 156);
+@color2: #676b77;
 @color3: rgb(234, 236, 239);
 @bg1: rgb(51, 51, 51);
 .ex-market-box {
   background-color: #fff;
   min-width: 396px;
-  border: 1px solid #e1e1e1;
   height: 484px;
   .search-box {
     position: relative;
@@ -277,7 +295,7 @@ export default {
       left: 8px;
       top: 7px;
       color: var(--font-color1-);
-      font-size: 12PX;
+      font-size: 12px;
     }
     input {
       width: 100%;
@@ -291,10 +309,7 @@ export default {
     }
   }
   .coin-list {
-    display: flex;
-    align-items: center;
-    height: 26px;
-    margin: 10px;
+    width: 100%;
     p,
     div,
     span {
@@ -308,8 +323,7 @@ export default {
     span {
       color: @color2;
       cursor: pointer;
-      font-size: 12px;
-      margin-right: 10px;
+      font-size: 14px;
     }
     span {
       position: relative;
@@ -350,6 +364,17 @@ export default {
         }
       }
     }
+    /deep/.el-tabs__item {
+      padding:0 11px;
+      font-size: 14px;
+      color: #676b77;
+      &.is-active {
+        color: #29be8f;
+      }
+    }
+    /deep/.el-tabs__active-bar {
+      background-color: #29be8f;
+    }
   }
   .tab-box {
     width: 100%;
@@ -374,7 +399,7 @@ export default {
         }
       }
       .market-list {
-        height: 358px;
+        height: 398px;
         overflow: auto;
         &::-webkit-scrollbar {
           width: 4px;
@@ -398,11 +423,11 @@ export default {
           }
           .left-coin {
             color: var(--font-body-);
-            font-size: 12px;
+            font-size: 14px;
           }
           .left-description {
-            color: @color2;
-            font-size: 12px;
+            color: #9ca0aa;
+            font-size: 10px;
             //margin-top:10px;
           }
           .right-coin {
@@ -445,7 +470,7 @@ export default {
       height: 100%;
       line-height: 50px;
       span {
-        font-size: 12PX;
+        font-size: 13px;
       }
       .sort-box {
         cursor: pointer;
@@ -454,13 +479,13 @@ export default {
           display: inline-block;
           
           height: 100%;
-          font-size: 12PX;
+          font-size: 12px;
           &.el-icon-caret-top {
             top:3PX;
           }
           &.el-icon-caret-bottom {
             margin-left:-11.9PX;
-            margin-top:5px;
+            margin-top:5PX;
           }
           &.select {
             color:var(--color-green-);
@@ -482,7 +507,7 @@ export default {
       }
       .left-coin {
         color: @color3;
-        font-size: 12px;
+        font-size: 14px;
       }
       .left-description {
         color: @color2;
@@ -521,6 +546,26 @@ export default {
         width: 20%;
       }
     }
+  }
+}
+/deep/.el-tabs__nav {
+  padding:10px 0;
+}
+/deep/.el-tabs__nav-prev{
+  line-height:65px;
+}
+/deep/.el-tabs__nav-next {
+  line-height:65px;
+}
+@media (max-width: 768px) {
+  .ex-market-box .tab-box ul li {
+    height: 60px;
+  }
+  /deep/.el-tabs__nav-prev{
+    line-height:68px;
+  }
+  /deep/.el-tabs__nav-next {
+    line-height:68px;
   }
 }
 </style>

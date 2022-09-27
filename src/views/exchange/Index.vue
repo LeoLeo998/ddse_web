@@ -1,6 +1,6 @@
 <template>
-  <div class="ex-index-page default-bg" :class="getIsLight ? 'light-css' : 'night-css'">
-    <el-container>
+  <div class="ex-index-page default-bg">
+    <!-- <el-container>
       <el-aside width="400px;overflow: hidden;">
         <market-box />
       </el-aside>
@@ -10,17 +10,6 @@
       <el-aside width="318px">
         <create-order />
       </el-aside>
-      <!-- <el-row>
-        <el-col :span="5" >
-          <market-box />
-        </el-col>
-        <el-col :span="15">
-          <trading-view />
-        </el-col>
-        <el-col :span="4">
-          <create-order />
-        </el-col>
-      </el-row> -->
     </el-container>
     
     <el-container>
@@ -31,15 +20,60 @@
       <el-aside width="318px">
         <deal-history />
       </el-aside>
-    </el-container>
-    <!-- <el-row>
-      <el-col :span="20">
+    </el-container> -->
+
+
+    <!-- <el-container>
+      <el-main>
+        <el-container>
+          <el-aside width="535px">
+            111
+          </el-aside>
+          <el-main>
+            <State />
+          </el-main>
+        </el-container>
+        <el-container style="margin-top:8px">
+          <el-aside width="535px">
+            <market-box />
+          </el-aside>
+          <el-main>
+            <trading-view />
+          </el-main>
+        </el-container>
+        <el-container style="margin-top:8px">
+          <el-main>
+            <order-history />
+          </el-main>
+        </el-container>
+      </el-main>
+      
+      <el-aside width="288px">
+        <create-order />
+        <DealHistory/>
+      </el-aside>
+      
+    </el-container> -->
+
+
+    <div class="main-left">
+      <State @search-update="searchUpdate"/>
+      <div class="row1">
+        <div class="market-box">
+          <market-box :searchVal="searchVal"/>
+        </div>
+        <trading-view />
+      </div>
+      <div class="row2">
+        <create-order v-if="getIsMobile"/>
         <order-history />
-      </el-col>
-      <el-col :span="4">
-        <deal-history />
-      </el-col>
-    </el-row> -->
+      </div>
+    </div>
+    <div class="main-right">
+      <create-order v-if="!getIsMobile" />
+      <DealHistory/>
+    </div>
+
   </div>
 </template>
 <script>
@@ -52,6 +86,7 @@ import OrderBook from './components/OrderBook.vue'
 import MarketBox from './components/MarketBox.vue'
 import CreateOrder from './components/CreateOrder.vue'
 import DealHistory from './components/DealHistory.vue'
+import State from './components/State.vue'
 import Socket from '@/config/socket'
 import config from '@/config/index'
 import { getCookie } from '@/common/cookie'
@@ -64,11 +99,13 @@ export default {
     OrderBook,
     MarketBox,
     CreateOrder,
-    DealHistory
+    DealHistory,
+    State,
   },
   data() {
     return {
-      coolingStatusVisible: true
+      coolingStatusVisible: true,
+      searchVal:''
     }
   },
   created() {
@@ -83,14 +120,30 @@ export default {
     
   },
   computed: {
-    ...mapGetters(['getIsLight', 'getSelectMarket','getIsLogin'])
+    ...mapGetters(['getIsLight', 'getSelectMarket','getIsLogin','getIsMobile'])
   },
   methods: {
-    ...mapMutations(['setMainCoinList', 'setSelectMarket','setTRANSocket'])
+    ...mapMutations(['setMainCoinList', 'setSelectMarket','setTRANSocket']),
+    searchUpdate (v) {
+      this.searchVal = v
+    }
   }
 }
 </script>
 <style lang="less">
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 .el-aside {
   overflow: hidden;
@@ -121,12 +174,37 @@ export default {
   background-color: #f9fafc;
 }
 
-@exBg: rgb(22, 26, 30);
 .ex-index-page {
   color: #fff;
-  // &.night-css {
-  //     // background-color: red;
-  // }
+  padding:8px 20px;
+  display: flex;
+  padding:8px 20px;
+  .main-left {
+    width: calc(~"100% - 288px");
+    margin-right:8px;
+    .row1 {
+      display: flex;
+      margin-top:8px;
+      border-radius: 8px;
+      overflow: hidden;
+      .market-box {
+        min-width: 535px;
+      }
+    }
+    .row2 {
+      margin-top:8px;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+  }
+  .main-right {
+    width: 288px;
+  }
+
+
+  .el-header {
+    padding:0;
+  }
   &.light-css {
     @border-color: #e1e1e1;
     & .ex-left,
@@ -202,6 +280,24 @@ export default {
     margin: 0 auto;
     .top {
       display: flex;
+    }
+  }
+}
+
+@media (max-width:768px) {
+  .ex-index-page {
+    flex-wrap: wrap;
+    .main-left,.main-right {
+      width: 100%;
+    }
+    .row1 {
+      flex-wrap: wrap;
+      .market-box,.ex-market-box {
+        width: 100%;
+      }
+      .market-box {
+        margin-bottom:10px;
+      }
     }
   }
 }

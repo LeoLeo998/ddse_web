@@ -1,3 +1,4 @@
+import store from '@/store'
 ;(function() {
   let orientation = window.matchMedia('(orientation: portrait)')
   let width = document.documentElement.getBoundingClientRect().width //获取宽度
@@ -23,6 +24,11 @@
 
   /* 计算rem */
   function autoRootFontSize() {
+    if(document.body.clientWidth <= 768) {
+      store.commit('setIsMobile', true)
+    }else {
+      store.commit('setIsMobile', false)
+    }
     //(当前屏幕宽度，最小宽度为1200)/1920*16px
     let setSize = (Math.max(document.documentElement.getBoundingClientRect().width, 1200) / 1920) * 16
     //字体默认最大值为16px

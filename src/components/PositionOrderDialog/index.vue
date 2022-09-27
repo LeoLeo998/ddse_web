@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="修改持仓订单" :visible.sync="dialogVisible" width="480px" style="border-radius:5px;">
+  <el-dialog title="修改持仓订单" :visible.sync="dialogVisible" class="dialog-box" style="border-radius:5px;">
     <div class="cc-dialog">
       <el-form :model="form" :rules="rule">
         <div class="info-row">
@@ -140,6 +140,9 @@ export default {
 }
 </script>
 <style lang="less" scoped>
+/deep/.el-dialog {
+  width: 480px;
+}
 .cc-dialog {
   .info-row {
     display: flex;
@@ -175,5 +178,10 @@ export default {
 }
 .el-form-item {
   margin-bottom:10px;
+}
+@media (max-width:768px) {
+  /deep/.el-dialog {
+    width: 90vw;
+  }
 }
 </style>

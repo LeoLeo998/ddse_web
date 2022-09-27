@@ -13,11 +13,9 @@
         </div>
       </div>
       <div class="right">
-        <!-- <input type="checkbox" name="" id="" />
-        <span>隐藏其他交易对</span> -->
       </div>
     </div>
-    <div class="tab-box">
+    <div class="tab-box" v-if="!getIsMobile">
       <div class="tab-head">
         <table>
           <tr>
@@ -59,6 +57,11 @@
         </div>
       </div>
     </div>
+    <div class="tab-box" v-else>
+      <div class="mobile-table">
+        <MobileOrder :type="activeName" :list="list" @set-click="orderClick"/>
+      </div>
+    </div>
     <PositionOrderDialog :visible.sync="PositionOrderDialogVisible" :oderInfo="oderInfo" @positionListFetch="getPositionList" />
     <EntrustOrderDialog :visible.sync="EntrustOrderDialogVisible" :oderInfo="oderInfo" @entrustListFetch="getEntrustList" />
   </div>
@@ -67,6 +70,7 @@
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import PositionOrderDialog from '@/components/PositionOrderDialog'
 import EntrustOrderDialog from '@/components/EntrustOrderDialog'
+import MobileOrder from './MobileOrder.vue'
 import bus from '@/util/bus'
 export default {
   data() {
@@ -83,7 +87,8 @@ export default {
   },
   components: {
     PositionOrderDialog,
-    EntrustOrderDialog
+    EntrustOrderDialog,
+    MobileOrder
   },
   watch: {
     getIsLogin () {
@@ -192,6 +197,7 @@ export default {
       return '--'
     },
     orderClick(data) {
+      console.log(data)
       this.oderInfo = data
       if (this.activeName === 1) {
         this.PositionOrderDialogVisible = true
@@ -212,7 +218,6 @@ export default {
 </script>
 <style lang="less" scoped>
 .order-history {
-  border: 1px solid rgb(70, 70, 70);
   border-top: none;
   background-color: #fff;
   
@@ -228,9 +233,7 @@ export default {
     width: 100%;
     display: flex;
     justify-content: space-between;
-    padding:0 8px;
     height:40px;
-    
     .left {
       display: flex;
       .item {
@@ -238,9 +241,9 @@ export default {
         cursor: pointer;
         height: 100%;
         padding:10px 20px;
-        font-size: 14PX;
+        font-size: 14px;
         span {
-          font-size: 14PX;
+          font-size: 14px;
         }
         &.active {
           background: #fff;
@@ -262,7 +265,7 @@ export default {
         width: 11.111%;
         text-align: left;
         font-weight: 400;
-        font-size: 14PX;
+        font-size: 14px;
         &:first-child {
           padding-left: 16px;
         }
@@ -317,6 +320,27 @@ export default {
         &:first-child {
           padding-left: 16px;
         }
+      }
+    }
+  }
+}
+
+@media (max-width:768px) {
+  .order-history {
+    background-color: #fff;
+    height:54vh;
+    .menu {
+      height:60px;
+      .item {
+        padding:20px;
+      }
+    }
+    .tab-box {
+      background: transparent;
+      .mobile-table {
+        background: #fff;
+        height:50vh;
+        overflow: auto;
       }
     }
   }

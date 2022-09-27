@@ -173,25 +173,25 @@ export default {
 </script>
 <style lang="less" scoped>
 .mobile-home-page {
-    padding:16PX;
+    padding:16px;
     background-color: #fff;
     p,span,div,a,th,td{
         font-family: 'URWDIN' !important;
     }
     .go-trans {
-        padding: 0 0 8PX;
+        padding: 0 0 8px;
         font-weight: 500;
-        font-size: 24PX;
-        line-height: 32PX;
+        font-size: 24px;
+        line-height: 32px;
     }
     .go-trans2 {
-        font-size: 16PX;
+        font-size: 16px;
         font-weight: 200;
-        line-height: 20PX;
-        margin-bottom: 16PX;
+        line-height: 20px;
+        margin-bottom: 16px;
     }
     .trans-btn {
-        border-radius: 4PX;
+        border-radius: 4px;
         outline: none;
         border: none;
         cursor: pointer;
@@ -199,14 +199,14 @@ export default {
         opacity: 1;
         pointer-events: auto;
         font-family: URWDIN, -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei";
-        margin-bottom: 20PX;
-        height: 48PX;
-        font-size: 18PX;
-        padding: 0PX 18PX;
+        margin-bottom: 20px;
+        height: 48px;
+        font-size: 18px;
+        padding: 0px 18px;
         background: rgb(45, 189, 150);
         color: rgb(255, 255, 255);
         text-align: center;
-        line-height: 48PX;
+        line-height: 48px;
     }
     .hot-market {
         display: flex;
@@ -218,48 +218,48 @@ export default {
                 text-decoration: none;
             }
             .symbol{
-                font-size: 12PX;
-                line-height: 16PX;
-                margin-right: 4PX;
+                font-size: 12px;
+                line-height: 16px;
+                margin-right: 4px;
                 color: rgba(0, 20, 42, 0.6);
             }
             .hq{
-                font-size: 12PX;
+                font-size: 12px;
                 color: rgb(237, 102, 102);
             }
             .price span{
                 display: block;
                 color:#00142A;
-                font-size: 16PX;
-                line-height: 20PX;
+                font-size: 16px;
+                line-height: 20px;
             }
             .d-price span{
-                font-size: 12PX;
-                line-height: 16PX;
+                font-size: 12px;
+                line-height: 16px;
                 color: rgba(0, 20, 42, 0.6);
             }
             &:nth-child(3),&:nth-child(4) {
-                margin-top:20PX;
+                margin-top:20px;
             }
         }
     }
     .hot-market2 {
         .title {
-            height: 40PX;
-            line-height: 40PX;
-            border-bottom:1PX solid #eee;
-            margin-top:30PX;
+            height: 40px;
+            line-height: 40px;
+            border-bottom:1px solid #eee;
+            margin-top:30px;
         }
         table {
             width: 100%;
             tr {
                 
                 th {
-                    padding: 14PX 16PX;
+                    padding: 14px 16px;
                     background: rgb(255, 255, 255);
                     color: rgba(0, 20, 42, 0.6);
                     font-weight: 400;
-                    font-size: 14PX;
+                    font-size: 14px;
                     &:first-child {
                         text-align: left;
                         padding-left:0;
@@ -270,8 +270,8 @@ export default {
                     }
                 }
                 td {
-                    height: 48PX;
-                    padding:10PX 0;
+                    height: 48px;
+                    padding:10px 0;
                     &:first-child {
                         text-align: left;
                     }
@@ -282,46 +282,46 @@ export default {
                         display: flex;
                         align-items: center;
                         img {
-                            width: 24PX;
-                            margin-right:8PX;
+                            width: 24px;
+                            margin-right:8px;
                         }
                         .symbol {
                             color:#00142A;
-                            font-size: 14PX;
+                            font-size: 14px;
                         }
                         .full-symbol {
                             color:#00142A99;
-                            font-size: 12PX;
+                            font-size: 12px;
                         }
                        
                     }
                     .fd {
                         color: #f5455b;
-                        font-size: 14PX;
+                        font-size: 14px;
                     }
                     .d-price {
                         color:#00142A99;
-                        font-size: 12PX;
+                        font-size: 12px;
                     }
                 }
             }
         }
     }
     .yd {
-        margin:60PX 0;
+        margin:60px 0;
         img {
             width: 100%;
         }
         .big-txt {
             color: rgb(9, 17, 51);
             font-weight: 500;
-            font-size: 24PX;
-            margin-top:20PX;
+            font-size: 24px;
+            margin-top:20px;
         }
         .small-txt {
             color:#00142A99;
-            font-size: 14PX;
-            margin-top:12PX;
+            font-size: 14px;
+            margin-top:12px;
         }
     }
 }

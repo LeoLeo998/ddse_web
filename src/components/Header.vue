@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!isMobile">
+  <div v-if="!getIsMobile">
     <header class="msb-header">
       <div class="header-left">
         <img @click="$router.push('/')" src="/static/images/logo.png" alt="" />
@@ -77,20 +77,15 @@
           <el-button class="register-btn" type="success" @click="$router.push('/register')">注册</el-button>
           <el-divider class="hr"></el-divider>
         </div>
-
-        <!-- <el-tree :data="menuList" :props="elTreeProps" @node-click="menuClick"></el-tree> -->
-        <el-tree :data="menuList" :props="elTreeProps" @node-click="menuClick"></el-tree>
-        <!-- <div class="menu-box">
-                    <ul>
-                        <li class="menu-li">
-                            <span>行情</span>
-                        </li>
-                        <li class="menu-li">
-                            <span>交易中心</span>
-                        </li>
-                        
-                    </ul>
-                </div> -->
+        <ul class="menu-ul">
+            <li v-for="item in menuList" @click="menuClick(item)">
+                <span>{{item.label}}</span>
+                <span>
+                    <i class="el-icon-arrow-down"></i>
+                </span>
+            </li>
+        </ul>
+        
       </div>
     </el-drawer>
   </div>
@@ -100,55 +95,21 @@
 import { mapGetters, mapMutations, mapActions } from 'vuex'
 import { delCookie } from '../common/cookie'
 export default {
-  data() {
-    return {
-      isMobile: false,
-      showDrawer: false,
-      menuList: [
-        {
-          label: '行情'
-        },
-        {
-          label: '交易'
-        },
-        {
-          label: '语言',
-          children: [
-            {
-              label: '简体中文'
-            },
-            {
-              label: 'English'
-            },
-            {
-              label: '한국어'
-            },
-            {
-              label: '日本語'
+    data () {
+        return {
+            isMobile:false,
+            showDrawer:false,
+            menuList:[{
+                label:'行情',
+            },{
+                label:'交易中心'
+            }],
+            elTreeProps:{
+                children: 'children',
+                label: 'label'
             }
-          ]
-        },
-        {
-          label: '汇率',
-          children: [
-            {
-              label: 'USD'
-            },
-            {
-              label: 'CNY'
-            },
-            {
-              label: 'KRW'
-            }
-          ]
         }
-      ],
-      elTreeProps: {
-        children: 'children',
-        label: 'label'
-      }
-    }
-  },
+    },
   computed: {
     ...mapGetters(['getIsLight', 'getIsLogin'])
   },
@@ -160,7 +121,6 @@ export default {
   methods: {
     ...mapMutations(['setIsLight', 'setIsLogin']),
     ...mapActions(['LogOutFetch']),
-    menuClick() {},
     handleClose() {
       this.showDrawer = false
     },
@@ -173,7 +133,16 @@ export default {
         this.setIsLogin(false)
         delCookie('userToken')
       }
-    }
+    },
+    menuClick (data){
+        if(data.label === '交易中心') {
+            this.$router.push('/exchange')
+        }
+        if(data.label === '行情') {
+            this.$router.push('/market')
+        }
+        this.showDrawer = false
+    },
   }
 }
 </script>
@@ -266,124 +235,87 @@ export default {
         }
       }
     }
-  }
-  .user-name {
-    margin-right: 20px;
-    display: flex;
-    align-items: center;
-  }
-  .item1 {
-    margin-right: 15px;
-    font-size: 16px;
-    text-decoration: none;
-    margin: 0 10px;
-    color: var(--font-color2-);
-    font-weight: 400;
-    line-height: 0;
-    cursor: pointer;
-    position: relative;
-    z-index: 100;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    z-index: 101;
-    span {
-      font-size: 16px;
-    }
-    &:hover {
-      color: var(--color-green-);
-      .child-menu {
-        display: block;
-      }
-    }
-    .child-menu {
-      position: absolute;
-      display: none;
-      min-width: 100px;
-      // padding:20px 0;
-      background-color: #fff;
-      box-shadow: rgb(221, 228, 241) 0 0 10px 0;
-      top: 35px;
-      left: -18px;
-      text-align: left;
-      font-size: 16px;
-      .a-item {
-        display: block;
-        padding: 18px;
-        font-size: 16px;
-        text-decoration: none;
-        color: var(--font-color3-);
-        &:hover {
-          background-color: var(--hover-color-);
-          color: var(--color-green-);
+}
+@media (max-width:768px) {
+    .msb-header {
+        height: 80px;
+        padding:0 16px;
+        .header-left {
+            img {
+                height:26px;
+            }
         }
-      }
+        .header-right {
+            i {
+                font-size: 20px;
+
+            }
+        }
+        
     }
-    i {
-      transform: translateY(-2px);
-      margin-left: 5px;
+    
+    /deep/.el-drawer__header {
+        padding:20px 20px 0;
+    }
+    /deep/.el-tree-node__content {
+        height: 40px;
+    }
+    /deep/.el-tree-node__label {
+        font-size: 14px;
     }
   }
 }
-@media (max-width: 768px) {
-  .msb-header {
-    height: 50px;
-    padding: 0 16px;
-    .header-left {
-      img {
-        height: 26px;
-      }
-    }
-    .header-right {
-      i {
-        font-size: 20px;
-      }
-    }
-  }
-  /deep/.el-drawer__header {
-    padding: 20px 20px 0;
-  }
-  /deep/.el-tree-node__content {
-    height: 40px;
-  }
-  /deep/.el-tree-node__label {
-    font-size: 14px;
-  }
-  .mobile-menu {
-    display: block;
-  }
-  .drawer-box {
-    padding: 0 20px 20px;
+.drawer-box {
+    padding:0 20px 20px;
     min-height: 100px;
     .login-box {
-      button {
-        width: 100%;
-        height: 35px;
-        color: rgb(45, 189, 150);
-        span {
-          font-size: 14px;
+        button {
+            width: 100%;
+            height:50px;
+            color: rgb(45, 189, 150);
+            span {
+                font-size: 14px;
+            }
+            &.register-btn {
+                background-color: var(--color-green-);
+                margin-top:16px;
+                border-radius:4px;
+                color: #fff;
+            }
         }
-        &.register-btn {
-          background-color: var(--color-green-);
-          margin-top: 16px;
-          border-radius: 4px;
-          color: #fff;
+    }
+    .menu-ul {
+        list-style: none;
+        li {
+            display: flex;
+            justify-content: space-between;
+            
+            height:48px;
+            line-height: 48px;
+            //border-bottom:1px solid #eee;
+            span {
+                font-size: 14PX;
+                color:var(--font-body-);
+                i {
+                    font-size: 14PX;
+                    color:var(--font-body-);
+                }
+            }
         }
-      }
     }
     .hr {
-      margin: 20px 0;
+        margin:20px 0;
     }
     .menu-box {
-      ul {
-        list-style: none;
-        .menu-li {
-          height: 40px;
-          display: flex;
-          justify-content: space-between;
+        ul {
+            list-style: none;
+            .menu-li {
+                height:40px;
+                display: flex;
+                justify-content: space-between;
+            }
         }
-      }
     }
-  }
 }
+
 </style>

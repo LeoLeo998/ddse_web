@@ -1,8 +1,11 @@
 <template>
-    <div v-if="!getIsMobile">
+    <div >
         <div class="home-page">
             <div class="head" >
                 <div class="head-content">
+                    <div class="right" v-if="getIsMobile">
+                        <img src="/static/images/home/part1-1.png" alt="">
+                    </div>
                     <div class="left">
                         <p class="title">全球首家数字资产结算全品种衍生品交易平台</p>
                         <p class="small-title">
@@ -17,13 +20,13 @@
                             </button>
                         </div>
                     </div>
-                    <div class="right">
+                    <div class="right" v-if="!getIsMobile">
                         <img src="/static/images/home/part1-1.png" alt="">
                     </div>
                 </div>
             </div>
             <div class="content">
-                <div class="banner-box">
+                <div class="banner-box" v-if="!getIsMobile">
                     <div class="item">
                         <img src="/static/images/home/banner1.png" alt="">
                     </div>
@@ -44,32 +47,26 @@
                             <li class="th">名称</li>
                             <li class="th">最新价</li>
                             <li class="th">24h涨跌</li>
-                            <li class="th">行情</li>
+                            <!-- <li class="th">行情</li> -->
                             <li class="th">24H Volume</li>
                         </div>
-                        <div class="td-box" v-for="item in 4">
+                        <div class="td-box" v-for="item in hotList">
                             <li class="td">
-                                <img src="https://huobicfg.s3.amazonaws.com/currency_icon/btc.png" alt="">
-                                <span class="coin-name">BTC</span>
-                                <span class="coin-fullname">Bitcoin</span>
+                                <!-- <img src="https://huobicfg.s3.amazonaws.com/currency_icon/btc.png" alt=""> -->
+                                <span class="coin-name">{{item.symbol}}</span>
                             </li>
                             <li class="td">
                                 <span class="txt1">
-                                    $58140.23
+                                    {{item.buy_price}}
                                 </span>
                             </li>
                             <li class="td">
-                                <span class="txt2">
-                                    4.5%
+                                <span class="txt2" :class="getRange(item) > 0 ? 'price-up' : 'price-down'">
+                                    {{ getRange(item) }}%
                                 </span>
                             </li>
-                            <li class="td">
-                                <!-- <HCharts
-                                symbol="BTC"
-                                :backgroundColor="getThemeType == 1?'#b6d991':'#1f303d'"
-                                :themeType="getThemeType"
-                                :borderColor="getThemeType == 1?'#7dbb3e':'#204046'"/> -->
-                            </li>
+                            <!-- <li class="td">
+                            </li> -->
                             <li class="td txt1">
                                 <button class="buy-btn" @click="$router.push('/exchange')">
                                     交易
@@ -156,7 +153,7 @@
                                     比特币是世界上最大、最著名的去中心化加密货币。 它采用区块链作为底层技术，允许用户通过点对点网络传输数据和资产，且无需任何中间人和中央银行。
                                 </div>
                             </div>
-                            <div class="item" style="padding-left:200px;">
+                            <div class="item jl">
                                 <p class="big-txt">
                                     在 KuCoin 上交易安全吗？
                                 </p>
@@ -172,7 +169,7 @@
                                     由于数字资产具有无限分割的特性，在KuCoin即使1美元也可以购买数字资产。
                                 </div>
                             </div>
-                            <div class="item item2" style="padding-left:200px;">
+                            <div class="item item2 jl">
                                 <p class="big-txt">
                                     法定货币出入金是否有限制？
                                 </p>
@@ -204,7 +201,7 @@
                                 合作伙伴: partnerships@xt.com
                             </div>
                         </div>
-                        <div class="right">
+                        <div class="right" v-if="!getIsMobile">
                             <div class="cell">
                                 <p class="title">
                                     技术支持
@@ -248,19 +245,20 @@
                         </div>
                     </div>
                 </div>
-                <div class="foot">
+                <div class="foot" v-if="!getIsMobile">
                     <p class="hz">合作伙伴</p>
                     <img src="/static/images/home/foot.png" alt="">
                 </div>
             </div>
         </div>
     </div>
-    <MobileHome v-else/>
+    <!-- <MobileHome v-else/> -->
 </template>
 <script>
 import { slider, slideritem } from 'vue-concise-slider'
 import HCharts from '@/components/chart/Index'
 import MobileHome from '@/views/mobile/Home'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 export default {
     data () {
         return {
@@ -276,7 +274,8 @@ export default {
                 timingFunction: 'ease',
                 speed: 500,
                 pagination: false,
-            }
+                
+            },
         }
     },
     components: {
@@ -285,7 +284,48 @@ export default {
         HCharts,
         MobileHome
     },
+    computed:{
+        ...mapGetters(["getProductData"]),
+        hotList () {
+            let data = Object.values(JSON.parse(JSON.stringify(this.getProductData)))
+            data = data.filter(v => {
+                return v.hot == 1
+            })
+            data = data.slice(0,5)
+            return data
+        },
+    },
+    created () {
+        this.getData()
+    },
     methods:{
+        ...mapActions([
+            "productListFetch"
+        ]),
+        ...mapMutations([
+            "setProductData"
+        ]),
+        async getData () {
+            let res = await this.productListFetch()
+            let hot;
+            if(res.rows.length > 0) {
+                hot = res.rows.filter(v => {
+                    return v.hot === 1
+                })
+            }
+            // this.hotList = hot.slice(0,5)
+
+            // this.dataList = res.rows
+            let obj = {}
+            res.rows.forEach(v => {
+                obj[v.symbol] = {}
+                obj[v.symbol] = v
+            })
+            this.setProductData(obj)
+        },
+        getRange(item) {
+            return (((item.buy_price - item.close) / item.close) * 100).toFixed(2)
+        },
         slide (data) {
             // console.log(data)
         },
@@ -310,18 +350,13 @@ export default {
         background-size: 100% ;
         background-position: 0px -80px;
         .head-content {
-            width: 1200px;
             margin:0 auto;
             display: flex;
             justify-content:space-between;
             align-items: center;
-            .left,.right {
-                flex:1;
-            }
+            
             .left {
                 .title {
-                    width: 495px;
-                    font-family: PingFang-SC;
                     font-size: 45px;
                     font-weight: 900;
                     font-stretch: normal;
@@ -354,12 +389,6 @@ export default {
                         margin-right:20px;
                         border:none;
                     }
-                }
-            }
-            .right {
-                img {
-                    width: 562px;
-                    height: 308px;
                 }
             }
         }
@@ -417,7 +446,7 @@ export default {
         }
         .banner-box {
             display: flex;
-            width: 1200px;
+            
             margin:0 auto;
             margin-top:38px;
             .item {
@@ -439,7 +468,6 @@ export default {
             }
         }
         .market-trend {
-            width: 1200px;
             margin:0 auto;
             margin-top:60px;
             .title {
@@ -454,7 +482,7 @@ export default {
                 width: 100%;
                 .th-box,.td-box {
                     .th,.td {
-                        width: 20%;
+                        width: 25%;
                         &:first-child{
                             padding-left:16px;
                         }
@@ -536,16 +564,13 @@ export default {
         .part2 {
             display: flex;
             align-items: center;
-            width: 1200px;
             margin:0 auto;
             margin-top:70px;
             img {
                 width: 490px;
             }
             .left {
-                width: 60%;
                 .big-txt {
-                    width: 583px;
                     font-size: 52px;
                     color: #000;
                 }
@@ -556,30 +581,22 @@ export default {
                     margin-top:40px;
                 }
             }
-            .right {
-                width: 40%;
-            }
+            
         }
         .part3 {
             display: flex;
             align-items: center;
-            width: 1200px;
             margin:0 auto;
             margin-top:70px;
             img {
                 width: 490px;
             }
-            .left {
-                width: 40%;
-            }
             .right {
-                width: 60%;
                 .big-txt {
                     font-size: 52px;
                     color: #000;
                 }
                 .small-txt {
-                    width: 661px;
                     font-size: 18px;
                     line-height: 1.78;
                     color: #000;
@@ -630,11 +647,9 @@ export default {
         .part5 {
             display: flex;
             align-items: center;
-            width: 1200px;
             margin:0 auto;
             padding-top:180px;
             .left {
-                width: 50%;
                 .big-txt {
                     font-size: 52px;
                     color: #000;
@@ -665,13 +680,6 @@ export default {
                     }
                 }
             }
-            .right {
-                width: 50%;
-                img {
-                    width: 719px;
-                    height: 488px;
-                }
-            }
         }
         .part6 {
             
@@ -690,7 +698,7 @@ export default {
                 text-align: center;
             }
             .content-box {
-                width: 1200px;
+                
                 margin:0 auto;
                 margin-top:44px;
                 .faq-box {
@@ -699,7 +707,6 @@ export default {
                     flex-wrap: wrap;
                 }
                 .item {
-                    flex:1;
                     text-align: left;
                     .big-txt {
                         font-size: 26px;
@@ -710,7 +717,6 @@ export default {
                         line-height: 1.57;
                         color: #68727e;
                         margin-top:17px;
-                        width: 490px;
                     }
                     &.item2 {
                         margin-top:63px;
@@ -721,14 +727,13 @@ export default {
                 text-align: center;
                 margin-top:120px;
                 .big-txt {
-                    width: 100%;
+                    
                     font-size: 36px;
                     line-height: 1;
                     text-align: center;
                     color: #000;
                 }
                 .small-txt {
-                    width: 100%;
                     font-size: 20px;
                     line-height: 1.6;
                     text-align: center;
@@ -737,9 +742,6 @@ export default {
                 }
                 .ks {
                     margin-top:50px;
-                    width: 98px;
-                    height: 40px;
-                    margin: 51px 293px 0;
                     padding: 12px 17px;
                     border-radius: 4px;
                     background-color: var(--font-primary-);
@@ -758,7 +760,7 @@ export default {
             padding-top:64px;
             padding-bottom:100px;
             .content {
-                width: 1200px;
+                
                 margin:0 auto;
                 display: flex;
             }
@@ -806,7 +808,6 @@ export default {
             }
         }
         .foot {
-            width: 1200px;
             margin:0 auto;
             .hz {
                 padding-top:11px;
@@ -821,11 +822,150 @@ export default {
         }
     }
 }
+@media (min-width:768px) {
+    .banner-box,.market-trend,.foot,.part8>.content,.part6>.content-box,.part5,.part3,.part2,.head > .head-content{
+        width: 1200px;
+    }
+    .head-content {
+        .left,.right {
+            flex:1;
+        }
+        .left {
+            .title {
+                width: 495px;
+            }
+        }
+        .right {
+            img {
+                width: 562px;
+                height: 308px;
+            }
+        }
+    }
+    .part2 {
+        .left{
+            width: 60%;
+            .big-txt {
+                width: 583px;
+            }
+        }
+        .right {
+            width: 40%;
+        }
+    }
+    .part3 {
+        .left{
+            width: 40%;
+        }
+        .right {
+            width: 60%;
+            .small-txt {
+                width: 661px;
+            }
+        }
+    }
+    .part5 {
+        .left,.right {
+            width:50%;
+        }
+        .right {
+            img {
+                width: 719px;
+                height: 488px;
+            }
+        }
+    }
+    .part6 {
+        .small-txt {
+            width: 490px;
+        }
+        .start-box {
+            .big-txt,.small-txt {
+                width: 100%;
+            }
+            .ks {
+                width: 98px;
+                height: 40px;
+            }
+        }
+    }
+    .faq-box {
+        .item {
+            width: 50%;
+        }
+        .jl {
+            padding-left: 200px;
+        }
+    }
+}
 @media (max-width:768px) {
     .home-page {
         .head {
+            height:700px;
             .head-content {
                 width: 90%;
+                flex-wrap: wrap;
+                .left,.right {
+                    width:100%;
+                    .title {
+                        width:90%;
+                    }
+                }
+                .right {
+                    img {
+                        width: 90%;
+                    }
+                }
+            }
+        }
+        .banner-box,.market-trend,.foot,.part8>.content,.part6>.content-box,.part5,.part3,.part2,.head > .head-content{
+            width: 90%;
+            
+        }
+        .part2{
+            flex-wrap: wrap;
+            .left,.right {
+                width: 100%;
+            }
+        }
+        .part3 {
+            flex-wrap: wrap;
+            .left,.right{
+                width: 100%
+            }
+            .right{
+                .big-txt,.small-txt {
+                    width:90%;
+                }
+            }
+        }
+        .part5 {
+            flex-wrap: wrap;
+            .left,.right {
+                width:100%;
+                img {
+                    width:90%;
+                }
+            }
+        }
+        .part6 {
+            .small-txt {
+                width: 90%;
+            }
+            .start-box {
+                .big-txt,.small-txt {
+                    width: 90%;
+                }
+            }
+        }
+        .faq-box {
+            .item {
+                width:100%;
+                padding:0;
+                margin-top:50px;
+            }
+            .jl {
+                padding-left: 0;
             }
         }
     }
