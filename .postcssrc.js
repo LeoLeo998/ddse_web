@@ -12,8 +12,9 @@ module.exports = {
       propList: ['*'],
       replace: true,
       mediaQuery: false,
-      minPixelValue: 0
+      minPixelValue: 0,
       // exclude: /emoji/i
+      exclude: [/views\/home/]
     }
   }
 }
