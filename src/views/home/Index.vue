@@ -42,8 +42,8 @@
                             <li class="th">名称</li>
                             <li class="th">最新价</li>
                             <li class="th">24h涨跌</li>
-                            <li class="th">24H最高</li>
-                            <li class="th">24H最低</li>
+                            <li class="th" v-if="!getIsMobile">24H最高</li>
+                            <li class="th" v-if="!getIsMobile">24H最低</li>
                             <li class="th">操作</li>
                         </div>
                         <div class="td-box" v-for="item in hotList">
@@ -62,10 +62,10 @@
                                     {{ getRange(item) }}%
                                 </span>
                             </li>
-                            <li class="td">
+                            <li class="td" v-if="!getIsMobile">
                                 {{item.high}}
                             </li>
-                            <li class="td">
+                            <li class="td" v-if="!getIsMobile">
                                 {{item.low}}
                             </li>
                             <li class="td txt1">
@@ -393,11 +393,9 @@ export default {
                     margin-top:50px;
                     button {
                         height: 54px;
-                        padding: 14px 37px 14px 38px;
                         cursor: pointer;
                         border-radius: 6px;
                         color: #000;
-                        font-size: 22.4px;
                         line-height: 1.14;
                         text-align: center;
                         border:1px solid rgb(145, 145, 145);
@@ -497,8 +495,6 @@ export default {
             }
         }
         .market-trend {
-            margin:0 auto;
-            margin-top:60px;
             .show-more {
                 display: block;
                 text-align: center;
@@ -525,16 +521,6 @@ export default {
                 list-style: none;
                 width: 100%;
                 .th-box,.td-box {
-                    .th,.td {
-                        width: 16.666%;
-                        &:first-child{
-                            padding-left:16px;
-                        }
-                        &:last-child {
-                            text-align: right;
-                            padding-right:16px;
-                        }
-                    }
                     .td {
                         &:last-child {
                             display: flex;
@@ -620,9 +606,6 @@ export default {
             align-items: center;
             margin:0 auto;
             margin-top:70px;
-            img {
-                width: 490px;
-            }
             .left {
                 .big-txt {
                     font-size: 52px;
@@ -642,9 +625,6 @@ export default {
             align-items: center;
             margin:0 auto;
             margin-top:70px;
-            img {
-                width: 490px;
-            }
             .right {
                 .big-txt {
                     font-size: 52px;
@@ -717,16 +697,8 @@ export default {
                 .download-box {
                     margin-top:50px;
                     display: flex;
-                    .code {
-                        width: 210px;
-                        height: 210px;
-                        margin-right:17px;
-                    }
                     .right-download {
                         .item {
-                            width: 147px;
-                            height: 97px;
-                            margin-right:14px;
                             &.item2 {
                                 margin-top:11px;
                             }
@@ -757,8 +729,6 @@ export default {
                 margin-top:44px;
                 .faq-box {
                     display: grid;
-                    gap: 60px 200px;
-                    grid-template-columns: repeat(2, 1fr);
                     margin-top: 40px;
                 }
                 .item {
@@ -881,11 +851,33 @@ export default {
         max-width: 1240px;
         padding:0 20px;
     }
+    .market-trend {
+        margin:0 auto;
+        margin-top:40px;
+    }
+    .home-page .content .market-trend ul {
+        .td,.th {
+            width: 16.666%;
+            &:first-child{
+                padding-left:16px;
+            }
+            &:last-child {
+                text-align: right;
+                padding-right:16px;
+            }
+        }
+    }
     .head-content {
         .left,.right {
             flex:1;
         }
         .left {
+            .btn-box {
+                button {
+                    padding: 14px 37px 14px 38px;
+                    font-size: 22.4px;
+                }
+            }
             .title {
                 width: 495px;
             }
@@ -898,6 +890,9 @@ export default {
         }
     }
     .part2 {
+        img {
+            width: 490px;
+        }
         .left{
             width: 60%;
             .big-txt {
@@ -909,6 +904,9 @@ export default {
         }
     }
     .part3 {
+        img {
+            width: 490px;
+        }
         .left{
             width: 40%;
         }
@@ -930,6 +928,20 @@ export default {
                 //height: 488px;
             }
         }
+        .download-box {
+            .code {
+                width: 210px;
+                height: 210px;
+                margin-right:17px;
+            }
+            .right-download {
+                .item {
+                    width: 147px;
+                    height: 97px;
+                    margin-right:14px;
+                }
+            }
+        }
     }
     .part6 {
         .small-txt {
@@ -946,9 +958,8 @@ export default {
         }
     }
     .faq-box {
-        .jl {
-            //padding-left: 200px;
-        }
+        gap: 60px 200px;
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 @media (max-width:768px) {
@@ -960,6 +971,12 @@ export default {
                 flex-wrap: wrap;
                 .left,.right {
                     width:100%;
+                    .btn-box {
+                        button {
+                            padding: 8px 14px ;
+                            font-size: 18px;
+                        }
+                    }
                     .title {
                         width:90%;
                     }
@@ -974,6 +991,23 @@ export default {
         .banner-box,.market-trend,.foot,.part8>.content,.part6>.content-box,.part5,.part3,.part2,.head > .head-content{
             width: 90%;
             
+        }
+        .market-trend {
+            margin:0 auto;
+        }
+        .market-trend ul {
+            .td,.th {
+                width: 25%;
+                &:last-child {
+                    text-align: right;
+                }
+            }
+        }
+        .major {
+            margin-bottom:20px;
+        }
+        .part2 img,.part3 img {
+            width: 90%;
         }
         .part2{
             flex-wrap: wrap;
@@ -1000,6 +1034,20 @@ export default {
                     width:90%;
                 }
             }
+            .download-box {
+                .code {
+                    width: 120px;
+                    height: 120px;
+                    margin-right:12px;
+                }
+                .right-download {
+                    .item {
+                        width: 100px;
+                        height: 70px;
+                        //margin-right:14px;
+                    }
+                }
+            }
         }
         .part6 {
             .small-txt {
@@ -1012,6 +1060,8 @@ export default {
             }
         }
         .faq-box {
+            gap: 24px 0;
+            grid-template-columns: repeat(1, 100%);
             .item {
                 width:100%;
                 padding:0;
