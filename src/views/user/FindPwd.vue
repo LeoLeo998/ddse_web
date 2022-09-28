@@ -119,8 +119,8 @@ export default {
       rules: {
         account: [{ validator: validatePass, trigger: 'blur' }],
         password: [{ validator: validatePass, trigger: 'blur' }],
-        verifyCode: [{ validator: validatePass, trigger: 'blur' }],
         re_password: [{ validator: validatePass, trigger: 'blur' }]
+        // verifyCode: [{ validator: validatePass, trigger: 'blur' }],
       }
     }
   },

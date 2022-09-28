@@ -74,6 +74,7 @@ export default {
 #app {
   background-color: #f6f8fa;
   padding-top: 80px;
+  height: 100%;
 }
 </style>
 

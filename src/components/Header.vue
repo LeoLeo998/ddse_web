@@ -31,9 +31,9 @@
             <span>钱包</span>
             <i class="fa fa-sort-down"></i>
             <div class="child-menu">
-              <router-link to="/" class="a-item">资产</router-link>
-              <router-link to="/" class="a-item">充值</router-link>
-              <router-link to="/" class="a-item">提现</router-link>
+              <router-link to="" class="a-item" @click.native="toCenter(0)">资产</router-link>
+              <router-link to="" class="a-item" @click.native="toCenter(1)">充值</router-link>
+              <router-link to="" class="a-item" @click.native="toCenter(2)">提现</router-link>
             </div>
           </div>
           <div class="item1">
@@ -144,6 +144,15 @@ export default {
         this.$router.push('/market')
       }
       this.showDrawer = false
+    },
+    
+    toCenter(data) {
+      this.$router.push({
+        path: '/center',
+        query: {
+          center_type: data
+        }
+      })
     }
   }
 }

@@ -7,6 +7,7 @@ import Login from '@/views/user/Login'
 import Register from '@/views/user/Register'
 import FindPwd from '@/views/user/FindPwd'
 import Agreement from '@/views/Agreement'
+import center from '@/views/center'
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
   return originalPush.call(this, location).catch(err => err)
@@ -45,10 +46,16 @@ export default new Router({
       path: '/FindPwd',
       name: 'FindPwd',
       component: FindPwd
-    },{
+    },
+    {
       path: '/agreement',
       name: 'Agreement',
       component: Agreement
+    },
+    {
+      path: '/center',
+      name: 'Center',
+      component: center
     }
   ]
 })
