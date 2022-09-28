@@ -534,8 +534,15 @@ export default {
                     height: 50px;
                     align-items: center;
                     .th {
+                        text-align: center;
                         font-size: 14px;
                         color: #00142a99;
+                        &:first-child {
+                            text-align: left;
+                        }
+                        &:last-child {
+                            text-align: right;
+                        }
                     }
                 }
                 .td-box {
@@ -548,8 +555,7 @@ export default {
                         font-family: URWDIN;
                     }
                     .td {
-                        display: flex;
-                        align-items: center;
+                        text-align: center;
                         font-family: URWDIN;
                         .coin-name {
                             //margin-left:10px;
@@ -557,6 +563,12 @@ export default {
                         .coin-fullname {
                             margin-left:10px;
                             font-size: 14px;
+                        }
+                        &:first-child {
+                            text-align: left;
+                        }
+                        &:last-child {
+                            text-align: right;
                         }
                     }
                     img {
@@ -858,12 +870,8 @@ export default {
     .home-page .content .market-trend ul {
         .td,.th {
             width: 16.666%;
-            &:first-child{
-                padding-left:16px;
-            }
             &:last-child {
                 text-align: right;
-                padding-right:16px;
             }
         }
     }

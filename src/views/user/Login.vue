@@ -7,12 +7,12 @@
       <img src="/static/images/login-banner.png" alt="" />
     </div>
     <div class="form-box">
-      <div class="go-register">
+      <!-- <div class="go-register">
         <span>还没有账号？</span>
         <router-link to="/register">
           去注册
         </router-link>
-      </div>
+      </div> -->
       <el-form class="content" :rules="rules" :model="user" ref="login">
         <p class="title">登录</p>
         <ul class="login-type">
