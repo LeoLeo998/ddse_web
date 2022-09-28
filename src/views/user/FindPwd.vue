@@ -27,40 +27,40 @@
                 <label for="">{{ type === 1 ? '手机号码' : '邮箱/子账号' }}</label>
                 <div class="flex-center-between">
                   <div style="width:78%">
-                    <el-input v-if="type == 1" type="number" placeholder="手机" v-model="user.account" class="input-with-select" @keyup.enter.native="stepNext">
+                    <el-input v-if="type == 1" type="number" placeholder="" v-model="user.account" class="input-with-select" @keyup.enter.native="stepNext" style="width:95%">
                       <template slot="prepend">
                         <VueCountryIntl schema="popover" v-model="user.code">
                           <button type="button" slot="reference">+{{ user.code }}</button>
                         </VueCountryIntl>
                       </template>
                     </el-input>
-                    <el-input v-else label="email" size="large" v-model="user.account" placeholder="邮箱/子账号" clearable style="width:100%" @keyup.enter.native="stepNext"/>
+                    <el-input v-else label="email" size="large" v-model="user.account" placeholder="邮箱/子账号" clearable style="width:95%" @keyup.enter.native="stepNext" />
                   </div>
-                  <el-button class="submit-btn" :class="sendDisable ? 'submit-btn-dis' : 'submit-btn'" type="success" @click="sendMsg" :disabled="sendDisable" style="width:130px">{{ sendText }}</el-button>
+                  <el-button class="submit-btn" :class="sendDisable ? 'submit-btn-dis' : 'submit-btn'" type="success" @click="sendMsg" :disabled="sendDisable" style="width:100px">{{ sendText }}</el-button>
                 </div>
               </div>
             </el-form-item>
             <el-form-item prop="verifyCode">
               <div class="row row2">
                 <label for="">验证码</label>
-                <el-input size="large" v-model="user.verifyCode" placeholder="" @keyup.enter.native="stepNext"/>
+                <el-input size="large" v-model="user.verifyCode" placeholder="" @keyup.enter.native="stepNext" />
               </div>
             </el-form-item>
             <div class="row row2">
-              <el-button class="submit-btn" type="success" @click="stepNext">确认</el-button>
+              <el-button class="submit-btn confirm-btn" type="success" @click="stepNext">确认</el-button>
             </div>
           </div>
           <div v-else style="width:100%">
             <div class="row row2">
               <el-form-item prop="password">
-                <el-input label="email" size="large" type="password" show-password v-model="user.password" placeholder="新密码" clearable style="margin:10px 0" @keyup.enter.native="submitClick"/>
+                <el-input label="email" size="large" type="password" show-password v-model="user.password" placeholder="新密码" clearable style="margin:10px 0" @keyup.enter.native="submitClick" />
               </el-form-item>
               <el-form-item prop="re_password">
-                <el-input label="email" size="large" type="password" show-password v-model="user.re_password" placeholder="确认密码" clearable style="margin:10px 0" @keyup.enter.native="submitClick"/>
+                <el-input label="email" size="large" type="password" show-password v-model="user.re_password" placeholder="确认密码" clearable style="margin:10px 0" @keyup.enter.native="submitClick" />
               </el-form-item>
             </div>
             <div class="row row2">
-              <el-button class="submit-btn" type="success" @click="submitClick">确认</el-button>
+              <el-button class="submit-btn confirm-btn" type="success" @click="submitClick">确认</el-button>
             </div>
           </div>
         </el-form>
@@ -104,7 +104,7 @@ export default {
     return {
       type: 1,
       showInv: false,
-      sendText: '发送验证码',
+      sendText: '发送',
       sendDisable: false,
       step: 1,
       user: {
@@ -148,21 +148,19 @@ export default {
       })
     },
     async sendMsg() {
-      let reg = new RegExp('^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$')
-      if (this.type == 2 && !reg.test(this.user.account)) {
-        this.$message.error('请检查邮箱格式')
-        return true
-      }
-      let res = await this.getPasswordVerifyCodeFetch({
-        account: this.type == 1 ? this.user.code + this.user.account : this.user.account
+      this.$refs['form'].validate(async valid => {
+        if (!valid) return false
+        let res = await this.getPasswordVerifyCodeFetch({
+          account: this.type == 1 ? this.user.code + this.user.account : this.user.account
+        })
+        if (res.status == 200) {
+          this.timerStart()
+          this.user.verifyCode = res.code
+          setCookie('phoneToken', res.token, 36000)
+        } else {
+          this.$message.error(res.msg)
+        }
       })
-      if (res.status == 200) {
-        this.timerStart()
-        this.user.verifyCode = res.code
-        setCookie('phoneToken', res.token, 36000)
-      } else {
-        this.$message.error(res.msg)
-      }
     },
     timerStart() {
       this.sendDisable = true
@@ -218,7 +216,6 @@ export default {
   width: 100%;
   //height: calc(~"100vh - 65px");
   height: 100vh;
-
   .el-input-group__prepend .vue-country-popover-container button {
     border: none;
     background: transparent;
@@ -268,7 +265,6 @@ export default {
     justify-content: center;
     align-items: center;
     height: 100%;
-    background: rgb(255, 255, 255);
     flex: 0 0 58.3333%;
     max-width: 58.3333%;
     .go-register {
@@ -333,7 +329,7 @@ export default {
         label {
           font-size: 12px;
           color: rgba(0, 20, 42, 0.6);
-          margin-bottom: 6px;
+          margin-bottom: 15px;
           display: inline-block;
         }
         .el-select .el-input {
@@ -352,7 +348,13 @@ export default {
           height: 48px;
           background: #2dbd96;
           border: none;
-          margin: 0 0 !important;
+          text-align: center;
+          span {
+            font-size: 16px;
+          }
+        }
+        .confirm-btn {
+          margin-top: 15px;
         }
         .submit-btn-dis {
           background: #f5f6f7;
@@ -365,6 +367,36 @@ export default {
           }
         }
       }
+    }
+  }
+}
+@media screen and (max-width: 768px) {
+  .msb-login {
+    .login-bg {
+      display: none;
+    }
+    .go-register {
+      display: none;
+    }
+    .form-box {
+      max-width: none;
+      width: 100%;
+      flex: auto;
+      padding: 0 30px 0 30px;
+      .content {
+        width: 100%;
+        .el-form {
+          width: 100%;
+        }
+        .el-input {
+          input {
+            height: 65px !important;
+          }
+        }
+      }
+    }
+    .submit-btn {
+      height: 65px !important;
     }
   }
 }

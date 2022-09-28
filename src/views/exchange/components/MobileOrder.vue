@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="mobile-o-page">
         <div class="mobile-order-page" v-for="(item,index) in list" :key="index">
             <div class="order-head">
                 <span>{{item.SYMBOL}}</span>
@@ -35,6 +35,14 @@
                 <div class="item">订单号 {{item.TICKET}}</div>
                 <div class="item">盈亏 {{formatProfit(item)}}</div>
                 <div class="item sell" v-if="type === 1" @click="setClick(item)">卖出</div>
+            </div>
+        </div>
+        <div class="tab" v-if="!getIsLogin">
+            <div>
+                <router-link to="/register">注册</router-link>
+                或
+                <router-link to="/login">登录</router-link>
+                后查看
             </div>
         </div>
     </div>
@@ -182,6 +190,22 @@ export default {
     .mobile-order-page {
         margin-bottom:20px 10px;
         border-radius:8px;
+    }
+    .mobile-o-page {
+        width:100%;
+        height: 100%;
+    }
+    .tab {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 14px;
+        color:var(--font-body-);
+        a {
+            color:var(--color-green-);
+        }
     }
 }
 </style>
