@@ -120,10 +120,6 @@
             <tr class="table-header">
               <th>
                 名称
-                <span class="sort">
-                  <i class="fa fa-sort-up"></i>
-                  <i class="fa fa-sort-down"></i>
-                </span>
               </th>
               <th>
                 价格
@@ -381,8 +377,6 @@ export default {
 }
 .market-page {
   padding: 30px 30px;
-  min-height: 100vh;
-
   .product-tab {
     padding: 20px 32px;
     box-sizing: border-box;
